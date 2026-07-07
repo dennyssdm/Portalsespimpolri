@@ -1,0 +1,63 @@
+{
+  "project": "Portal Resmi Sespim Lemdiklat Polri",
+  "stack": [
+    "Next.js",
+    "TypeScript",
+    "Tailwind CSS"
+  ],
+  "status_labels": [
+    "Draft",
+    "Need Review",
+    "Approved",
+    "In Progress",
+    "Revision",
+    "Ready for QA",
+    "Done",
+    "Hold",
+    "Belum Dimulai"
+  ],
+  "phases": [
+    {
+      "phase": "Phase 1",
+      "deliverable": "Foundation Setup",
+      "status": "Done",
+      "approval": "Disetujui"
+    },
+    {
+      "phase": "Phase 2",
+      "deliverable": "Navigation System",
+      "status": "Done",
+      "approval": "Disetujui"
+    },
+    {
+      "phase": "Phase 3",
+      "deliverable": "Homepage UI",
+      "status": "Done",
+      "approval": "Disetujui"
+    },
+    {
+      "phase": "Phase 4",
+      "deliverable": "Main Pages UI",
+      "status": "Done",
+      "approval": "Disetujui"
+    },
+    {
+      "phase": "Phase 5",
+      "deliverable": "Content Listing & Detail Pages",
+      "status": "Done",
+      "approval": "Disetujui"
+    },
+    {
+      "phase": "Phase 6",
+      "deliverable": "Responsive & Accessibility QA",
+      "status": "Done",
+      "approval": "Disetujui"
+    },
+    {
+      "phase": "Phase 7",
+      "deliverable": "Final UI Polish",
+      "status": "Done",
+      "approval": "Disetujui"
+    }
+  ]
+}
