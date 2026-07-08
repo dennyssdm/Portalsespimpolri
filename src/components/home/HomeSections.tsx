@@ -3,8 +3,6 @@ import { Container } from '@/components/ui/Container'
 import { InfoCard } from '@/components/ui/InfoCard'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { educationPrograms, kasespimGreeting, latestNews, quickLinks } from '@/data/homepage'
-import { implementationStatus } from '@/data/implementationStatus'
-import { StatusBadge } from '@/components/ui/StatusBadge'
 import { KasespimPhoto } from '@/components/home/KasespimPhoto'
 
 export function KasespimGreeting() {
@@ -89,30 +87,6 @@ export function QuickLinks() {
               <Link key={link.href} href={link.href} className="rounded-2xl border border-polri-gold/40 bg-white/5 px-4 py-4 text-center text-sm font-bold text-polri-goldSoft hover:bg-white/10">
                 {link.label}
               </Link>
-            ))}
-          </div>
-        </div>
-      </Container>
-    </section>
-  )
-}
-
-export function ImplementationStatusPreview() {
-  return (
-    <section className="bg-white py-16">
-      <Container>
-        <SectionTitle eyebrow="SOT Driven" title="Status Implementasi Front-End" description="Status ini harus diperbarui setiap fase selesai atau berubah setelah approval." />
-        <div className="mt-10 overflow-hidden rounded-2xl border border-polri-gold/30 bg-white shadow-soft">
-          <div className="grid grid-cols-1 divide-y divide-neutral-100">
-            {implementationStatus.map((item) => (
-              <div key={item.phase} className="grid gap-4 p-5 sm:grid-cols-[.7fr_1fr_auto] sm:items-center">
-                <div>
-                  <p className="font-black text-polri-brownDark">{item.phase}</p>
-                  <p className="text-sm text-neutral-600">{item.deliverable}</p>
-                </div>
-                <p className="text-sm leading-7 text-neutral-700">{item.note}</p>
-                <StatusBadge status={item.status} />
-              </div>
             ))}
           </div>
         </div>

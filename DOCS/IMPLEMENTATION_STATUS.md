@@ -104,6 +104,29 @@
 - Halaman `eLibrary` diperkuat dengan hero `Perpustakaan Sespim Polri` untuk koleksi buku referensi, karya serdik terdahulu, NKP, Policy Brief, NASKAP, TASKAP, dan NASTRAP dalam bentuk hardcopy maupun akses online.
 - Hero `eLibrary` kini memakai aset gambar baru bernuansa perpustakaan/rak buku di `public/images/elibrary-library-hero.png`.
 
+### 2026-07-07
+
+- Menambahkan halaman portal **Registrasi dan Login Multirole** di `/login` dan `/register` yang mendukung 5 peran utama:
+  1. Super Admin (All Action)
+  2. Super Admin Read-Only / Stakeholder (menggunakan toggle pembatasan aksi pada form login Super Admin)
+  3. Admin (Staf) (membutuhkan input Kode Undangan untuk keamanan registrasi)
+  4. User Serdik (Peserta Didik) (pendaftaran memuat data Program Pendidikan, Angkatan, dan Pangkat)
+  5. User Widyaiswara (Tenaga Pendidik) (pendaftaran memuat data Bidang Keahlian dan Sertifikasi Utama)
+- Menyertakan **Simulasi Dasbor Peran (Mock Dashboard)** interaktif setelah sukses login:
+  - Super Admin: Log aktivitas sistem lengkap, kontrol backup database, sinkronisasi DB, dan kelola pengguna.
+  - Stakeholder: Analitik grafik kinerja, audit log (read-only), dan pembatasan tombol aksi.
+  - Admin (Staf): Kelola persetujuan berita, checklist modul agenda, dan verifikasi serdik baru.
+  - Widyaiswara: Input nilai, unggah materi kelas, serta pintasan workspace inpassing & pembimbingan.
+  - Serdik: Progres belajar persentase bar, akses cepat sarana prasarana, dan unduhan dokumen NASTRAP.
+- Memperbarui rute link menu navigasi global dari `/login-internal` menjadi `/login` terintegrasi.
+- Mengubah rute halaman lama `/login-internal` agar otomatis melakukan pengalihan (*redirect*) ke rute `/login` baru untuk menghindari link rusak.
+- Menambahkan halaman **Admin Dashboard & Content Management System (CMS)** di `/admin/dashboard` yang terintegrasi penuh secara dinamis dengan 3 peran akses (Stakeholder, Admin CRU, dan Super Admin CRUD).
+- Memisahkan visualisasi menu modul, hak akses tombol kontrol (Tambah, Edit, Hapus), dan pop-up formulir modal aksi berdasarkan izin peran:
+  - **Super Admin (CRUD)**: Akses ke 10 modul lengkap, izin penuh untuk menambah, mengedit, dan menghapus konten.
+  - **Admin (CRU)**: Akses ke 10 modul lengkap, izin untuk menambah dan mengedit, namun tombol hapus diblokir.
+  - **Stakeholder (Read Only)**: Akses ke 7 modul dasar, semua tombol manipulasi data diblokir/dinonaktifkan dengan banner notifikasi izin.
+- Menyediakan simulasi **Create, Read, Update, Delete** lokal menggunakan State React agar pengguna dapat menambah, mengubah, melihat detail, dan menghapus item demo secara instan.
+
 ---
 
 ## Approval Required

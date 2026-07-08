@@ -1,3 +1,6 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import { LockClosedIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -6,6 +9,8 @@ import { FooterVisitorWidget } from '@/components/layout/FooterVisitorWidget'
 import { internalLoginLink, navigation, socialLinks } from '@/data/navigation'
 import { externalLinkProps } from '@/lib/links'
 import type { SocialLink } from '@/types'
+import { SearchBar } from '@/components/ui/SearchBar'
+
 
 function SocialIcon({ platform }: { platform: SocialLink['platform'] }) {
   switch (platform) {
@@ -46,6 +51,58 @@ function SocialIcon({ platform }: { platform: SocialLink['platform'] }) {
 }
 
 export function Footer() {
+  const [mounted, setMounted] = useState(false)
+  const [user, setUser] = useState<{
+    name: string
+    role: string
+    roleLabel: string
+  } | null>(null)
+
+  useEffect(() => {
+    setMounted(true)
+    const handleStorageChange = () => {
+      const userJson = sessionStorage.getItem('sespim_user')
+      if (userJson) {
+        setUser(JSON.parse(userJson))
+      } else {
+        setUser(null)
+      }
+    }
+
+    handleStorageChange()
+
+    window.addEventListener('storage', handleStorageChange)
+    window.addEventListener('sespim_auth_change', handleStorageChange)
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      window.removeEventListener('sespim_auth_change', handleStorageChange)
+    }
+  }, [])
+
+  // Filter navigation: hide restricted menus (Widyaiswara, Publikasi, Galeri, Unduhan) if not logged in
+  const showRestricted = mounted && user !== null
+
+  const filteredNavigation = navigation
+    .filter((item) => {
+      if (!showRestricted) {
+        const isRestricted = ['/widyaiswara', '/publikasi', '/galeri', '/unduhan'].includes(item.href)
+        return !isRestricted
+      }
+      return true
+    })
+    .map((item) => {
+      // If not logged in, convert 'Sarana Prasarana' top-level menu directly into 'Klinik Pratama' without children
+      if (!showRestricted && item.href === '/sarana-prasarana') {
+        return {
+          label: 'Klinik Pratama',
+          href: '/sarana-prasarana/klinik-pratama',
+          description: 'Layanan Kesehatan Klinik Pratama Sespim Lemdiklat Polri.'
+        }
+      }
+      return item
+    })
+
   return (
     <footer className="bg-polri-brownDark text-white">
       <div className="border-t border-polri-gold/30">
@@ -70,6 +127,10 @@ export function Footer() {
               <p className="mt-5 max-w-md text-sm leading-7 text-white/72">
                 Portal resmi informasi kelembagaan, pendidikan, widyaiswara, publikasi, berita, dan layanan pendukung Sespim Lemdiklat Polri.
               </p>
+              <div className="mt-6 max-w-xs">
+                <p className="text-xs font-bold uppercase tracking-[0.22em] text-polri-goldSoft mb-2">Cari Konten Portal</p>
+                <SearchBar />
+              </div>
               <div className="mt-6">
                 <p className="text-xs font-bold uppercase tracking-[0.22em] text-polri-goldSoft">Media Sosial</p>
                 <div className="mt-3 flex flex-wrap gap-2" aria-label="Media sosial Sespim Polri">
@@ -99,7 +160,7 @@ export function Footer() {
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {navigation.slice(1, 7).map((item) => (
+              {filteredNavigation.slice(1, 7).map((item) => (
                 <div key={item.href}>
                   <Link href={item.href} {...externalLinkProps(item.href)} className="font-bold text-polri-goldSoft hover:text-white">{item.label}</Link>
                   {item.children?.length ? (

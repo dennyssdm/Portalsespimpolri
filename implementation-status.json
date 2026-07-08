@@ -58,6 +58,18 @@
       "deliverable": "Final UI Polish",
       "status": "Done",
       "approval": "Disetujui"
+    },
+    {
+      "phase": "Phase 8",
+      "deliverable": "Multirole Login & Registration Portal",
+      "status": "Done",
+      "approval": "Disetujui"
+    },
+    {
+      "phase": "Phase 9",
+      "deliverable": "Admin Dashboard & CMS Portal",
+      "status": "Done",
+      "approval": "Disetujui"
     }
   ]
 }

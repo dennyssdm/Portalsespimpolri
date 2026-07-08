@@ -49,5 +49,19 @@ export const implementationStatus: ImplementationStatus[] = [
     status: 'Done',
     note: 'Komponen EmptyState baru, global page loader, global error boundary, pemolesan halaman 404, transisi dropdown navigasi halus, serta kerangka pemuatan (skeleton loaders).',
     approval: 'Disetujui'
+  },
+  {
+    phase: 'Phase 8',
+    deliverable: 'Multirole Login & Registration Portal',
+    status: 'Done',
+    note: 'Registrasi & Login interaktif dengan 5 peran (Super Admin, Stakeholder, Admin, Serdik, Widyaiswara), validasi dinamis, dan simulasi dashboard fungsional terproteksi.',
+    approval: 'Disetujui'
+  },
+  {
+    phase: 'Phase 9',
+    deliverable: 'Admin Dashboard & CMS Portal',
+    status: 'Done',
+    note: 'Dasbor CMS terintegrasi dengan 3 peran hak akses (Super Admin CRUD, Admin CRU, dan Stakeholder Read-Only) untuk manajemen data konten modular portal.',
+    approval: 'Disetujui'
   }
 ]

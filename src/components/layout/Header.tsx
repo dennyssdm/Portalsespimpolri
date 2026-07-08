@@ -1,17 +1,14 @@
 'use client'
 
+import { useEffect } from 'react'
 import { Bars3Icon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { navigation } from '@/data/navigation'
 import { cn } from '@/lib/cn'
 import { externalLinkProps, isExternalHref } from '@/lib/links'
-import { SearchBar } from '@/components/ui/SearchBar'
-
-const desktopItems = navigation.slice(0, 7)
-const desktopMoreItems = navigation.slice(7).filter((item) => item.href !== '/kontak')
 
 function isActiveHref(pathname: string, href: string) {
   if (isExternalHref(href)) {
@@ -22,9 +19,72 @@ function isActiveHref(pathname: string, href: string) {
 }
 
 export function Header() {
+  const router = useRouter()
   const [open, setOpen] = useState(false)
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null)
   const pathname = usePathname()
+  
+  const [mounted, setMounted] = useState(false)
+  const [user, setUser] = useState<{
+    name: string
+    role: string
+    roleLabel: string
+  } | null>(null)
+
+  useEffect(() => {
+    setMounted(true)
+    const handleStorageChange = () => {
+      const userJson = sessionStorage.getItem('sespim_user')
+      if (userJson) {
+        setUser(JSON.parse(userJson))
+      } else {
+        setUser(null)
+      }
+    }
+
+    handleStorageChange()
+
+    window.addEventListener('storage', handleStorageChange)
+    window.addEventListener('sespim_auth_change', handleStorageChange)
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      window.removeEventListener('sespim_auth_change', handleStorageChange)
+    }
+  }, [])
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('sespim_user')
+    setUser(null)
+    window.dispatchEvent(new Event('sespim_auth_change'))
+    router.push('/login')
+  }
+
+  // Filter navigation: hide restricted menus (Widyaiswara, Publikasi, Galeri, Unduhan) if not logged in
+  const showRestricted = mounted && user !== null
+
+  const filteredNavigation = navigation
+    .filter((item) => {
+      if (!showRestricted) {
+        const isRestricted = ['/widyaiswara', '/publikasi', '/galeri', '/unduhan'].includes(item.href)
+        return !isRestricted
+      }
+      return true
+    })
+    .map((item) => {
+      // If not logged in, convert 'Sarana Prasarana' top-level menu directly into 'Klinik Pratama' without children
+      if (!showRestricted && item.href === '/sarana-prasarana') {
+        return {
+          label: 'Klinik Pratama',
+          href: '/sarana-prasarana/klinik-pratama',
+          description: 'Layanan Kesehatan Klinik Pratama Sespim Lemdiklat Polri.'
+        }
+      }
+      return item
+    })
+
+  const desktopItems = filteredNavigation.slice(0, 7)
+  const desktopMoreItems = filteredNavigation.slice(7).filter((item) => item.href !== '/kontak')
 
   return (
     <header className="sticky top-0 z-50 border-b border-polri-gold/30 bg-polri-brownDark/95 text-white shadow-lg backdrop-blur">
@@ -215,8 +275,32 @@ export function Header() {
           ) : null}
         </nav>
 
-        <div className="hidden shrink-0 xl:block">
-          <SearchBar />
+        <div className="hidden shrink-0 xl:flex xl:items-center xl:gap-3">
+          
+          {user ? (
+            <div className="flex items-center gap-2.5 bg-white/10 rounded-xl px-3 py-1.5 border border-polri-gold/20">
+              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-polri-gold text-polri-brownDark font-black text-xs uppercase">
+                {user.name.charAt(0)}
+              </div>
+              <div className="text-left text-[10px] leading-tight">
+                <p className="font-black text-white max-w-[110px] truncate" title={user.name}>{user.name}</p>
+                <p className="text-polri-goldSoft font-bold capitalize mt-0.5">{user.role.replace('_', ' ')}</p>
+              </div>
+              <button
+                onClick={handleLogout}
+                className="text-[10px] font-black uppercase text-neutral-400 hover:text-white transition-colors ml-2 bg-neutral-900 px-2 py-1 rounded border border-neutral-700"
+              >
+                Keluar
+              </button>
+            </div>
+          ) : (
+            <Link
+              href="/login"
+              className="inline-flex h-9 items-center justify-center rounded-xl bg-polri-gold px-4 text-xs font-bold text-polri-brownDark transition hover:-translate-y-0.5 hover:shadow-soft"
+            >
+              Login
+            </Link>
+          )}
         </div>
 
         <button
@@ -234,10 +318,35 @@ export function Header() {
       {open ? (
         <div id="mobile-menu" className="border-t border-polri-gold/30 bg-polri-brown xl:hidden">
           <div className="mx-auto max-h-[calc(100dvh-73px)] max-w-7xl space-y-2 overflow-y-auto px-4 py-4">
-            <div className="rounded-lg bg-white/10 p-3">
-              <SearchBar />
-            </div>
-            {navigation.map((item) => {
+            {user ? (
+              <div className="flex items-center justify-between rounded-lg bg-white/10 p-3 border border-polri-gold/20">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-polri-gold text-polri-brownDark font-black text-sm uppercase">
+                    {user.name.charAt(0)}
+                  </div>
+                  <div className="text-left text-xs leading-tight">
+                    <p className="font-black text-white">{user.name}</p>
+                    <p className="text-polri-goldSoft font-bold capitalize mt-0.5">{user.role.replace('_', ' ')}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="rounded-lg bg-polri-maroon text-white px-3 py-1.5 text-xs font-bold transition hover:bg-polri-brownDark border border-polri-gold/20"
+                >
+                  Keluar
+                </button>
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                onClick={() => setOpen(false)}
+                className="block text-center rounded-lg bg-polri-gold text-polri-brownDark py-2.5 text-sm font-bold shadow-soft transition hover:bg-polri-gold/90"
+              >
+                Login Akun Internal
+              </Link>
+            )}
+
+            {filteredNavigation.map((item) => {
               const active = isActiveHref(pathname, item.href)
               const hasChildren = Boolean(item.children?.length)
               const expanded = hasChildren && (expandedMenu === item.href || (expandedMenu === null && active))

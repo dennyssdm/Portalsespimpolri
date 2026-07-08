@@ -156,7 +156,7 @@ export const navigation: NavItem[] = [
 
 export const internalLoginLink: NavItem = {
   label: 'Login Internal',
-  href: '/login-internal',
+  href: '/login',
   description: 'Akses masuk untuk personel, pengelola konten, dan layanan internal Sespim.'
 }
 
