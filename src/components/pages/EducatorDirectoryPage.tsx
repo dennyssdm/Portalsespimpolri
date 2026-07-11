@@ -106,33 +106,6 @@ export function EducatorDirectoryPage({ items }: EducatorDirectoryPageProps) {
         </Container>
       </section>
 
-      <section className="bg-polri-brownDark py-10 text-white">
-        <Container>
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.75fr)] lg:items-center">
-            <div className="max-w-3xl">
-              <p className="text-sm font-bold uppercase tracking-[0.24em] text-polri-goldSoft">Direktori Akademik</p>
-              <h2 className="mt-3 text-2xl font-black tracking-tight sm:text-3xl">Profil Widyaiswara dalam format data kedinasan</h2>
-              <p className="mt-4 text-base leading-8 text-white/76">
-                Setiap kartu disiapkan untuk menampung data resmi Widyaiswara dan dapat diperbarui bertahap saat riwayat pendidikan dan jabatan final tersedia.
-              </p>
-            </div>
-            <div className="grid overflow-hidden rounded-lg border border-polri-gold/30 sm:grid-cols-3">
-              <div className="border-b border-polri-gold/20 bg-white/8 p-5 sm:border-b-0 sm:border-r">
-                <p className="text-3xl font-black text-polri-goldSoft">{items.length}</p>
-                <p className="mt-2 text-sm font-semibold leading-6 text-white/76">Profil terdata</p>
-              </div>
-              <div className="border-b border-polri-gold/20 bg-white/8 p-5 sm:border-b-0 sm:border-r">
-                <p className="text-3xl font-black text-polri-goldSoft">3</p>
-                <p className="mt-2 text-sm font-semibold leading-6 text-white/76">Data identitas</p>
-              </div>
-              <div className="bg-white/8 p-5">
-                <p className="text-3xl font-black text-polri-goldSoft">6</p>
-                <p className="mt-2 text-sm font-semibold leading-6 text-white/76">Field profil</p>
-              </div>
-            </div>
-          </div>
-        </Container>
-      </section>
 
       <section className="bg-white py-14">
         <Container>
