@@ -330,6 +330,7 @@ function DashboardContent() {
   // Profil Specific Form Fields
   const [formPejabatItems, setFormPejabatItems] = useState<{ group: string; name: string; pangkat: string; jabatan: string; foto: string }[]>([])
   const [formFasilitasItems, setFormFasilitasItems] = useState<{ group: string; name: string; keterangan: string; foto: string }[]>([])
+  const [formMateriTerbukaItems, setFormMateriTerbukaItems] = useState<{ title: string; description: string; fileName: string; href: string; format: string; category: string }[]>([])
   
   const [formContactChatbotName, setFormContactChatbotName] = useState('')
   const [formContactChatbotUrl, setFormContactChatbotUrl] = useState('')
@@ -351,6 +352,59 @@ function DashboardContent() {
   const [formRedaksiKontributorSetlem, setFormRedaksiKontributorSetlem] = useState('')
   const [formRedaksiKontributorWidyaiswara, setFormRedaksiKontributorWidyaiswara] = useState('')
   const [formRedaksiReviewer, setFormRedaksiReviewer] = useState('')
+
+  // Parsing Materi Terbuka string content into states
+  const parseMateriTerbukaContent = (contentStr: string) => {
+    const lines = contentStr.split(/\r?\n/)
+    const list: any[] = []
+    let currentItem: any = null
+    for (const line of lines) {
+      const trimmed = line.trim()
+      if (!trimmed) continue
+      
+      const colonIdx = trimmed.indexOf(':')
+      if (colonIdx === -1) continue
+      const key = trimmed.substring(0, colonIdx).trim().toUpperCase()
+      const val = trimmed.substring(colonIdx + 1).trim()
+      
+      if (key === 'NAMA') {
+        currentItem = { title: val, description: '', fileName: '', href: '', format: 'PDF', category: 'Pelatihan Dasar' }
+        list.push(currentItem)
+        continue
+      }
+      
+      if (currentItem) {
+        if (key === 'DESKRIPSI') {
+          currentItem.description = val
+        } else if (key === 'FILE') {
+          currentItem.fileName = val
+        } else if (key === 'URL') {
+          currentItem.href = val
+        } else if (key === 'FORMAT') {
+          currentItem.format = val
+        } else if (key === 'KATEGORI') {
+          currentItem.category = val
+        }
+      }
+    }
+    setFormMateriTerbukaItems(list.length > 0 ? list : [{ title: '', description: '', fileName: '', href: '', format: 'PDF', category: 'Pelatihan Dasar' }])
+  }
+
+  // Building Materi Terbuka content string from states
+  const buildMateriTerbukaContent = (): string => {
+    let contentStr = ''
+    for (const item of formMateriTerbukaItems) {
+      if (!item.title.trim()) continue
+      contentStr += `NAMA: ${item.title}\n`
+      if (item.description) contentStr += `DESKRIPSI: ${item.description}\n`
+      if (item.fileName) contentStr += `FILE: ${item.fileName}\n`
+      if (item.href) contentStr += `URL: ${item.href}\n`
+      if (item.format) contentStr += `FORMAT: ${item.format}\n`
+      if (item.category) contentStr += `KATEGORI: ${item.category}\n`
+      contentStr += `\n`
+    }
+    return contentStr.trim()
+  }
 
   // Parsing a profil string content into states
   const parseProfilContent = (itemId: string, contentStr: string) => {
@@ -1081,6 +1135,127 @@ function DashboardContent() {
     return null
   }
 
+  const renderMateriTerbukaStructuredFields = () => {
+    return (
+      <div className="space-y-4 max-h-[350px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3 text-neutral-200">
+        <div className="flex justify-between items-center">
+          <p className="text-[10px] font-bold text-polri-goldSoft uppercase tracking-wider">Daftar Materi Terbuka (PDF / File)</p>
+          <button
+            type="button"
+            onClick={() => setFormMateriTerbukaItems([...formMateriTerbukaItems, { title: '', description: '', fileName: '', href: '', format: 'PDF', category: 'Pelatihan Dasar' }])}
+            className="px-2 py-1 rounded bg-polri-gold text-neutral-950 text-[9px] font-black uppercase hover:bg-yellow-500 transition"
+          >
+            + Tambah Materi
+          </button>
+        </div>
+        <div className="space-y-4">
+          {formMateriTerbukaItems.map((item, idx) => (
+            <div key={idx} className="p-3 bg-neutral-950 rounded-xl border border-neutral-800 space-y-2 relative">
+              <button
+                type="button"
+                onClick={() => setFormMateriTerbukaItems(formMateriTerbukaItems.filter((_, i) => i !== idx))}
+                className="absolute right-2 top-2 text-red-500 hover:text-red-400 font-bold text-xs"
+              >
+                Hapus
+              </button>
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Judul Materi</label>
+                  <input
+                    type="text"
+                    value={item.title}
+                    onChange={(e) => {
+                      const updated = [...formMateriTerbukaItems]
+                      updated[idx].title = e.target.value
+                      setFormMateriTerbukaItems(updated)
+                    }}
+                    placeholder="Contoh: RENCANA PEMBELAJARAN"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Nama File</label>
+                  <input
+                    type="text"
+                    value={item.fileName}
+                    onChange={(e) => {
+                      const updated = [...formMateriTerbukaItems]
+                      updated[idx].fileName = e.target.value
+                      setFormMateriTerbukaItems(updated)
+                    }}
+                    placeholder="Contoh: rencana_pembelajaran.pdf"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">URL Tautan / File</label>
+                  <input
+                    type="text"
+                    value={item.href}
+                    onChange={(e) => {
+                      const updated = [...formMateriTerbukaItems]
+                      updated[idx].href = e.target.value
+                      setFormMateriTerbukaItems(updated)
+                    }}
+                    placeholder="Contoh: /files/rencana.pdf"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Kategori Materi</label>
+                  <input
+                    type="text"
+                    value={item.category}
+                    onChange={(e) => {
+                      const updated = [...formMateriTerbukaItems]
+                      updated[idx].category = e.target.value
+                      setFormMateriTerbukaItems(updated)
+                    }}
+                    placeholder="Contoh: Pelatihan Dasar"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[8px] uppercase text-neutral-500 font-bold">Deskripsi Materi</label>
+                <textarea
+                  value={item.description}
+                  onChange={(e) => {
+                    const updated = [...formMateriTerbukaItems]
+                    updated[idx].description = e.target.value
+                    setFormMateriTerbukaItems(updated)
+                  }}
+                  rows={2}
+                  placeholder="Deskripsi singkat materi pembelajaran..."
+                  className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold resize-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[8px] uppercase text-neutral-500 font-bold">Format Dokumen</label>
+                <input
+                  type="text"
+                  value={item.format || 'PDF'}
+                  onChange={(e) => {
+                    const updated = [...formMateriTerbukaItems]
+                    updated[idx].format = e.target.value
+                    setFormMateriTerbukaItems(updated)
+                  }}
+                  placeholder="Contoh: PDF"
+                  className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
   // Actions
   const handleOpenCreate = () => {
     setFormTitle('')
@@ -1314,6 +1489,12 @@ function DashboardContent() {
       setFormRedaksiKontributorWidyaiswara('')
       setFormRedaksiReviewer('')
     }
+
+    if (currentModule === 'Widyaiswara' && item.id === 'w-4') {
+      parseMateriTerbukaContent(item.content || '')
+    } else {
+      setFormMateriTerbukaItems([])
+    }
     setIsEditModalOpen(true)
   }
 
@@ -1326,9 +1507,16 @@ function DashboardContent() {
 
     const isProg = currentModule === 'Program Pendidikan' && isProgramSchool(formCategory, selectedItem.id)
     const isProfilStructured = currentModule === 'Profil' && ['p-5', 'p-6', 'p-7', 'p-8'].includes(selectedItem.id)
+    const isWidyaiswaraMateri = currentModule === 'Widyaiswara' && selectedItem.id === 'w-4'
     const finalContent = isProg 
       ? buildProgramContent(formTitle) 
-      : (isProfilStructured ? buildProfilContent(selectedItem.id) : formContent)
+      : (isProfilStructured 
+          ? buildProfilContent(selectedItem.id) 
+          : (isWidyaiswaraMateri 
+              ? buildMateriTerbukaContent() 
+              : formContent
+            )
+        )
 
     const body = {
       title: formTitle,
@@ -2009,6 +2197,8 @@ function DashboardContent() {
                 </div>
               ) : currentModule === 'Profil' && ['p-5', 'p-6', 'p-7', 'p-8'].includes(formCategory) ? (
                 renderProfilStructuredFields(formCategory)
+              ) : currentModule === 'Widyaiswara' && formCategory === 'Materi Terbuka' ? (
+                renderMateriTerbukaStructuredFields()
               ) : (
                 <div>
                   <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Isi Konten (News / Detail)</label>
@@ -2242,6 +2432,8 @@ function DashboardContent() {
                 </div>
               ) : currentModule === 'Profil' && ['p-5', 'p-6', 'p-7', 'p-8'].includes(selectedItem?.id || '') ? (
                 renderProfilStructuredFields(selectedItem?.id || '')
+              ) : currentModule === 'Widyaiswara' && selectedItem?.id === 'w-4' ? (
+                renderMateriTerbukaStructuredFields()
               ) : (
                 <div>
                   <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Isi Konten (News / Detail)</label>
