@@ -147,9 +147,9 @@ export function EducatorDirectoryPage({ items }: EducatorDirectoryPageProps) {
               <div key={groupName} className="space-y-6">
                 {/* Kelompok Header */}
                 <div className="flex items-center gap-3 pl-1 py-1.5 bg-polri-cream/15 rounded-xl border border-polri-gold/10">
-                  <div className="h-10 w-5 bg-polri-gold rounded-lg shadow-md shrink-0 border border-white" />
+                  <div className="h-12 w-6 bg-polri-gold rounded-lg shadow-md shrink-0 border border-white" />
                   <div>
-                    <h3 className="text-base font-black uppercase text-polri-brownDark tracking-wider leading-none">{groupName}</h3>
+                    <h3 className="text-xl sm:text-2xl font-black uppercase text-polri-brownDark tracking-wider leading-none">{groupName}</h3>
                     <p className="text-[11px] font-bold text-neutral-500 mt-1.5">{groupItems.length} Personel Terdata</p>
                   </div>
                 </div>
