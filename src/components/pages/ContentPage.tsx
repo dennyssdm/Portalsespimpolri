@@ -1154,7 +1154,12 @@ export function ContentPage({ content, path }: ContentPageProps) {
 
       <section className="bg-white py-14">
         <Container>
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
+          <div className={cn(
+            "grid gap-8",
+            isEditorialBoardPage 
+              ? "grid-cols-1" 
+              : "lg:grid-cols-[minmax(0,1fr)_340px]"
+          )}>
             <div className="min-w-0 space-y-6">
               {content.sections.map((section) => {
                 const isEducatorRankSection = path === '/widyaiswara' && section.title === 'Jenjang Jabatan'
@@ -1272,56 +1277,58 @@ export function ContentPage({ content, path }: ContentPageProps) {
               })}
             </div>
 
-            <aside className="space-y-5">
-              {path !== '/profil/sejarah' && path !== '/profil/visi-misi' && path !== '/profil/tugas-fungsi' && path !== '/profil/struktur-organisasi' && path !== '/profil/pejabat' && path !== '/profil/fasilitas' && path !== '/profil/kontak/contact' && path !== '/profil/kontak/susunan-redaksi' && (
-                <div className="rounded-lg bg-polri-brownDark p-6 text-white">
-                  <p className="text-sm font-bold uppercase tracking-[0.24em] text-polri-goldSoft">Status Konten</p>
-                  <h3 className="mt-3 text-xl font-black">Ready for QA</h3>
-                  <p className="mt-3 text-sm leading-7 text-white/72">
-                    Struktur front-end halaman utama sudah diperkuat. Konten resmi dapat dimasukkan pada fase integrasi CMS/backend.
-                  </p>
-                </div>
-              )}
-              {path !== '/profil/kontak/susunan-redaksi' && highlight?.sideNotes.map((note) => (
-                <div key={note.title} className="rounded-lg border border-polri-gold/25 bg-polri-cream p-6">
-                  <h3 className="font-black text-polri-brownDark">{note.title}</h3>
-                  <p className="mt-3 text-sm leading-7 text-neutral-700">{note.body}</p>
-                </div>
-              ))}
-              {content.externalLink ? (
-                <div className="rounded-lg border border-polri-gold/25 bg-polri-cream p-6">
-                  <h3 className="font-black text-polri-brownDark">Akses Layanan</h3>
-                  {content.externalLink.description ? (
-                    <p className="mt-3 text-sm leading-7 text-neutral-700">{content.externalLink.description}</p>
-                  ) : null}
-                  <a
-                    href={content.externalLink.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-4 inline-flex w-full items-center justify-center rounded-lg bg-polri-gold px-4 py-3 text-center text-sm font-black text-polri-brownDark hover:bg-polri-goldSoft"
-                  >
-                    {content.externalLink.label}
-                  </a>
-                </div>
-              ) : null}
-              {path !== '/profil/pejabat' && path !== '/profil/fasilitas' && path !== '/profil/kontak/contact' && path !== '/profil/kontak/susunan-redaksi' && path !== '/profil/struktur-organisasi' && (
-                <div className="rounded-lg border border-polri-gold/25 bg-polri-cream p-6">
-                  <h3 className="font-black text-polri-brownDark">Tautan Terkait</h3>
-                  <div className="mt-4 grid gap-2">
-                    {related.map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        {...externalLinkProps(item.href)}
-                        className="rounded-lg bg-white px-4 py-3 text-sm font-bold text-polri-brownDark hover:text-polri-maroon"
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
+            {!isEditorialBoardPage && (
+              <aside className="space-y-5">
+                {path !== '/profil/sejarah' && path !== '/profil/visi-misi' && path !== '/profil/tugas-fungsi' && path !== '/profil/struktur-organisasi' && path !== '/profil/pejabat' && path !== '/profil/fasilitas' && path !== '/profil/kontak/contact' && path !== '/profil/kontak/susunan-redaksi' && (
+                  <div className="rounded-lg bg-polri-brownDark p-6 text-white">
+                    <p className="text-sm font-bold uppercase tracking-[0.24em] text-polri-goldSoft">Status Konten</p>
+                    <h3 className="mt-3 text-xl font-black">Ready for QA</h3>
+                    <p className="mt-3 text-sm leading-7 text-white/72">
+                      Struktur front-end halaman utama sudah diperkuat. Konten resmi dapat dimasukkan pada fase integrasi CMS/backend.
+                    </p>
                   </div>
-                </div>
-              )}
-            </aside>
+                )}
+                {path !== '/profil/kontak/susunan-redaksi' && highlight?.sideNotes.map((note) => (
+                  <div key={note.title} className="rounded-lg border border-polri-gold/25 bg-polri-cream p-6">
+                    <h3 className="font-black text-polri-brownDark">{note.title}</h3>
+                    <p className="mt-3 text-sm leading-7 text-neutral-700">{note.body}</p>
+                  </div>
+                ))}
+                {content.externalLink ? (
+                  <div className="rounded-lg border border-polri-gold/25 bg-polri-cream p-6">
+                    <h3 className="font-black text-polri-brownDark">Akses Layanan</h3>
+                    {content.externalLink.description ? (
+                      <p className="mt-3 text-sm leading-7 text-neutral-700">{content.externalLink.description}</p>
+                    ) : null}
+                    <a
+                      href={content.externalLink.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-4 inline-flex w-full items-center justify-center rounded-lg bg-polri-gold px-4 py-3 text-center text-sm font-black text-polri-brownDark hover:bg-polri-goldSoft"
+                    >
+                      {content.externalLink.label}
+                    </a>
+                  </div>
+                ) : null}
+                {path !== '/profil/pejabat' && path !== '/profil/fasilitas' && path !== '/profil/kontak/contact' && path !== '/profil/kontak/susunan-redaksi' && path !== '/profil/struktur-organisasi' && (
+                  <div className="rounded-lg border border-polri-gold/25 bg-polri-cream p-6">
+                    <h3 className="font-black text-polri-brownDark">Tautan Terkait</h3>
+                    <div className="mt-4 grid gap-2">
+                      {related.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          {...externalLinkProps(item.href)}
+                          className="rounded-lg bg-white px-4 py-3 text-sm font-bold text-polri-brownDark hover:text-polri-maroon"
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </aside>
+            )}
           </div>
         </Container>
       </section>
