@@ -451,12 +451,9 @@ export function ContentPage({ content, path }: ContentPageProps) {
         />
         <div className="mt-8 grid gap-5 md:grid-cols-2">
           {content.resources.map((resource) => (
-            <a
+            <div
               key={resource.href}
-              href={resource.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group block rounded-lg border border-polri-gold/25 bg-white p-5 shadow-soft transition hover:-translate-y-1 hover:border-polri-gold hover:shadow-gold"
+              className="rounded-lg border border-polri-gold/25 bg-white p-5 shadow-soft transition hover:-translate-y-1 hover:border-polri-gold hover:shadow-gold"
             >
               <div className="flex flex-wrap gap-2">
                 <span className="rounded-lg bg-polri-maroon px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-white">
@@ -468,17 +465,37 @@ export function ContentPage({ content, path }: ContentPageProps) {
                   </span>
                 ) : null}
               </div>
-              <h2 className="mt-4 text-lg font-black text-polri-brownDark group-hover:text-polri-maroon sm:text-xl">
+              <h2 className="mt-4 text-lg font-black text-polri-brownDark sm:text-xl">
                 {resource.title}
               </h2>
               <p className="mt-3 text-sm leading-7 text-neutral-700">{resource.description}</p>
               <p className="mt-4 rounded-lg bg-polri-cream px-4 py-3 text-xs font-bold text-polri-brownDark">
                 {resource.fileName}
               </p>
-              <span className="mt-4 inline-flex rounded-lg bg-polri-gold px-4 py-3 text-sm font-black text-polri-brownDark group-hover:bg-polri-goldSoft">
-                Buka File
-              </span>
-            </a>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <a
+                  href={resource.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-polri-gold px-4 py-2.5 text-xs font-black text-polri-brownDark hover:bg-polri-goldSoft transition"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                  </svg>
+                  Buka File
+                </a>
+                <a
+                  href={resource.href}
+                  download={resource.fileName}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-polri-maroon px-4 py-2.5 text-xs font-black text-white hover:bg-polri-brownDark transition"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                  </svg>
+                  Unduh File
+                </a>
+              </div>
+            </div>
           ))}
         </div>
       </Container>
