@@ -99,16 +99,36 @@ function createCertificatePdf(name: string, moduleCount: number) {
 export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspaceProps) {
   const [completedModuleIds, setCompletedModuleIds] = useState<string[]>([])
   const [certificateName, setCertificateName] = useState('')
+  const [openedVideos, setOpenedVideos] = useState<string[]>([])
+  const [openedPdfs, setOpenedPdfs] = useState<string[]>([])
 
   useEffect(() => {
     const storedProgress = window.localStorage.getItem(progressStorageKey)
     const storedName = window.localStorage.getItem(certificateNameStorageKey)
+    const storedVideos = window.localStorage.getItem('sespim-inpassing-videos-v1')
+    const storedPdfs = window.localStorage.getItem('sespim-inpassing-pdfs-v1')
 
     if (storedProgress) {
       try {
         setCompletedModuleIds(JSON.parse(storedProgress) as string[])
       } catch {
         setCompletedModuleIds([])
+      }
+    }
+
+    if (storedVideos) {
+      try {
+        setOpenedVideos(JSON.parse(storedVideos) as string[])
+      } catch {
+        setOpenedVideos([])
+      }
+    }
+
+    if (storedPdfs) {
+      try {
+        setOpenedPdfs(JSON.parse(storedPdfs) as string[])
+      } catch {
+        setOpenedPdfs([])
       }
     }
 
@@ -124,6 +144,14 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
   useEffect(() => {
     window.localStorage.setItem(certificateNameStorageKey, certificateName)
   }, [certificateName])
+
+  useEffect(() => {
+    window.localStorage.setItem('sespim-inpassing-videos-v1', JSON.stringify(openedVideos))
+  }, [openedVideos])
+
+  useEffect(() => {
+    window.localStorage.setItem('sespim-inpassing-pdfs-v1', JSON.stringify(openedPdfs))
+  }, [openedPdfs])
 
   const moduleIdSet = useMemo(() => new Set(modules.map((module) => module.id)), [modules])
   const completedSet = useMemo(() => new Set(completedModuleIds.filter((moduleId) => moduleIdSet.has(moduleId))), [completedModuleIds, moduleIdSet])
@@ -143,6 +171,8 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
 
   function resetProgress() {
     setCompletedModuleIds([])
+    setOpenedVideos([])
+    setOpenedPdfs([])
   }
 
   function downloadCertificate() {
@@ -186,6 +216,11 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
       <section className="grid gap-4 lg:grid-cols-2">
         {modules.map((module) => {
           const completed = completedSet.has(module.id)
+          const hasVideo = !!module.videoHref
+          const hasPdf = !!module.pdfHref
+          const videoWatched = !hasVideo || openedVideos.includes(module.id)
+          const pdfOpened = !hasPdf || openedPdfs.includes(module.id)
+          const isEligible = videoWatched && pdfOpened
 
           return (
             <article key={module.id} className="overflow-hidden rounded-lg border border-polri-gold/25 bg-white shadow-soft">
@@ -208,6 +243,11 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
                       href={module.videoHref}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() => {
+                        if (!openedVideos.includes(module.id)) {
+                          setOpenedVideos([...openedVideos, module.id])
+                        }
+                      }}
                       className="inline-flex items-center justify-center gap-2 rounded-lg bg-polri-brownDark px-4 py-3 text-sm font-black text-white hover:bg-polri-maroon"
                     >
                       <PlayCircleIcon className="h-5 w-5" aria-hidden="true" />
@@ -224,6 +264,13 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
                     <a
                       href={module.pdfHref}
                       download={module.pdfFileName}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => {
+                        if (!openedPdfs.includes(module.id)) {
+                          setOpenedPdfs([...openedPdfs, module.id])
+                        }
+                      }}
                       className="inline-flex items-center justify-center gap-2 rounded-lg bg-polri-gold px-4 py-3 text-sm font-black text-polri-brownDark hover:bg-polri-goldSoft"
                     >
                       <DocumentArrowDownIcon className="h-5 w-5" aria-hidden="true" />
@@ -237,15 +284,32 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
                   )}
                 </div>
 
-                <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-polri-gold/25 bg-white px-4 py-3 text-sm font-black text-polri-brownDark hover:bg-polri-cream">
-                  <input
-                    type="checkbox"
-                    checked={completed}
-                    onChange={() => toggleModule(module.id)}
-                    className="h-5 w-5 rounded border-polri-gold text-polri-maroon"
-                  />
-                  Sudah dipelajari
-                </label>
+                <div className="space-y-2">
+                  <label 
+                    className={`flex items-center gap-3 rounded-lg border px-4 py-3 text-sm font-black transition ${
+                      isEligible 
+                        ? 'cursor-pointer border-polri-gold/25 bg-white text-polri-brownDark hover:bg-polri-cream' 
+                        : 'cursor-not-allowed border-neutral-200 bg-neutral-50 text-neutral-400'
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={completed}
+                      disabled={!isEligible}
+                      onChange={() => toggleModule(module.id)}
+                      className="h-5 w-5 rounded border-polri-gold text-polri-maroon disabled:opacity-50"
+                    />
+                    Sudah dipelajari
+                  </label>
+                  {!isEligible && (
+                    <p className="text-[11px] font-bold text-polri-maroon flex items-start gap-1">
+                      <svg className="w-3.5 h-3.5 shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                      </svg>
+                      Harap tonton video pembelajaran dan baca PDF terlebih dahulu untuk mengaktifkan checklist.
+                    </p>
+                  )}
+                </div>
               </div>
             </article>
           )
