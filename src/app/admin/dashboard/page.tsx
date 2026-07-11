@@ -140,7 +140,8 @@ const ADMIN_SIDEBAR_ITEMS: CMSSidebarItem[] = [
   { label: 'Publikasi', type: 'module', moduleName: 'Publikasi' },
   { label: 'Galeri & Unduhan', type: 'module', moduleName: 'Galeri & Unduhan' },
   { label: 'Kontak', type: 'module', moduleName: 'Kontak' },
-  { label: 'Sarana Prasarana', type: 'module', moduleName: 'Sarana Prasarana' }
+  { label: 'Sarana Prasarana', type: 'module', moduleName: 'Sarana Prasarana' },
+  { label: 'Laporan Sertifikasi', type: 'module', moduleName: 'Laporan Sertifikasi' }
 ]
 
 function DashboardContent() {
@@ -353,6 +354,118 @@ function DashboardContent() {
   const [formRedaksiKontributorSetlem, setFormRedaksiKontributorSetlem] = useState('')
   const [formRedaksiKontributorWidyaiswara, setFormRedaksiKontributorWidyaiswara] = useState('')
   const [formRedaksiReviewer, setFormRedaksiReviewer] = useState('')
+
+  // Claims List State and Helpers
+  const [claimsList, setClaimsList] = useState<{ id: number; nrp_nip: string; name: string; certificate_code: string; completed_at: string }[]>([])
+  
+  const fetchClaimsList = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/inpassing-claims`)
+      if (response.ok) {
+        const json = await response.json()
+        if (json.status === 'success') {
+          setClaimsList(json.data.claims)
+        }
+      }
+    } catch (err) {
+      console.error('Failed to fetch claims list:', err)
+    }
+  }
+
+  const downloadClaimsCSV = () => {
+    if (claimsList.length === 0) return
+    const headers = ['No', 'NRP/NIP', 'Nama Calon Widyaiswara', 'Kode Sertifikat', 'Tanggal Kelulusan']
+    const rows = claimsList.map((c, i) => [
+      i + 1,
+      c.nrp_nip,
+      c.name,
+      c.certificate_code,
+      new Date(c.completed_at).toLocaleString('id-ID')
+    ])
+    
+    // Add BOM for proper UTF-8 Excel mapping
+    const csvContent = '\uFEFF' + [
+      headers.join(','),
+      ...rows.map(r => r.map(val => `"${String(val).replace(/"/g, '""')}"`).join(','))
+    ].join('\n')
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `laporan-sertifikasi-widyaiswara-${new Date().toISOString().split('T')[0]}.csv`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }
+
+  // Trigger fetch when currentModule is 'Laporan Sertifikasi'
+  useEffect(() => {
+    if (currentModule === 'Laporan Sertifikasi') {
+      fetchClaimsList()
+    }
+  }, [currentModule])
+
+  const renderClaimsReportWorkspace = () => {
+    return (
+      <div className="space-y-6">
+        <div className="bg-neutral-950 p-6 rounded-2xl border border-neutral-800 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h4 className="text-sm font-black uppercase text-polri-goldSoft tracking-wider">Laporan Kelulusan Calon Widyaiswara</h4>
+              <p className="text-xs text-neutral-400 mt-1">Daftar Widyaiswara yang telah menyelesaikan seluruh modul Inpassing dan mengklaim sertifikat.</p>
+            </div>
+            <button
+              onClick={downloadClaimsCSV}
+              disabled={claimsList.length === 0}
+              className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-neutral-800 disabled:text-neutral-500 text-white font-bold text-xs py-3 px-4 rounded-xl shadow-md transition"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+              </svg>
+              Download Laporan CSV (Excel)
+            </button>
+          </div>
+
+          <div className="bg-neutral-900 rounded-xl border border-neutral-800 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs text-neutral-300">
+                <thead className="bg-neutral-950 border-b border-neutral-800 text-neutral-400 font-bold uppercase tracking-wider text-[10px]">
+                  <tr>
+                    <th className="px-6 py-4">No</th>
+                    <th className="px-6 py-4">NRP / NIP</th>
+                    <th className="px-6 py-4">Nama Calon Widyaiswara</th>
+                    <th className="px-6 py-4">Kode Sertifikat</th>
+                    <th className="px-6 py-4">Tanggal Kelulusan</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-neutral-800/60 font-semibold">
+                  {claimsList.length > 0 ? (
+                    claimsList.map((claim, index) => (
+                      <tr key={claim.id} className="hover:bg-neutral-950/40 transition">
+                        <td className="px-6 py-4">{index + 1}</td>
+                        <td className="px-6 py-4 font-mono">{claim.nrp_nip}</td>
+                        <td className="px-6 py-4 text-white">{claim.name}</td>
+                        <td className="px-6 py-4 text-polri-goldSoft font-mono">{claim.certificate_code}</td>
+                        <td className="px-6 py-4">{new Date(claim.completed_at).toLocaleString('id-ID')}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={5} className="px-6 py-10 text-center text-neutral-500">
+                        Belum ada laporan klaim sertifikat yang tercatat.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   // Parsing Materi Terbuka string content into states
   const parseMateriTerbukaContent = (contentStr: string) => {
@@ -1965,11 +2078,15 @@ function DashboardContent() {
 
         {/* PAGE CONTENT CONTAINER */}
         <div className="flex-1 p-6 space-y-6 overflow-y-auto">
-          {/* Header Title Section */}
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h3 className="text-xl font-black text-white">{currentSidebarLabel}</h3>
-              <p className="text-xs text-neutral-400 mt-1">Kelola dan atur konfigurasi data konten dinamis untuk modul ini.</p>
+          {currentModule === 'Laporan Sertifikasi' ? (
+            renderClaimsReportWorkspace()
+          ) : (
+            <>
+              {/* Header Title Section */}
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h3 className="text-xl font-black text-white">{currentSidebarLabel}</h3>
+                  <p className="text-xs text-neutral-400 mt-1">Kelola dan atur konfigurasi data konten dinamis untuk modul ini.</p>
             </div>
             {hasWriteAccess && currentModule !== 'Profil' && (
               <button
@@ -2183,6 +2300,8 @@ function DashboardContent() {
               </table>
             </div>
           </div>
+          </>
+          )}
         </div>
       </main>
 

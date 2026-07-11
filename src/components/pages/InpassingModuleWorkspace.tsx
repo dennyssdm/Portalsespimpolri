@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { CheckCircleIcon, DocumentArrowDownIcon, LockClosedIcon, PlayCircleIcon, TrophyIcon } from '@heroicons/react/24/outline'
 import type { InpassingModule } from '@/data/inpassingModules'
+import { apiFetch } from '@/lib/api'
 
 type InpassingModuleWorkspaceProps = {
   modules: InpassingModule[]
@@ -174,6 +175,23 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
 
   function downloadCertificate() {
     if (!certificateReady) return
+
+    // Save claim event to database
+    try {
+      const userJson = sessionStorage.getItem('sespim_user')
+      if (userJson) {
+        const user = JSON.parse(userJson)
+        apiFetch('/api/inpassing-claims', {
+          method: 'POST',
+          body: JSON.stringify({
+            nrp_nip: user.nrpNip || 'guest',
+            name: certificateName
+          })
+        }).catch(err => console.warn('Failed to log certificate claim:', err))
+      }
+    } catch (err) {
+      console.warn('Failed to write claim log:', err)
+    }
 
     const pdf = createCertificatePdf(certificateName, modules.length)
     const blob = new Blob([pdf], { type: 'application/pdf' })
