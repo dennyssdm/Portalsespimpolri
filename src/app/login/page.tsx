@@ -474,7 +474,12 @@ function LoginContent() {
               </div>
 
               <div>
-                <label className="block text-xs font-black uppercase tracking-[0.16em] text-polri-maroon">Kata Sandi</label>
+                <div className="flex justify-between items-center">
+                  <label className="block text-xs font-black uppercase tracking-[0.16em] text-polri-maroon">Kata Sandi</label>
+                  <Link href="/lupa-password" className="text-xs font-bold text-polri-maroon hover:underline transition">
+                    Lupa Kata Sandi?
+                  </Link>
+                </div>
                 <div className="relative mt-2">
                   <input
                     type="password"
