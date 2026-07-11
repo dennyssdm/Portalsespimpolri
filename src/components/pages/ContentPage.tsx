@@ -1279,15 +1279,7 @@ export function ContentPage({ content, path }: ContentPageProps) {
 
             {!isEditorialBoardPage && (
               <aside className="space-y-5">
-                {path !== '/profil/sejarah' && path !== '/profil/visi-misi' && path !== '/profil/tugas-fungsi' && path !== '/profil/struktur-organisasi' && path !== '/profil/pejabat' && path !== '/profil/fasilitas' && path !== '/profil/kontak/contact' && path !== '/profil/kontak/susunan-redaksi' && (
-                  <div className="rounded-lg bg-polri-brownDark p-6 text-white">
-                    <p className="text-sm font-bold uppercase tracking-[0.24em] text-polri-goldSoft">Status Konten</p>
-                    <h3 className="mt-3 text-xl font-black">Ready for QA</h3>
-                    <p className="mt-3 text-sm leading-7 text-white/72">
-                      Struktur front-end halaman utama sudah diperkuat. Konten resmi dapat dimasukkan pada fase integrasi CMS/backend.
-                    </p>
-                  </div>
-                )}
+                {/* Status Konten has been removed */}
                 {path !== '/profil/kontak/susunan-redaksi' && highlight?.sideNotes.map((note) => (
                   <div key={note.title} className="rounded-lg border border-polri-gold/25 bg-polri-cream p-6">
                     <h3 className="font-black text-polri-brownDark">{note.title}</h3>
