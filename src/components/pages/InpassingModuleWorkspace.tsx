@@ -97,45 +97,42 @@ function createCertificatePdf(name: string, moduleCount: number) {
 }
 
 export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspaceProps) {
-  const [completedModuleIds, setCompletedModuleIds] = useState<string[]>([])
-  const [certificateName, setCertificateName] = useState('')
-  const [openedVideos, setOpenedVideos] = useState<string[]>([])
-  const [openedPdfs, setOpenedPdfs] = useState<string[]>([])
-
-  useEffect(() => {
-    const storedProgress = window.localStorage.getItem(progressStorageKey)
-    const storedName = window.localStorage.getItem(certificateNameStorageKey)
-    const storedVideos = window.localStorage.getItem('sespim-inpassing-videos-v1')
-    const storedPdfs = window.localStorage.getItem('sespim-inpassing-pdfs-v1')
-
-    if (storedProgress) {
-      try {
-        setCompletedModuleIds(JSON.parse(storedProgress) as string[])
-      } catch {
-        setCompletedModuleIds([])
+  const [completedModuleIds, setCompletedModuleIds] = useState<string[]>(() => {
+    if (typeof window !== 'undefined') {
+      const stored = window.localStorage.getItem(progressStorageKey)
+      if (stored) {
+        try { return JSON.parse(stored) as string[] } catch {}
       }
     }
+    return []
+  })
 
-    if (storedVideos) {
-      try {
-        setOpenedVideos(JSON.parse(storedVideos) as string[])
-      } catch {
-        setOpenedVideos([])
+  const [certificateName, setCertificateName] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      return window.localStorage.getItem(certificateNameStorageKey) || ''
+    }
+    return ''
+  })
+
+  const [openedVideos, setOpenedVideos] = useState<string[]>(() => {
+    if (typeof window !== 'undefined') {
+      const stored = window.localStorage.getItem('sespim-inpassing-videos-v1')
+      if (stored) {
+        try { return JSON.parse(stored) as string[] } catch {}
       }
     }
+    return []
+  })
 
-    if (storedPdfs) {
-      try {
-        setOpenedPdfs(JSON.parse(storedPdfs) as string[])
-      } catch {
-        setOpenedPdfs([])
+  const [openedPdfs, setOpenedPdfs] = useState<string[]>(() => {
+    if (typeof window !== 'undefined') {
+      const stored = window.localStorage.getItem('sespim-inpassing-pdfs-v1')
+      if (stored) {
+        try { return JSON.parse(stored) as string[] } catch {}
       }
     }
-
-    if (storedName) {
-      setCertificateName(storedName)
-    }
-  }, [])
+    return []
+  })
 
   useEffect(() => {
     window.localStorage.setItem(progressStorageKey, JSON.stringify(completedModuleIds))
