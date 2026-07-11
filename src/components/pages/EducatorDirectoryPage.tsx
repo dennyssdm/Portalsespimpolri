@@ -146,9 +146,16 @@ export function EducatorDirectoryPage({ items }: EducatorDirectoryPageProps) {
             {Object.entries(groupedItems).map(([groupName, groupItems]) => (
               <div key={groupName} className="space-y-6">
                 {/* Kelompok Header */}
-                <div className="border-l-4 border-polri-gold pl-4 py-1.5 bg-polri-cream/30 rounded-r-xl">
-                  <h3 className="text-base font-black uppercase text-polri-brownDark tracking-wider">{groupName}</h3>
-                  <p className="text-[11px] font-bold text-neutral-500 mt-0.5">{groupItems.length} Personel Terdata</p>
+                <div className="flex items-center gap-3 pl-1 py-1.5 bg-polri-cream/15 rounded-xl border border-polri-gold/10">
+                  <div className="h-10 w-10 bg-polri-gold rounded-xl shadow-md shrink-0 border-2 border-white flex items-center justify-center">
+                    <svg className="w-5 h-5 text-polri-brownDark" fill="currentColor" viewBox="0 0 24 24">
+                      <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-base font-black uppercase text-polri-brownDark tracking-wider leading-none">{groupName}</h3>
+                    <p className="text-[11px] font-bold text-neutral-500 mt-1.5">{groupItems.length} Personel Terdata</p>
+                  </div>
                 </div>
 
                 {/* Grid of Cards inside Group */}
