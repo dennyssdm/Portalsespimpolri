@@ -52,17 +52,17 @@ function createCertificatePdf(name: string, moduleCount: number) {
   const content = [
     'q 1.8 w 42 42 758 511 re S Q',
     'q 0.8 w 56 56 730 483 re S Q',
-    centeredTextCommand('PORTAL RESMI SESPIM LEMDIKLAT POLRI', 500, 14, 'F2'),
-    centeredTextCommand('SERTIFIKAT PENYELESAIAN', 438, 30, 'F2'),
-    centeredTextCommand('BELAJAR MANDIRI INPASSING WIDYAISWARA', 404, 18, 'F2'),
-    centeredTextCommand('Diberikan kepada', 350, 13),
-    centeredTextCommand(name.trim(), 310, 26, 'F2'),
-    centeredTextCommand(`Telah menyelesaikan ${moduleCount} modul pembelajaran mandiri Inpassing Widyaiswara`, 260, 14),
-    centeredTextCommand('melalui Portal Resmi Sespim Lemdiklat Polri.', 238, 14),
-    centeredTextCommand(`Tanggal terbit: ${issuedAt}`, 190, 12),
-    centeredTextCommand('Sertifikat ini diterbitkan otomatis berdasarkan checklist belajar mandiri peserta.', 144, 10),
-    textCommand('Developed by Labinov Bagjianbang', 596, 86, 11, 'F2'),
-    textCommand('Sespim Lemdiklat Polri', 626, 68, 10)
+    centeredTextCommand('SESPIM LEMDIKLAT POLRI', 500, 14, 'F2'),
+    centeredTextCommand('SERTIFIKAT CALON WIDYAISWARA', 438, 28, 'F2'),
+    centeredTextCommand('Keterangan telah mengikuti Pelatihan Calon Widyaiswara Inpassing', 404, 13, 'F2'),
+    centeredTextCommand('Sespim Lemdiklat Polri', 384, 13, 'F2'),
+    centeredTextCommand('Diberikan Kepada:', 330, 11),
+    centeredTextCommand(name.trim().toUpperCase(), 280, 24, 'F2'),
+    centeredTextCommand(`Telah menyelesaikan seluruh dari ${moduleCount} Modul Pembelajaran Mandiri Inpassing`, 220, 12),
+    centeredTextCommand('Widyaiswara Sespim Lemdiklat Polri dengan hasil baik.', 200, 12),
+    centeredTextCommand(`Tanggal Terbit: ${issuedAt}`, 150, 11),
+    textCommand('KEPALA SESPIM LEMDIKLAT POLRI', 520, 100, 11, 'F2'),
+    textCommand('Irjen Pol. Dr. Chryshnanda Dwilaksana, M.Si.', 520, 68, 10)
   ].join('\n')
 
   const objects = [
