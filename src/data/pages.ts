@@ -1566,11 +1566,6 @@ export const pages: Record<string, PageContent> = {
     description: "Kanal kontak resmi untuk alamat, nomor kontak, email, peta lokasi, media sosial, dan formulir kontak Sespim Lemdiklat Polri.",
     sections: [
       {
-        title: 'Kanal Contact Resmi',
-        body: 'Halaman Contact disiapkan sebagai pintu komunikasi publik pada area Kontak Profil. Alamat resmi Sespim Polri berada di Jl. Maribaya No.53, Kayuambon, Kec. Lembang, Kabupaten Bandung Barat, Jawa Barat 40391, Indonesia. Pengunjung juga dapat menemukan nomor kontak resmi, email resmi, peta lokasi, kanal media sosial resmi, dan formulir kontak dalam satu halaman.',
-        items: ['Alamat resmi', 'Nomor kontak resmi', 'Email resmi', 'Peta lokasi', 'Kanal media sosial resmi', 'Formulir kontak']
-      },
-      {
         title: 'Informasi yang Ditampilkan',
         body: 'Data kontak dibuat terstruktur agar mudah diperbarui oleh pengelola portal setelah nomor dan email operasional final dikonfirmasi oleh satuan kerja terkait. Akses peta lokasi sudah diarahkan ke Google Maps resmi Sespim Polri.',
         items: ['Alamat kantor', 'Nomor telepon atau hotline', 'Email layanan publik', 'Google Maps lokasi resmi', 'Instagram, Facebook, YouTube', 'Form nama, email, subjek, dan pesan']
