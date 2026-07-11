@@ -712,16 +712,7 @@ export const pageHighlights: Record<string, PageHighlight> = {
         description: 'Form pesan publik untuk kebutuhan komunikasi awal dengan pengelola portal.'
       }
     ],
-    sideNotes: [
-      {
-        title: 'Data resmi',
-        body: 'Nomor kontak dan email sengaja disiapkan sebagai field siap isi sampai data final diberikan.'
-      },
-      {
-        title: 'Integrasi teknis',
-        body: 'Form kontak dapat disambungkan ke API, email gateway, atau sistem tiket layanan publik.'
-      }
-    ],
+    sideNotes: [],
     cta: { label: 'Lihat Informasi Publik', href: '/berita/informasi-publik' }
   },
   '/galeri': {
