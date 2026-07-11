@@ -1,3 +1,6 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { AcademicCapIcon, ArrowRightIcon, BriefcaseIcon } from '@heroicons/react/24/outline'
 import { Breadcrumb } from '@/components/ui/Breadcrumb'
@@ -5,6 +8,7 @@ import { Container } from '@/components/ui/Container'
 import { PageHero } from '@/components/ui/PageHero'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import type { EducatorProfile } from '@/data/contentCollections'
+import { API_BASE_URL } from '@/lib/api'
 
 type EducatorDirectoryPageProps = {
   items: EducatorProfile[]
@@ -31,7 +35,26 @@ function ProfileLine({ label, value }: { label: string; value: string }) {
   )
 }
 
+function findMatchingClaim(educatorName: string, claims: { name: string; certificate_code: string }[]) {
+  const norm = (s: string) => s.toLowerCase().replace(/(irjen pol|akbp|kompol|ipda|drs\.|s\.i\.k\.|m\.si\.|s\.h\.|s\.t\.|s\.st\.mk\.)/g, '').replace(/[^a-z]/g, '').trim()
+  const targetNorm = norm(educatorName)
+  return claims.find(c => norm(c.name) === targetNorm || norm(c.name).includes(targetNorm) || targetNorm.includes(norm(c.name)))
+}
+
 export function EducatorDirectoryPage({ items }: EducatorDirectoryPageProps) {
+  const [claims, setClaims] = useState<{ name: string; certificate_code: string }[]>([])
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/inpassing-claims`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'success') {
+          setClaims(data.data.claims || [])
+        }
+      })
+      .catch(err => console.warn('Failed to fetch claims for profiles:', err))
+  }, [])
+
   return (
     <main>
       <PageHero
@@ -84,11 +107,21 @@ export function EducatorDirectoryPage({ items }: EducatorDirectoryPageProps) {
 
           <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {items.map((item) => {
+              const matchingClaim = findMatchingClaim(item.name, claims)
+
+              // Dynamic enrichment based on certificate claims
+              const activeExpertise = matchingClaim 
+                ? [...(item.expertise || []), 'Inpassing Widyaiswara'] 
+                : item.expertise
+              const activeCertifications = matchingClaim 
+                ? [...(item.professionalCertifications || []), 'Sertifikat Inpassing Widyaiswara'] 
+                : item.professionalCertifications
+
               const generalEducation = compactList(item.generalEducation, 'Belum tersedia')
               const serviceEducation = compactList(item.serviceEducation, 'Belum tersedia')
               const developmentEducation = compactList(item.developmentEducation, 'Belum tersedia')
-              const expertise = compactList(item.expertise, 'Belum tersedia')
-              const certifications = compactList(item.professionalCertifications, 'Belum tersedia')
+              const expertise = compactList(activeExpertise, 'Belum tersedia')
+              const certifications = compactList(activeCertifications, 'Belum tersedia')
               const subjects = compactList(item.subjects, 'Belum tersedia')
 
               return (
@@ -104,7 +137,17 @@ export function EducatorDirectoryPage({ items }: EducatorDirectoryPageProps) {
                       </span>
                       <div className="min-w-0">
                         <p className="text-xs font-black uppercase tracking-[0.16em] text-polri-maroon">{item.rank || 'Pangkat belum tersedia'}</p>
-                        <h2 className="mt-1 text-lg font-black leading-6 text-polri-brownDark">{item.name}</h2>
+                        <h2 className="text-lg font-black leading-6 text-polri-brownDark">{item.name}</h2>
+                        {matchingClaim && (
+                          <div className="mt-1">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
+                              </svg>
+                              Inpassing: {matchingClaim.certificate_code}
+                            </span>
+                          </div>
+                        )}
                       </div>
                     </div>
 
