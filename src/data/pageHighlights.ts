@@ -826,16 +826,7 @@ export const pageHighlights: Record<string, PageHighlight> = {
         description: 'Area ini dapat diperluas untuk media sosial, peta, dan kontak unit terkait.'
       }
     ],
-    sideNotes: [
-      {
-        title: 'Data sementara',
-        body: 'Nomor telepon dan email masih placeholder sampai data resmi dikonfirmasi.'
-      },
-      {
-        title: 'Integrasi lanjutan',
-        body: 'Form kontak dapat dihubungkan ke API, email gateway, atau dashboard admin.'
-      }
-    ],
+    sideNotes: [],
     cta: { label: 'Lihat Profil Sespim', href: '/profil' }
   },
   '/sarana-prasarana': {
