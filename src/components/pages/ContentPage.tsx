@@ -1302,7 +1302,7 @@ export function ContentPage({ content, path }: ContentPageProps) {
                     </a>
                   </div>
                 ) : null}
-                {path !== '/profil/pejabat' && path !== '/profil/fasilitas' && path !== '/profil/kontak/contact' && path !== '/profil/kontak/susunan-redaksi' && path !== '/profil/struktur-organisasi' && (
+                {path !== '/profil/pejabat' && path !== '/profil/fasilitas' && path !== '/profil/kontak/contact' && path !== '/profil/kontak/susunan-redaksi' && path !== '/profil/struktur-organisasi' && path !== '/kontak' && (
                   <div className="rounded-lg border border-polri-gold/25 bg-polri-cream p-6">
                     <h3 className="font-black text-polri-brownDark">Tautan Terkait</h3>
                     <div className="mt-4 grid gap-2">
