@@ -1706,13 +1706,7 @@ export const pages: Record<string, PageContent> = {
     title: "Kontak",
     eyebrow: "Layanan",
     description: "Alamat resmi, nomor telepon, email, peta lokasi, media sosial, dan form kontak.",
-    sections: [
-      {
-        title: 'Kebutuhan UI',
-        body: 'Halaman ini membutuhkan struktur hero, breadcrumb, konten utama, kartu informasi, dan CTA menuju halaman terkait.',
-        items: ['Hero halaman', 'Section konten utama', 'Kartu informasi', 'CTA dan tautan terkait']
-      }
-    ]
+    sections: []
   },
   '/sarana-prasarana': {
     title: "Sarana dan Prasarana Kependidikan",
