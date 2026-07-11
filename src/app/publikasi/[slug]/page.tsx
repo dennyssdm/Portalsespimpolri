@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { ContentDetailPage } from '@/components/pages/ContentDetailPage'
 import { findPublicationItem, publicationItems } from '@/data/contentCollections'
+import { serverFetch } from '@/lib/api'
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -13,7 +14,32 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  const item = findPublicationItem(slug)
+  let item = findPublicationItem(slug)
+
+  if (!item) {
+    try {
+      const res = await serverFetch(`/api/publikasi-content/${slug}`)
+      if (res.ok) {
+        const json = await res.json()
+        if (json.status === 'success' && json.data && json.data.record) {
+          const r = json.data.record
+          item = {
+            slug: r.id,
+            title: r.title,
+            category: r.category || 'Publikasi',
+            date: r.date ? new Date(r.date).toLocaleDateString('id-ID') : '10 Juli 2026',
+            author: r.author || 'Admin',
+            summary: `Publikasi ilmiah mengenai ${r.title}.`,
+            body: [],
+            tags: [r.category || 'publikasi'],
+            href: `/publikasi/${r.id}`
+          }
+        }
+      }
+    } catch (e) {
+      // Ignore
+    }
+  }
 
   return {
     title: item ? `${item.title} | Publikasi Sespim` : 'Publikasi Sespim',
@@ -23,14 +49,56 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function Page({ params }: PageProps) {
   const { slug } = await params
-  const item = findPublicationItem(slug)
+  let localItem = findPublicationItem(slug)
+  let itemToRender = localItem
 
-  if (!item) {
+  if (!itemToRender) {
+    try {
+      const res = await serverFetch(`/api/publikasi-content/${slug}`)
+      if (res.ok) {
+        const json = await res.json()
+        if (json.status === 'success' && json.data && json.data.record) {
+          const r = json.data.record
+          const matchingLocal = publicationItems.find(
+            (p) => p.title.toLowerCase() === r.title.toLowerCase()
+          )
+
+          const dateVal = r.date ? new Date(r.date).toLocaleDateString('id-ID', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+          }) : '10 Juli 2026'
+
+          itemToRender = {
+            slug: r.id,
+            title: r.title,
+            category: r.category || 'Publikasi',
+            date: dateVal,
+            author: r.author || 'Admin',
+            summary: matchingLocal?.summary || `Karya publikasi ilmiah resmi mengenai ${r.title} yang dipublikasikan oleh Sespim Lemdiklat Polri.`,
+            body: r.content
+              ? r.content.split('\n').filter((p: string) => p.trim())
+              : (matchingLocal?.body || [
+                  `Dokumen kajian/publikasi ilmiah mengenai: ${r.title}.`,
+                  "Naskah lengkap, sinopsis, dan metadata publikasi sedang diproses untuk diunggah oleh Bidang Jianbang Sespim Lemdiklat Polri.",
+                  "Silakan kembali beberapa saat lagi untuk mengunduh naskah lengkap atau hubungi eLibrary Sespim."
+                ]),
+            tags: matchingLocal?.tags || [r.category?.toLowerCase() || 'publikasi', 'jianbang', 'sespim'],
+            href: `/publikasi/${r.id}`
+          }
+        }
+      }
+    } catch (err) {
+      console.warn(`Failed to fetch publication detail for slug/ID: ${slug} from API:`, err)
+    }
+  }
+
+  if (!itemToRender) {
     notFound()
   }
 
   const related = publicationItems
-    .filter((publication) => publication.slug !== item.slug)
+    .filter((publication) => publication.slug !== itemToRender?.slug)
     .slice(0, 2)
     .map((publication) => ({
       title: publication.title,
@@ -40,21 +108,21 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <ContentDetailPage
-      path={item.href}
-      eyebrow={item.category}
-      title={item.title}
-      description={item.summary}
-      body={item.body}
+      path={itemToRender.href}
+      eyebrow={itemToRender.category}
+      title={itemToRender.title}
+      description={itemToRender.summary}
+      body={itemToRender.body}
       meta={[
-        { label: 'Kategori', value: item.category },
-        { label: 'Tanggal', value: item.date },
-        { label: 'Penulis', value: item.author }
+        { label: 'Kategori', value: itemToRender.category },
+        { label: 'Tanggal', value: itemToRender.date },
+        { label: 'Penulis', value: itemToRender.author }
       ]}
-      tags={item.tags}
+      tags={itemToRender.tags}
       backHref="/publikasi"
       backLabel="Kembali ke Daftar Publikasi"
       related={related}
-      action={{ label: 'Lihat Kategori Publikasi', href: '/publikasi/kajian-strategis' }}
+      action={{ label: 'Lihat Kategori Publikasi', href: '/publikasi' }}
     />
   )
 }

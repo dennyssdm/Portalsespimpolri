@@ -10,6 +10,18 @@ export type DummyAccount = {
 
 export const dummyAccounts: DummyAccount[] = [
   {
+    name: 'Denny',
+    nrpNip: '081973001974',
+    phone: '081973001974',
+    password: 'polri123',
+    role: 'super_admin',
+    roleLabel: 'Super Admin (All Action)',
+    details: {
+      'Jabatan': 'Penguji Khusus',
+      'Pangkat': 'Administrator Utama'
+    }
+  },
+  {
     name: 'Irjen Pol. Drs. H. Ahmad Fauzi',
     nrpNip: '197204151996031001',
     phone: '081122334455',

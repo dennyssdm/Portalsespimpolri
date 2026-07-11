@@ -15,7 +15,17 @@ export const navigation: NavItem[] = [
       { label: 'Visi dan Misi', href: '/profil/visi-misi' },
       { label: 'Tugas dan Fungsi', href: '/profil/tugas-fungsi' },
       { label: 'Struktur Organisasi', href: '/profil/struktur-organisasi' },
-      { label: 'Pejabat Sespim', href: '/profil/pejabat' },
+      {
+        label: 'Struktur Pejabat Sespim',
+        href: '/profil/pejabat',
+        children: [
+          { label: 'Unsur Pimpinan', href: '/profil/pejabat#unsur-pimpinan' },
+          { label: 'Setlem', href: '/profil/pejabat#setlem' },
+          { label: 'Jianbang', href: '/profil/pejabat#jianbang' },
+          { label: 'Bidang', href: '/profil/pejabat#bidang-strategi' },
+          { label: 'Para Kepala Sekolah', href: '/profil/pejabat#para-kepala-sekolah' }
+        ]
+      },
       { label: 'Fasilitas', href: '/profil/fasilitas' },
       {
         label: 'Kontak Profil',

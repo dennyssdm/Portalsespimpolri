@@ -148,18 +148,7 @@ export const pages: Record<string, PageContent> = {
       alt: 'Bagan struktur organisasi Sespim Lemdiklat Polri',
       caption: 'Struktur organisasi Sespim Lemdiklat Polri.'
     },
-    sections: [
-      {
-        title: 'Ringkasan Halaman',
-        body: "Struktur organisasi dan tata kerja Sespim Polri dalam mendukung tata kelola kelembagaan.",
-        items: ['Konten awal mengikuti sitemap Sespim Polri.', 'Layout disiapkan sebagai baseline front-end.', 'Detail konten dapat diperbarui setelah approval.']
-      },
-      {
-        title: 'Kebutuhan UI',
-        body: 'Halaman ini membutuhkan struktur hero, breadcrumb, konten utama, kartu informasi, dan CTA menuju halaman terkait.',
-        items: ['Hero halaman', 'Section konten utama', 'Kartu informasi', 'CTA dan tautan terkait']
-      }
-    ]
+    sections: []
   },
   '/profil/pejabat': {
     title: "Pejabat Sespim",
@@ -230,43 +219,13 @@ export const pages: Record<string, PageContent> = {
         position: 'Kasespimti'
       }
     ],
-    sections: [
-      {
-        title: 'Daftar Pejabat Utama Sespim',
-        body: "Halaman ini menampilkan daftar pejabat utama Sespim dalam format kartu pas foto 3x4 dengan keterangan nama, pangkat, dan jabatan.",
-        items: [
-          'Setiap kartu disiapkan untuk pas foto 3x4.',
-          'Keterangan yang ditampilkan: Nama, Pangkat, dan Jabatan.',
-          'Data nama, pangkat, dan foto dapat dilengkapi bertahap sesuai data resmi.'
-        ]
-      },
-      {
-        title: 'Kebutuhan Data',
-        body: 'Untuk melengkapi halaman ini, setiap pejabat membutuhkan nama lengkap, pangkat, jabatan, dan file pas foto resmi.',
-        items: [
-          'Format foto ditampilkan dengan rasio 3:4.',
-          'Foto dapat diletakkan pada folder public/images.',
-          'Urutan dan daftar jabatan dapat disesuaikan kembali sesuai struktur resmi terbaru.'
-        ]
-      }
-    ]
+    sections: []
   },
   '/profil/fasilitas': {
     title: "Fasilitas",
     eyebrow: "Profil",
     description: "Informasi fasilitas pendidikan, ruang kelas, asrama, pendukung akademik, dan fasilitas umum.",
-    sections: [
-      {
-        title: 'Ringkasan Halaman',
-        body: "Informasi fasilitas pendidikan, ruang kelas, asrama, pendukung akademik, dan fasilitas umum.",
-        items: ['Konten awal mengikuti sitemap Sespim Polri.', 'Layout disiapkan sebagai baseline front-end.', 'Detail konten dapat diperbarui setelah approval.']
-      },
-      {
-        title: 'Kebutuhan UI',
-        body: 'Halaman ini membutuhkan struktur hero, breadcrumb, konten utama, kartu informasi, dan CTA menuju halaman terkait.',
-        items: ['Hero halaman', 'Section konten utama', 'Kartu informasi', 'CTA dan tautan terkait']
-      }
-    ]
+    sections: []
   },
   '/profil/kontak': {
     title: "Kontak Profil",

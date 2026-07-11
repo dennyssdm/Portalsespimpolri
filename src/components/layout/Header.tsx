@@ -286,12 +286,22 @@ export function Header() {
                 <p className="font-black text-white max-w-[110px] truncate" title={user.name}>{user.name}</p>
                 <p className="text-polri-goldSoft font-bold capitalize mt-0.5">{user.role.replace('_', ' ')}</p>
               </div>
-              <button
-                onClick={handleLogout}
-                className="text-[10px] font-black uppercase text-neutral-400 hover:text-white transition-colors ml-2 bg-neutral-900 px-2 py-1 rounded border border-neutral-700"
-              >
-                Keluar
-              </button>
+              <div className="flex items-center gap-1.5 ml-2">
+                {(user.role === 'super_admin' || user.role === 'admin') && (
+                  <Link
+                    href={`/admin/dashboard?role=${user.role}`}
+                    className="text-[10px] font-black uppercase text-polri-goldSoft hover:text-white transition-colors bg-polri-maroon px-2.5 py-1 rounded border border-polri-gold/30"
+                  >
+                    Dasbor CMS
+                  </Link>
+                )}
+                <button
+                  onClick={handleLogout}
+                  className="text-[10px] font-black uppercase text-neutral-400 hover:text-white transition-colors bg-neutral-900 px-2.5 py-1 rounded border border-neutral-700"
+                >
+                  Keluar
+                </button>
+              </div>
             </div>
           ) : (
             <Link
@@ -329,12 +339,23 @@ export function Header() {
                     <p className="text-polri-goldSoft font-bold capitalize mt-0.5">{user.role.replace('_', ' ')}</p>
                   </div>
                 </div>
-                <button
-                  onClick={handleLogout}
-                  className="rounded-lg bg-polri-maroon text-white px-3 py-1.5 text-xs font-bold transition hover:bg-polri-brownDark border border-polri-gold/20"
-                >
-                  Keluar
-                </button>
+                <div className="flex items-center gap-2">
+                  {(user.role === 'super_admin' || user.role === 'admin') && (
+                    <Link
+                      href={`/admin/dashboard?role=${user.role}`}
+                      onClick={() => setOpen(false)}
+                      className="rounded-lg bg-polri-gold text-polri-brownDark px-3 py-1.5 text-xs font-bold transition hover:bg-polri-gold/90 border border-polri-gold/20"
+                    >
+                      CMS
+                    </Link>
+                  )}
+                  <button
+                    onClick={handleLogout}
+                    className="rounded-lg bg-polri-maroon text-white px-3 py-1.5 text-xs font-bold transition hover:bg-polri-brownDark border border-polri-gold/20"
+                  >
+                    Keluar
+                  </button>
+                </div>
               </div>
             ) : (
               <Link

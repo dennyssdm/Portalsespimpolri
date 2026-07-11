@@ -30,11 +30,7 @@ export const pageHighlights: Record<string, PageHighlight> = {
       { value: '4', label: 'Area informasi inti' },
       { value: '1', label: 'Alur kelembagaan' }
     ],
-    priorities: [
-      'Menjelaskan mandat dan posisi Sespim dalam ekosistem Lemdiklat Polri.',
-      'Menghubungkan pengguna ke sejarah, visi misi, tugas fungsi, dan struktur organisasi.',
-      'Menyiapkan ruang konten resmi untuk pejabat, fasilitas, dan kontak profil.'
-    ],
+    priorities: [],
     spotlight: [
       {
         title: 'Arah kelembagaan',
@@ -72,35 +68,9 @@ export const pageHighlights: Record<string, PageHighlight> = {
       { value: '1965', label: 'Peresmian Sespim' },
       { value: '113', label: 'Alumni mancanegara' }
     ],
-    priorities: [
-      'Menjelaskan tonggak awal Sespim sebagai lembaga pendidikan kepemimpinan dan manajemen Polri.',
-      'Mencatat perubahan nomenklatur dan kedudukan Sespim dalam perkembangan organisasi Polri.',
-      'Menampilkan jangkauan kerja sama pendidikan dengan TNI, unsur Criminal Justice System, dan peserta mancanegara.'
-    ],
-    spotlight: [
-      {
-        title: 'Tonggak awal',
-        description: 'Sespim berawal pada 24 September 1964 dan diresmikan oleh Presiden Ir. Soekarno pada 19 Maret 1965.'
-      },
-      {
-        title: 'Perubahan kelembagaan',
-        description: 'Perjalanan Sespim mencakup SESKOAK, SESKOPOL, Sesko ABRI Bagian Kepolisian, hingga Sespim Polri.'
-      },
-      {
-        title: 'Kerja sama pendidikan',
-        description: 'Sespim menerima peserta dari instansi lain dan mancanegara dengan 113 alumni dari 14 negara.'
-      }
-    ],
-    sideNotes: [
-      {
-        title: 'Naskah sejarah',
-        body: 'Halaman ini telah menggunakan naskah sejarah yang memuat tanggal awal, peresmian, perubahan nomenklatur, dan kerja sama peserta didik.'
-      },
-      {
-        title: 'Pengayaan arsip',
-        body: 'Konten dapat diperkuat kembali dengan foto peresmian, arsip keputusan, dan dokumen pendukung kelembagaan.'
-      }
-    ],
+    priorities: [],
+    spotlight: [],
+    sideNotes: [],
     cta: { label: 'Lihat Struktur Organisasi', href: '/profil/struktur-organisasi' }
   },
   '/profil/visi-misi': {
@@ -111,35 +81,9 @@ export const pageHighlights: Record<string, PageHighlight> = {
       { value: '4', label: 'Misi utama' },
       { value: '3', label: 'Nilai kepemimpinan' }
     ],
-    priorities: [
-      'Menjelaskan cita-cita Sespim sebagai lembaga pendidikan pengembangan tinggi Polri yang berkualitas.',
-      'Menampilkan misi pendidikan calon pemimpin pada tingkat pertama, menengah, dan tinggi.',
-      'Menguatkan orientasi pengkajian, pelayanan informasi, konsultasi manajemen, dan pendidikan keamanan ketertiban masyarakat.'
-    ],
-    spotlight: [
-      {
-        title: 'Pendidikan berkualitas',
-        description: 'Visi Sespim menekankan kualitas pendidikan pengembangan tinggi Polri.'
-      },
-      {
-        title: 'Kepemimpinan strategis',
-        description: 'Calon pimpinan diarahkan memiliki profesionalisme, wawasan kepemimpinan strategi, dan integritas moral.'
-      },
-      {
-        title: 'Misi pengembangan',
-        description: 'Misi mencakup pendidikan, pengkajian kebijakan, pelayanan informasi, konsultasi, dan manajemen kamtibmas.'
-      }
-    ],
-    sideNotes: [
-      {
-        title: 'Fokus visi',
-        body: 'Visi menempatkan Sespim sebagai lembaga pendidikan pengembangan tinggi Polri yang menghasilkan calon pimpinan profesional.'
-      },
-      {
-        title: 'Ruang misi',
-        body: 'Misi Sespim mencakup pendidikan calon pemimpin Polri, penegak hukum lainnya, pengkajian kebijakan, dan layanan konsultasi manajemen.'
-      }
-    ],
+    priorities: [],
+    spotlight: [],
+    sideNotes: [],
     cta: { label: 'Lihat Tugas dan Fungsi', href: '/profil/tugas-fungsi' }
   },
   '/profil/tugas-fungsi': {
@@ -150,35 +94,9 @@ export const pageHighlights: Record<string, PageHighlight> = {
       { value: '4', label: 'Fungsi utama' },
       { value: '3', label: 'Komponen dibina' }
     ],
-    priorities: [
-      'Menjelaskan tugas Sespim dalam pendidikan manajemen tingkat tinggi, menengah, dan pertama.',
-      'Menguraikan fungsi pendidikan dan pelatihan bagi perwira Polri, non-Polri, serta penegak hukum lainnya.',
-      'Menampilkan peran pengkajian dan pengembangan manajemen, kebijakan, serta lingkungan strategis Polri.'
-    ],
-    spotlight: [
-      {
-        title: 'Tugas pokok',
-        description: 'Sespim menyelenggarakan pendidikan manajemen berjenjang, pengkajian kebijakan, dan pengelolaan komponen pendidikan.'
-      },
-      {
-        title: 'Diklat staf dan kepemimpinan',
-        description: 'Fungsi pendidikan mencakup staf dan kepemimpinan tingkat tinggi, menengah, dan pertama.'
-      },
-      {
-        title: 'Kajian strategis',
-        description: 'Sespim mengembangkan pengkajian manajemen, kebijakan, dan lingkungan strategis di jajaran Polri.'
-      }
-    ],
-    sideNotes: [
-      {
-        title: 'Naskah tugas fungsi',
-        body: 'Halaman ini telah menggunakan rumusan tugas dan fungsi Sespim Polri terkait pendidikan, pembinaan komponen, dan pengkajian kebijakan.'
-      },
-      {
-        title: 'Penyempurnaan',
-        body: 'Rumusan dapat disesuaikan kembali jika tersedia dokumen organisasi terbaru dari Sespim atau Lemdiklat Polri.'
-      }
-    ],
+    priorities: [],
+    spotlight: [],
+    sideNotes: [],
     cta: { label: 'Lihat Struktur Organisasi', href: '/profil/struktur-organisasi' }
   },
   '/profil/pejabat': {
@@ -208,16 +126,7 @@ export const pageHighlights: Record<string, PageHighlight> = {
         description: 'Placeholder nama, pangkat, dan foto dapat diganti saat data resmi pejabat tersedia.'
       }
     ],
-    sideNotes: [
-      {
-        title: 'Data resmi',
-        body: 'Nama, pangkat, jabatan, dan pas foto dapat dimasukkan setelah daftar pejabat utama final diberikan.'
-      },
-      {
-        title: 'Format foto',
-        body: 'Foto pejabat dapat disimpan pada folder public/images dan ditautkan dari data halaman.'
-      }
-    ],
+    sideNotes: [],
     cta: { label: 'Lihat Struktur Organisasi', href: '/profil/struktur-organisasi' }
   },
   '/program-pendidikan': {

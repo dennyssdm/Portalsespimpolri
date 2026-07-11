@@ -3,25 +3,26 @@
 import Image from 'next/image'
 import { useState } from 'react'
 
-export function KasespimPhoto() {
+export function KasespimPhoto({ src }: { src?: string }) {
   const [loaded, setLoaded] = useState(true)
+  const imageSrc = src || "/images/kasespim.png"
 
   if (!loaded) {
     return (
-      <div className="flex min-h-80 items-center justify-center rounded-lg bg-polri-brownDark text-center text-white">
+      <div className="flex min-h-80 items-center justify-center rounded-lg bg-polri-brownDark text-center text-white animate-fadeIn">
         <div>
           <p className="text-sm font-bold uppercase tracking-[0.24em] text-polri-goldSoft">Foto Resmi</p>
           <p className="mt-3 text-2xl font-black">Kasespim</p>
-          <p className="mt-2 text-sm text-white/64">Simpan file di public/images/kasespim.png</p>
+          <p className="mt-2 text-sm text-white/64">Foto atau URL gambar tidak dapat dimuat</p>
         </div>
       </div>
     )
   }
 
   return (
-    <figure className="relative min-h-80 overflow-hidden rounded-lg bg-polri-brownDark">
+    <figure className="relative min-h-80 overflow-hidden rounded-lg bg-polri-brownDark animate-fadeIn">
       <Image
-        src="/images/kasespim.png"
+        src={imageSrc}
         alt="Foto resmi Kasespim Lemdiklat Polri"
         fill
         sizes="(min-width: 1024px) 420px, 100vw"

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { ContentDetailPage } from '@/components/pages/ContentDetailPage'
 import { findNewsItem, newsItems } from '@/data/contentCollections'
+import { serverFetch } from '@/lib/api'
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -13,7 +14,32 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  const item = findNewsItem(slug)
+  let item = findNewsItem(slug)
+  
+  if (!item) {
+    try {
+      const res = await serverFetch(`/api/berita-informasi-content/${slug}`)
+      if (res.ok) {
+        const json = await res.json()
+        if (json.status === 'success' && json.data && json.data.record) {
+          const r = json.data.record
+          item = {
+            slug: r.id,
+            title: r.title,
+            category: r.category || 'Berita',
+            date: r.date ? new Date(r.date).toLocaleDateString('id-ID') : '10 Juli 2026',
+            author: r.author || 'Admin',
+            summary: `Informasi resmi mengenai ${r.title}.`,
+            body: [],
+            tags: [r.category || 'berita'],
+            href: `/berita/${r.id}`
+          }
+        }
+      }
+    } catch (e) {
+      // Ignore
+    }
+  }
 
   return {
     title: item ? `${item.title} | Berita Sespim` : 'Berita Sespim',
@@ -23,14 +49,56 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function Page({ params }: PageProps) {
   const { slug } = await params
-  const item = findNewsItem(slug)
+  let localItem = findNewsItem(slug)
+  let itemToRender = localItem
 
-  if (!item) {
+  if (!itemToRender) {
+    try {
+      const res = await serverFetch(`/api/berita-informasi-content/${slug}`)
+      if (res.ok) {
+        const json = await res.json()
+        if (json.status === 'success' && json.data && json.data.record) {
+          const r = json.data.record
+          const matchingLocal = newsItems.find(
+            (n) => n.title.toLowerCase() === r.title.toLowerCase()
+          )
+
+          const dateVal = r.date ? new Date(r.date).toLocaleDateString('id-ID', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+          }) : '10 Juli 2026'
+
+          itemToRender = {
+            slug: r.id,
+            title: r.title,
+            category: r.category || 'Berita',
+            date: dateVal,
+            author: r.author || 'Admin',
+            summary: matchingLocal?.summary || `Informasi resmi mengenai ${r.title} yang diterbitkan oleh Humas Sespim Lemdiklat Polri.`,
+            body: r.content
+              ? r.content.split('\n').filter((p: string) => p.trim())
+              : (matchingLocal?.body || [
+                  `Laporan resmi mengenai: ${r.title}.`,
+                  "Konten lengkap dan dokumen pelengkap sedang diunggah oleh administrator sistem Sespim Lemdiklat Polri.",
+                  "Silakan kembali beberapa saat lagi atau hubungi Sekretariat Humas Sespim untuk konfirmasi informasi resmi lebih lanjut."
+                ]),
+            tags: matchingLocal?.tags || [r.category?.toLowerCase() || 'berita', 'sespim', 'polri'],
+            href: `/berita/${r.id}`
+          }
+        }
+      }
+    } catch (err) {
+      console.warn(`Failed to fetch news detail for slug/ID: ${slug} from API:`, err)
+    }
+  }
+
+  if (!itemToRender) {
     notFound()
   }
 
   const related = newsItems
-    .filter((news) => news.slug !== item.slug)
+    .filter((news) => news.slug !== itemToRender?.slug)
     .slice(0, 2)
     .map((news) => ({
       title: news.title,
@@ -40,17 +108,17 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <ContentDetailPage
-      path={item.href}
-      eyebrow={item.category}
-      title={item.title}
-      description={item.summary}
-      body={item.body}
+      path={itemToRender.href}
+      eyebrow={itemToRender.category}
+      title={itemToRender.title}
+      description={itemToRender.summary}
+      body={itemToRender.body}
       meta={[
-        { label: 'Kategori', value: item.category },
-        { label: 'Tanggal', value: item.date },
-        { label: 'Penulis', value: item.author }
+        { label: 'Kategori', value: itemToRender.category },
+        { label: 'Tanggal', value: itemToRender.date },
+        { label: 'Penulis', value: itemToRender.author }
       ]}
-      tags={item.tags}
+      tags={itemToRender.tags}
       backHref="/berita"
       backLabel="Kembali ke Daftar Berita"
       related={related}

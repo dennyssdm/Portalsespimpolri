@@ -25,6 +25,13 @@ export type PageContent = {
     href: string
     description?: string
   }
+  chatbot?: {
+    name: string
+    url: string
+  }
+  alamatResmi?: string
+  noKontakResmi?: string
+  emailResmi?: string
   resources?: {
     title: string
     description: string
@@ -39,6 +46,13 @@ export type PageContent = {
     position: string
     photoSrc?: string
     photoAlt?: string
+    group?: string
+  }[]
+  facilities?: {
+    title: string
+    description: string
+    photoSrc?: string
+    group?: string
   }[]
   sections: {
     title: string

@@ -1,8 +1,8 @@
 export const educationPrograms = [
   {
-    title: 'SESPIMMA',
-    description: 'Sekolah Staf dan Pimpinan Pertama untuk penguatan kepemimpinan dasar perwira Polri.',
-    href: '/program-pendidikan/sespimma'
+    title: 'SESPIMTI',
+    description: 'Sekolah Staf dan Pimpinan Tinggi untuk penguatan kepemimpinan strategis tingkat tinggi.',
+    href: '/program-pendidikan/sespimti'
   },
   {
     title: 'SESPIMMEN',
@@ -15,15 +15,20 @@ export const educationPrograms = [
     href: '/program-pendidikan/sppk'
   },
   {
-    title: 'SESPIMTI',
-    description: 'Sekolah Staf dan Pimpinan Tinggi untuk penguatan kepemimpinan strategis tingkat tinggi.',
-    href: '/program-pendidikan/sespimti'
+    title: 'SESPIMMA',
+    description: 'Sekolah Staf dan Pimpinan Pertama untuk penguatan kepemimpinan dasar perwira Polri.',
+    href: '/program-pendidikan/sespimma'
+  },
+  {
+    title: 'Leadership Camp',
+    description: 'Program pembinaan kepemimpinan, karakter, kolaborasi, dan disiplin untuk perwira Polri dan masyarakat luas.',
+    href: '/program-pendidikan/leadership-camp'
   }
 ]
 
 export const kasespimGreeting = {
   eyebrow: 'Sambutan Kasespim',
-  title: 'Sambutan Kepala Sekolah Staf dan Pimpinan Polri',
+  title: 'Kepala Sekolah Staf dan Pimpinan Polri',
   openingLines: [
     "Assalamu'alaikum warahmatullahi wabarakatuh,",
     'Salam sejahtera bagi kita semua,',

@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Container } from '@/components/ui/Container'
 import { dummyAccounts } from '@/data/dummyAccounts'
+import { API_BASE_URL } from '@/lib/api'
 import { 
   KeyIcon, 
   LockClosedIcon, 
@@ -61,12 +62,69 @@ function LoginContent() {
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setLoginError(null)
 
-    // Simulate network authentication
+    try {
+      // 1. Try to login with the real API backend
+      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          identifier,
+          password
+        })
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.status === 'success') {
+        const apiUser = data.data.user
+        const token = data.token
+
+        const sessionUser = {
+          name: apiUser.name,
+          nrpNip: apiUser.nrp_nip,
+          phone: apiUser.phone,
+          role: apiUser.role,
+          roleLabel: apiUser.role_label,
+          details: apiUser.details || {}
+        }
+
+        // Set session storage
+        sessionStorage.setItem('sespim_token', token)
+        sessionStorage.setItem('sespim_user', JSON.stringify(sessionUser))
+        window.dispatchEvent(new Event('sespim_auth_change'))
+
+        setAuthenticatedUser({
+          name: sessionUser.name,
+          roleName: sessionUser.roleLabel,
+          roleKey: sessionUser.role as RoleType,
+          identifier: sessionUser.nrpNip
+        })
+
+        setLoading(false)
+
+        // Redirect
+        if (sessionUser.role === 'super_admin' || sessionUser.role === 'admin') {
+          router.push(`/admin/dashboard?role=${sessionUser.role}`)
+        } else {
+          const redirectUrl = searchParams.get('redirect')
+          router.push(redirectUrl || '/')
+        }
+        return
+      } else {
+        console.warn('API login failed:', data.message || response.statusText)
+      }
+    } catch (err) {
+      console.warn('Backend API connection failed, falling back to dummyAccounts:', err)
+    }
+
+    // 2. Fallback to Local Dummy Accounts
     setTimeout(() => {
       setLoading(false)
       const found = dummyAccounts.find(
@@ -90,6 +148,7 @@ function LoginContent() {
 
       // Set session storage for authorization
       sessionStorage.setItem('sespim_user', JSON.stringify(found))
+      sessionStorage.setItem('sespim_token', 'mock_fallback_token')
       window.dispatchEvent(new Event('sespim_auth_change'))
 
       setAuthenticatedUser({
@@ -106,7 +165,7 @@ function LoginContent() {
         const redirectUrl = searchParams.get('redirect')
         router.push(redirectUrl || '/')
       }
-    }, 1500)
+    }, 1000)
   }
 
   const getRoleLabel = (r: RoleType) => {
@@ -377,53 +436,8 @@ function LoginContent() {
                 />
               </div>
               <h2 className="mt-4 text-2xl font-black text-polri-brownDark">Login Portal Sespim</h2>
-              <p className="mt-1 text-sm text-neutral-500">Pilih peran akun Anda untuk masuk ke sistem</p>
+              <p className="mt-1 text-sm text-neutral-500">Silakan masukkan kredensial Anda untuk masuk ke sistem</p>
             </div>
-
-            {/* Role Select Grid */}
-            <div className="mt-6 grid grid-cols-2 gap-2 p-1 bg-polri-cream/60 rounded-2xl">
-              {[
-                { key: 'serdik', label: 'Serdik', icon: AcademicCapIcon },
-                { key: 'widyaiswara', label: 'Widyaiswara', icon: UserGroupIcon },
-                { key: 'admin', label: 'Admin Staf', icon: KeyIcon },
-                { key: 'super_admin', label: 'Super Admin', icon: ShieldCheckIcon }
-              ].map((item) => {
-                const Icon = item.icon
-                const active = role === item.key || (item.key === 'super_admin' && role === 'stakeholder')
-                return (
-                  <button
-                    key={item.key}
-                    type="button"
-                    onClick={() => selectRole(item.key as any)}
-                    className={`flex items-center justify-center gap-2 rounded-xl py-2.5 text-xs font-black transition ${
-                      active 
-                        ? 'bg-white text-polri-maroon shadow-sm border border-polri-gold/25' 
-                        : 'text-neutral-600 hover:bg-white/40'
-                    }`}
-                  >
-                    <Icon className="h-4 w-4 shrink-0" />
-                    {item.label}
-                  </button>
-                )
-              })}
-            </div>
-
-            {/* Super Admin Read Only / Stakeholder Toggle */}
-            {(role === 'super_admin' || role === 'stakeholder') && (
-              <div className="mt-4 flex items-center justify-between rounded-xl bg-neutral-50 p-3 border border-neutral-200">
-                <div className="flex flex-col">
-                  <span className="text-xs font-black text-polri-brownDark">Akses Stakeholder (Read-Only)</span>
-                  <span className="text-[10px] text-neutral-500">Hanya melihat data analitik sistem</span>
-                </div>
-                <input
-                  type="checkbox"
-                  checked={isReadOnly}
-                  onChange={(e) => handleReadOnlyToggle(e.target.checked)}
-                  className="h-4.5 w-9 rounded-full appearance-none bg-neutral-200 checked:bg-polri-gold relative transition-all duration-300 cursor-pointer outline-none after:content-[''] after:absolute after:h-3.5 after:w-3.5 after:bg-white after:rounded-full after:top-0.5 after:left-0.5 checked:after:left-5 after:transition-all after:duration-300"
-                  aria-label="Aktifkan akses stakeholder read-only"
-                />
-              </div>
-            )}
 
             {loginError && (
               <div className="mt-4 rounded-xl bg-red-50 border border-red-200 p-3 text-xs font-semibold text-polri-red leading-5">
@@ -433,13 +447,13 @@ function LoginContent() {
 
             {message === 'unauthorized' && (
               <div className="mt-4 rounded-xl bg-amber-50 border border-amber-200 p-3 text-xs font-semibold text-amber-800 leading-5">
-                Silakan login terlebih dahulu menggunakan akun demo di bawah untuk mengakses menu yang dilindungi.
+                Silakan login terlebih dahulu untuk mengakses menu yang dilindungi.
               </div>
             )}
 
             {message === 'forbidden' && (
               <div className="mt-4 rounded-xl bg-red-50 border border-red-200 p-3 text-xs font-semibold text-polri-red leading-5">
-                Akun Anda tidak memiliki izin akses ke menu tersebut. Silakan gunakan akses demo yang sesuai.
+                Akun Anda tidak memiliki izin akses ke menu tersebut. Silakan gunakan kredensial yang sesuai.
               </div>
             )}
 
@@ -453,11 +467,7 @@ function LoginContent() {
                     required
                     value={identifier}
                     onChange={(e) => setIdentifier(e.target.value)}
-                    placeholder={
-                      role === 'serdik' ? 'Contoh: 84081234 atau 081388889999' :
-                      role === 'widyaiswara' ? 'Contoh: 197008121995031002 atau 081277776666' :
-                      role === 'admin' ? 'Contoh: 200108242022031001 atau 081234567890' : 'Contoh: 197204151996031001'
-                    }
+                    placeholder="Contoh: 197411152009121001 atau 081234567890"
                     className="w-full rounded-xl border border-polri-gold/30 bg-white px-4 py-3 text-sm text-polri-brownDark outline-none focus:border-polri-maroon placeholder:text-neutral-400"
                   />
                 </div>
@@ -495,62 +505,18 @@ function LoginContent() {
             </form>
 
             {/* Bottom Actions */}
-            {role !== 'super_admin' && role !== 'stakeholder' && (
-              <div className="mt-6 border-t border-neutral-100 pt-4 text-center">
-                <p className="text-xs text-neutral-500">
-                  Belum memiliki akun?{' '}
-                  <Link href={`/register?role=${role}`} className="font-bold text-polri-maroon hover:underline">
-                    Daftar Sekarang
-                  </Link>
-                </p>
-              </div>
-            )}
-            {(role === 'super_admin' || role === 'stakeholder') && (
-              <p className="mt-5 text-[10px] text-neutral-400 text-center leading-5">
-                Registrasi untuk peran Super Admin dibatasi. Kredensial akun diatur langsung secara aman melalui kebijakan sistem pusat Sespim.
+            <div className="mt-6 border-t border-neutral-100 pt-4 text-center">
+              <p className="text-xs text-neutral-500">
+                Belum memiliki akun?{' '}
+                <Link href="/register" className="font-bold text-polri-maroon hover:underline">
+                  Daftar Sekarang
+                </Link>
               </p>
-            )}
-          </div>
-        )}
-
-        {/* Helper Copy Box for Dummy Accounts */}
-        {!authenticatedUser && (
-          <div className="mt-8 w-full max-w-lg rounded-2xl border border-polri-gold/20 bg-polri-cream p-5 text-polri-brownDark">
-            <h3 className="text-sm font-black uppercase tracking-wider text-polri-maroon">Akun Simulasi Login (Demo)</h3>
-            <p className="text-xs text-neutral-600 mt-1">Gunakan kredensial berikut untuk menguji masing-masing role (bisa login dengan NIP/NRP ATAU nomor WhatsApp):</p>
-            <div className="mt-4 space-y-3 text-xs">
-              {dummyAccounts.map((acc) => (
-                <div key={acc.nrpNip} className="bg-white p-3 rounded-xl border border-polri-gold/10">
-                  <div className="flex justify-between font-bold text-polri-brownDark">
-                    <span>{acc.roleLabel}</span>
-                    <button 
-                      type="button" 
-                      onClick={() => {
-                        setRole(acc.role)
-                        setIdentifier(acc.nrpNip)
-                        setPassword(acc.password)
-                        if (acc.role === 'stakeholder') {
-                          setIsReadOnly(true)
-                        } else {
-                          setIsReadOnly(false)
-                        }
-                        setLoginError(null)
-                      }} 
-                      className="text-polri-maroon hover:underline font-black"
-                    >
-                      Gunakan Akses
-                    </button>
-                  </div>
-                  <div className="mt-1 text-neutral-600 space-y-0.5">
-                    <p><span className="font-semibold text-neutral-500">NRP / NIP:</span> <code className="bg-neutral-100 px-1 py-0.5 rounded select-all">{acc.nrpNip}</code></p>
-                    <p><span className="font-semibold text-neutral-500">No WhatsApp:</span> <code className="bg-neutral-100 px-1 py-0.5 rounded select-all">{acc.phone}</code></p>
-                    <p><span className="font-semibold text-neutral-500">Kata Sandi (Default):</span> <code className="bg-neutral-100 px-1 py-0.5 rounded select-all">{acc.password}</code></p>
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
         )}
+
+
       </Container>
     </main>
   )
