@@ -1,5 +1,5 @@
 import { HeroSection } from '@/components/home/HeroSection'
-import { EducationProgramCards, KasespimGreeting, LatestNewsGrid, QuickLinks } from '@/components/home/HomeSections'
+import { EducationProgramCards, KasespimGreeting, LatestNewsGrid } from '@/components/home/HomeSections'
 
 export default function HomePage() {
   return (
@@ -8,7 +8,6 @@ export default function HomePage() {
       <KasespimGreeting />
       <EducationProgramCards />
       <LatestNewsGrid />
-      <QuickLinks />
     </main>
   )
 }
