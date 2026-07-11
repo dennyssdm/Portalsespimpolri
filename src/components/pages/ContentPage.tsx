@@ -514,7 +514,7 @@ export function ContentPage({ content, path }: ContentPageProps) {
 
       {moveResourcesAbove ? resourcesSection : null}
 
-      {path !== '/profil/struktur-organisasi' && path !== '/profil/fasilitas' && path !== '/profil/pejabat' && path !== '/sarana-prasarana/klinik-pratama' && !path.startsWith('/kelembagaan-internal') && !path.startsWith('/widyaiswara') && !path.startsWith('/program-pendidikan') && !path.includes('kontak') && !path.includes('contact') && !path.includes('redaksi') && (
+      {path !== '/profil/struktur-organisasi' && path !== '/profil/fasilitas' && path !== '/profil/pejabat' && path !== '/profil' && path !== '/sarana-prasarana/klinik-pratama' && !path.startsWith('/kelembagaan-internal') && !path.startsWith('/widyaiswara') && !path.startsWith('/program-pendidikan') && !path.includes('kontak') && !path.includes('contact') && !path.includes('redaksi') && (
         <section className="bg-polri-brownDark py-10 text-white">
           <Container>
             <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.75fr)] lg:items-center">
