@@ -361,34 +361,7 @@ export const pageFeaturePanels: Record<string, PageFeaturePanel> = {
       }
     ]
   },
-  '/kontak': {
-    eyebrow: 'Peta Kontak',
-    title: 'Kanal komunikasi disiapkan untuk informasi lokasi dan layanan publik',
-    description: 'Area kontak dibuat lebih operasional dengan pembagian kanal yang siap dihubungkan ke data resmi.',
-    items: [
-      {
-        title: 'Alamat dan peta',
-        description: 'Ruang untuk lokasi resmi, petunjuk akses, dan embed peta pada fase integrasi.',
-        meta: 'Lokasi'
-      },
-      {
-        title: 'Telepon dan email',
-        description: 'Kanal komunikasi utama yang perlu diverifikasi sebelum publikasi final.',
-        meta: 'Kontak'
-      },
-      {
-        title: 'Form pesan',
-        description: 'Baseline UI untuk pengiriman pesan yang nantinya dapat terhubung ke API.',
-        meta: 'Form'
-      },
-      {
-        title: 'Tautan profil',
-        description: 'Pengguna tetap diberi jalur balik ke profil kelembagaan jika membutuhkan konteks institusi.',
-        meta: 'Navigasi',
-        href: '/profil'
-      }
-    ]
-  },
+
   '/sarana-prasarana': {
     eyebrow: 'Peta Layanan',
     title: 'Portal pendukung untuk literasi, pembelajaran, mutu akademik, akses digital, dan kesehatan',
