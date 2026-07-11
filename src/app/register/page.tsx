@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Container } from '@/components/ui/Container'
+import { API_BASE_URL } from '@/lib/api'
 import { 
   KeyIcon, 
   UserGroupIcon, 
@@ -49,6 +50,7 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false)
   const [registered, setRegistered] = useState(false)
   const [passwordStrength, setPasswordStrength] = useState<'Weak' | 'Medium' | 'Strong'>('Weak')
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
   // Calculate password strength
   useEffect(() => {
@@ -81,22 +83,48 @@ export default function RegisterPage() {
     }
   }, [inviteCode])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setErrorMsg(null)
+
     if (password !== confirmPassword) {
-      alert('Konfirmasi kata sandi tidak cocok!')
+      setErrorMsg('Konfirmasi kata sandi tidak cocok!')
       return
     }
     if (role === 'admin' && inviteCodeValid !== true) {
-      alert('Kode undangan admin tidak valid!')
+      setErrorMsg('Kode undangan admin tidak valid!')
       return
     }
 
     setLoading(true)
-    setTimeout(() => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name,
+          nrp_nip: nrpNip,
+          phone,
+          password,
+          role,
+          role_label: getRoleLabel(role)
+        })
+      })
+
+      const data = await response.json()
+      if (response.ok && data.status === 'success') {
+        setRegistered(true)
+      } else {
+        setErrorMsg(data.message || 'Pendaftaran gagal. Silakan coba lagi.')
+      }
+    } catch (err) {
+      console.error('Registration error:', err)
+      setErrorMsg('Gagal terhubung ke server API. Pastikan server backend Anda menyala.')
+    } finally {
       setLoading(false)
-      setRegistered(true)
-    }, 1500)
+    }
   }
 
   const getRoleLabel = (r: RegisterRole) => {
@@ -194,8 +222,13 @@ export default function RegisterPage() {
               })}
             </div>
 
-            {/* Form */}
             <form onSubmit={handleSubmit} className="mt-6 grid gap-4">
+              {errorMsg && (
+                <div className="col-span-1 sm:col-span-2 rounded-xl bg-rose-50 border border-rose-200 p-3 text-xs text-rose-800 flex items-start gap-2 leading-5 animate-fadeIn">
+                  <ExclamationTriangleIcon className="h-5 w-5 shrink-0 text-rose-600" />
+                  <span>{errorMsg}</span>
+                </div>
+              )}
               {/* Common Fields */}
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
