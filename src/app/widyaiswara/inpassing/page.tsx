@@ -4,8 +4,66 @@ import { PageHero } from '@/components/ui/PageHero'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { InpassingModuleWorkspace } from '@/components/pages/InpassingModuleWorkspace'
 import { inpassingModules } from '@/data/inpassingModules'
+import { serverFetch } from '@/lib/api'
 
-export default function Page() {
+export default async function Page() {
+  // Fetch dynamic inpassing modules from database
+  let dbContent = null
+  try {
+    const res = await serverFetch('/api/widyaiswara-content/w-6', { cache: 'no-store' })
+    if (res.ok) {
+      const json = await res.json()
+      if (json.status === 'success' && json.data?.record) {
+        dbContent = json.data.record
+      }
+    }
+  } catch (err) {
+    console.warn('Failed to fetch dynamic inpassing modules from DB, using fallback:', err)
+  }
+
+  // Parse structured content if available
+  let modulesList = inpassingModules
+  if (dbContent && dbContent.content) {
+    const lines = dbContent.content.split(/\r?\n/)
+    const parsedList: any[] = []
+    let currentItem: any = null
+    
+    for (const line of lines) {
+      const trimmed = line.trim()
+      if (!trimmed) continue
+      
+      const colonIdx = trimmed.indexOf(':')
+      if (colonIdx === -1) continue
+      const key = trimmed.substring(0, colonIdx).trim().toUpperCase()
+      const val = trimmed.substring(colonIdx + 1).trim()
+      
+      if (key === 'MODUL') {
+        const order = parseInt(val) || (parsedList.length + 1)
+        currentItem = { id: `modul-${order}`, order, title: '', description: '', videoHref: '', pdfHref: '', pdfFileName: '' }
+        parsedList.push(currentItem)
+        continue
+      }
+      
+      if (currentItem) {
+        if (key === 'JUDUL') {
+          currentItem.title = val
+        } else if (key === 'DESKRIPSI') {
+          currentItem.description = val
+        } else if (key === 'VIDEO') {
+          currentItem.videoHref = val
+        } else if (key === 'URL') {
+          currentItem.pdfHref = val
+        } else if (key === 'FILE') {
+          currentItem.pdfFileName = val
+        }
+      }
+    }
+    
+    if (parsedList.length > 0) {
+      modulesList = parsedList
+    }
+  }
+
   return (
     <main>
       <PageHero
@@ -29,7 +87,7 @@ export default function Page() {
           />
 
           <div className="mt-8">
-            <InpassingModuleWorkspace modules={inpassingModules} />
+            <InpassingModuleWorkspace modules={modulesList} />
           </div>
         </Container>
       </section>

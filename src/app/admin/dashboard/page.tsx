@@ -331,6 +331,7 @@ function DashboardContent() {
   const [formPejabatItems, setFormPejabatItems] = useState<{ group: string; name: string; pangkat: string; jabatan: string; foto: string }[]>([])
   const [formFasilitasItems, setFormFasilitasItems] = useState<{ group: string; name: string; keterangan: string; foto: string }[]>([])
   const [formMateriTerbukaItems, setFormMateriTerbukaItems] = useState<{ title: string; description: string; fileName: string; href: string; format: string; category: string }[]>([])
+  const [formInpassingModules, setFormInpassingModules] = useState<{ id: string; order: number; title: string; description: string; videoHref?: string; pdfHref?: string; pdfFileName?: string }[]>([])
   
   const [formContactChatbotName, setFormContactChatbotName] = useState('')
   const [formContactChatbotUrl, setFormContactChatbotUrl] = useState('')
@@ -401,6 +402,66 @@ function DashboardContent() {
       if (item.href) contentStr += `URL: ${item.href}\n`
       if (item.format) contentStr += `FORMAT: ${item.format}\n`
       if (item.category) contentStr += `KATEGORI: ${item.category}\n`
+      contentStr += `\n`
+    }
+    return contentStr.trim()
+  }
+
+  // Parsing Inpassing modules string content into states
+  const parseInpassingModules = (contentStr: string) => {
+    const lines = contentStr.split(/\r?\n/)
+    const list: any[] = []
+    let currentItem: any = null
+    for (const line of lines) {
+      const trimmed = line.trim()
+      if (!trimmed) continue
+      
+      const colonIdx = trimmed.indexOf(':')
+      if (colonIdx === -1) continue
+      const key = trimmed.substring(0, colonIdx).trim().toUpperCase()
+      const val = trimmed.substring(colonIdx + 1).trim()
+      
+      if (key === 'MODUL') {
+        const order = parseInt(val) || (list.length + 1)
+        currentItem = { id: `modul-${order}`, order, title: '', description: '', videoHref: '', pdfHref: '', pdfFileName: '' }
+        list.push(currentItem)
+        continue
+      }
+      
+      if (currentItem) {
+        if (key === 'JUDUL') {
+          currentItem.title = val
+        } else if (key === 'DESKRIPSI') {
+          currentItem.description = val
+        } else if (key === 'VIDEO') {
+          currentItem.videoHref = val
+        } else if (key === 'URL') {
+          currentItem.pdfHref = val
+        } else if (key === 'FILE') {
+          currentItem.pdfFileName = val
+        }
+      }
+    }
+    // If list is empty, initialize 8 default modules to make it easy for admin to populate
+    if (list.length === 0) {
+      for (let i = 1; i <= 8; i++) {
+        list.push({ id: `modul-${i}`, order: i, title: `Modul ${i} Inpassing Widyaiswara`, description: 'Materi pembelajaran mandiri untuk calon Widyaiswara.', videoHref: '', pdfHref: '', pdfFileName: '' })
+      }
+    }
+    setFormInpassingModules(list)
+  }
+
+  // Building Inpassing modules content string from states
+  const buildInpassingModulesContent = (): string => {
+    let contentStr = ''
+    for (const item of formInpassingModules) {
+      if (!item.title.trim()) continue
+      contentStr += `MODUL: ${item.order}\n`
+      contentStr += `JUDUL: ${item.title}\n`
+      if (item.description) contentStr += `DESKRIPSI: ${item.description}\n`
+      if (item.videoHref) contentStr += `VIDEO: ${item.videoHref}\n`
+      if (item.pdfFileName) contentStr += `FILE: ${item.pdfFileName}\n`
+      if (item.pdfHref) contentStr += `URL: ${item.pdfHref}\n`
       contentStr += `\n`
     }
     return contentStr.trim()
@@ -1256,6 +1317,126 @@ function DashboardContent() {
     )
   }
 
+  const renderInpassingStructuredFields = () => {
+    return (
+      <div className="space-y-4 max-h-[350px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3 text-neutral-200">
+        <div className="flex justify-between items-center">
+          <p className="text-[10px] font-bold text-polri-goldSoft uppercase tracking-wider">Daftar Modul Inpassing (8 Modul)</p>
+          <button
+            type="button"
+            onClick={() => setFormInpassingModules([...formInpassingModules, { id: `modul-${formInpassingModules.length + 1}`, order: formInpassingModules.length + 1, title: '', description: '', videoHref: '', pdfHref: '', pdfFileName: '' }])}
+            className="px-2 py-1 rounded bg-polri-gold text-neutral-950 text-[9px] font-black uppercase hover:bg-yellow-500 transition"
+          >
+            + Tambah Modul
+          </button>
+        </div>
+        <div className="space-y-4">
+          {formInpassingModules.map((item, idx) => (
+            <div key={idx} className="p-3 bg-neutral-950 rounded-xl border border-neutral-800 space-y-2 relative">
+              <button
+                type="button"
+                onClick={() => setFormInpassingModules(formInpassingModules.filter((_, i) => i !== idx))}
+                className="absolute right-2 top-2 text-red-500 hover:text-red-400 font-bold text-xs"
+              >
+                Hapus
+              </button>
+              <div className="grid grid-cols-3 gap-2">
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Urutan</label>
+                  <input
+                    type="number"
+                    value={item.order}
+                    onChange={(e) => {
+                      const updated = [...formInpassingModules]
+                      updated[idx].order = parseInt(e.target.value) || (idx + 1)
+                      setFormInpassingModules(updated)
+                    }}
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+                <div className="col-span-2">
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Judul Modul</label>
+                  <input
+                    type="text"
+                    value={item.title}
+                    onChange={(e) => {
+                      const updated = [...formInpassingModules]
+                      updated[idx].title = e.target.value
+                      setFormInpassingModules(updated)
+                    }}
+                    placeholder="Contoh: Modul 1 Inpassing"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[8px] uppercase text-neutral-500 font-bold">Deskripsi Modul</label>
+                <textarea
+                  value={item.description}
+                  onChange={(e) => {
+                    const updated = [...formInpassingModules]
+                    updated[idx].description = e.target.value
+                    setFormInpassingModules(updated)
+                  }}
+                  rows={2}
+                  placeholder="Ringkasan materi modul..."
+                  className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold resize-none"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">URL Video Pembelajaran</label>
+                  <input
+                    type="text"
+                    value={item.videoHref || ''}
+                    onChange={(e) => {
+                      const updated = [...formInpassingModules]
+                      updated[idx].videoHref = e.target.value
+                      setFormInpassingModules(updated)
+                    }}
+                    placeholder="Contoh: /videos/modul1.mp4"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Nama File PDF</label>
+                  <input
+                    type="text"
+                    value={item.pdfFileName || ''}
+                    onChange={(e) => {
+                      const updated = [...formInpassingModules]
+                      updated[idx].pdfFileName = e.target.value
+                      setFormInpassingModules(updated)
+                    }}
+                    placeholder="Contoh: modul1.pdf"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[8px] uppercase text-neutral-500 font-bold">URL Tautan PDF</label>
+                <input
+                  type="text"
+                  value={item.pdfHref || ''}
+                  onChange={(e) => {
+                    const updated = [...formInpassingModules]
+                    updated[idx].pdfHref = e.target.value
+                    setFormInpassingModules(updated)
+                  }}
+                  placeholder="Contoh: /files/inpassing/modul1.pdf"
+                  className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
   // Actions
   const handleOpenCreate = () => {
     setFormTitle('')
@@ -1495,6 +1676,12 @@ function DashboardContent() {
     } else {
       setFormMateriTerbukaItems([])
     }
+
+    if (currentModule === 'Widyaiswara' && item.id === 'w-6') {
+      parseInpassingModules(item.content || '')
+    } else {
+      setFormInpassingModules([])
+    }
     setIsEditModalOpen(true)
   }
 
@@ -1508,13 +1695,17 @@ function DashboardContent() {
     const isProg = currentModule === 'Program Pendidikan' && isProgramSchool(formCategory, selectedItem.id)
     const isProfilStructured = currentModule === 'Profil' && ['p-5', 'p-6', 'p-7', 'p-8'].includes(selectedItem.id)
     const isWidyaiswaraMateri = currentModule === 'Widyaiswara' && selectedItem.id === 'w-4'
+    const isWidyaiswaraInpassing = currentModule === 'Widyaiswara' && selectedItem.id === 'w-6'
     const finalContent = isProg 
       ? buildProgramContent(formTitle) 
       : (isProfilStructured 
           ? buildProfilContent(selectedItem.id) 
           : (isWidyaiswaraMateri 
               ? buildMateriTerbukaContent() 
-              : formContent
+              : (isWidyaiswaraInpassing 
+                  ? buildInpassingModulesContent() 
+                  : formContent
+                )
             )
         )
 
@@ -2199,6 +2390,8 @@ function DashboardContent() {
                 renderProfilStructuredFields(formCategory)
               ) : currentModule === 'Widyaiswara' && formCategory === 'Materi Terbuka' ? (
                 renderMateriTerbukaStructuredFields()
+              ) : currentModule === 'Widyaiswara' && formCategory === 'Inpassing' ? (
+                renderInpassingStructuredFields()
               ) : (
                 <div>
                   <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Isi Konten (News / Detail)</label>
@@ -2434,6 +2627,8 @@ function DashboardContent() {
                 renderProfilStructuredFields(selectedItem?.id || '')
               ) : currentModule === 'Widyaiswara' && selectedItem?.id === 'w-4' ? (
                 renderMateriTerbukaStructuredFields()
+              ) : currentModule === 'Widyaiswara' && selectedItem?.id === 'w-6' ? (
+                renderInpassingStructuredFields()
               ) : (
                 <div>
                   <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Isi Konten (News / Detail)</label>
