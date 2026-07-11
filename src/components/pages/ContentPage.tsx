@@ -514,7 +514,7 @@ export function ContentPage({ content, path }: ContentPageProps) {
 
       {moveResourcesAbove ? resourcesSection : null}
 
-      {path !== '/profil/struktur-organisasi' && path !== '/profil/fasilitas' && path !== '/profil/pejabat' && !path.startsWith('/kelembagaan-internal') && (
+      {path !== '/profil/struktur-organisasi' && path !== '/profil/fasilitas' && path !== '/profil/pejabat' && !path.startsWith('/kelembagaan-internal') && !path.startsWith('/widyaiswara') && (
         <section className="bg-polri-brownDark py-10 text-white">
           <Container>
             <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.75fr)] lg:items-center">
