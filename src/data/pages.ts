@@ -1564,18 +1564,7 @@ export const pages: Record<string, PageContent> = {
     title: "Contact",
     eyebrow: "Kontak Profil",
     description: "Kanal kontak resmi untuk alamat, nomor kontak, email, peta lokasi, media sosial, dan formulir kontak Sespim Lemdiklat Polri.",
-    sections: [
-      {
-        title: 'Informasi yang Ditampilkan',
-        body: 'Data kontak dibuat terstruktur agar mudah diperbarui oleh pengelola portal setelah nomor dan email operasional final dikonfirmasi oleh satuan kerja terkait. Akses peta lokasi sudah diarahkan ke Google Maps resmi Sespim Polri.',
-        items: ['Alamat kantor', 'Nomor telepon atau hotline', 'Email layanan publik', 'Google Maps lokasi resmi', 'Instagram, Facebook, YouTube', 'Form nama, email, subjek, dan pesan']
-      },
-      {
-        title: 'Formulir Kontak',
-        body: 'Formulir kontak disiapkan sebagai baseline front-end untuk menerima pesan publik. Pengiriman pesan dapat dihubungkan ke API, email gateway, atau dashboard admin pada fase integrasi backend.',
-        items: ['Nama lengkap', 'Alamat email', 'Subjek pesan', 'Isi pesan', 'Validasi input', 'Status pengiriman']
-      }
-    ]
+    sections: []
   },
   '/galeri': {
     title: "Galeri",
