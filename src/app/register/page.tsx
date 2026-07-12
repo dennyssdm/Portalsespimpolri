@@ -109,7 +109,12 @@ export default function RegisterPage() {
           phone,
           password,
           role,
-          role_label: getRoleLabel(role)
+          role_label: getRoleLabel(role),
+          keahlian: role === 'widyaiswara' ? keahlian : undefined,
+          sertifikasi: role === 'widyaiswara' ? sertifikasi : undefined,
+          program: role === 'serdik' ? program : undefined,
+          angkatan: role === 'serdik' ? angkatan : undefined,
+          pangkat: role === 'serdik' ? pangkat : undefined
         })
       })
 
