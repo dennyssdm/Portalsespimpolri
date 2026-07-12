@@ -2,13 +2,13 @@ import type { PageContent } from '@/types'
 
 export const pages: Record<string, PageContent> = {
   '/profil': {
-    title: "Profil Sespim",
+    title: "Peta Profil",
     eyebrow: "Kelembagaan",
-    description: "Informasi dasar kelembagaan Sespim Lemdiklat Polri yang mencakup sejarah, visi misi, tugas fungsi, struktur organisasi, pejabat, fasilitas, dan kontak.",
+    description: "Informasi kelembagaan disusun dari mandat sampai layanan kontak",
     sections: [
       {
         title: 'Ringkasan Halaman',
-        body: "Informasi dasar kelembagaan Sespim Lemdiklat Polri yang mencakup sejarah, visi misi, tugas fungsi, struktur organisasi, pejabat, fasilitas, dan kontak.",
+        body: "Informasi kelembagaan disusun dari mandat sampai layanan kontak.",
         items: ['Konten awal mengikuti sitemap Sespim Polri.', 'Layout disiapkan sebagai baseline front-end.', 'Detail konten dapat diperbarui setelah approval.']
       },
       {
