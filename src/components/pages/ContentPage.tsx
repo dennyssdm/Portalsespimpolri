@@ -604,16 +604,10 @@ export function ContentPage({ content, path }: ContentPageProps) {
     <main>
       <PageHero eyebrow={content.eyebrow} title={content.title} description={content.description} />
 
-      <section className="border-b border-polri-gold/20 bg-polri-cream py-4">
-        <Container>
-          <Breadcrumb path={path} currentLabel={content.title} />
-        </Container>
-      </section>
-
       {path === '/profil' && (
-        <section className="bg-neutral-900 py-12 text-white border-b border-polri-gold/20">
-          <Container className="max-w-xl">
-            <div className="overflow-hidden rounded-3xl border border-polri-gold/30 bg-neutral-950 p-5 shadow-2xl">
+        <div className="relative z-20 -mt-16 sm:-mt-24 md:-mt-28 -mb-12 sm:-mb-16 md:-mb-20">
+          <Container className="max-w-md mx-auto px-4">
+            <div className="overflow-hidden rounded-3xl border-2 border-polri-gold/50 bg-neutral-950 p-4 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] transition transform hover:scale-[1.02] duration-300">
               <div className="relative aspect-square w-full overflow-hidden rounded-2xl border border-polri-gold/20">
                 <img 
                   src="/images/police_leaders_collage.png" 
@@ -621,16 +615,22 @@ export function ContentPage({ content, path }: ContentPageProps) {
                   className="h-full w-full object-cover shadow-inner"
                 />
               </div>
-              <div className="mt-5 text-center">
-                <h4 className="text-sm font-black uppercase tracking-wider text-polri-goldSoft">Kolase Kepemimpinan Sespim Polri</h4>
-                <p className="mt-2 text-xs text-neutral-400 font-semibold leading-relaxed">
+              <div className="mt-4 text-center">
+                <h4 className="text-xs font-black uppercase tracking-wider text-polri-goldSoft">Kolase Kepemimpinan Sespim Polri</h4>
+                <p className="mt-1.5 text-[10px] text-neutral-400 font-semibold leading-relaxed">
                   Sinergi kepemimpinan perwira tinggi, perwira menengah, dan perwira pertama menatap mantap ke depan demi mewujudkan masa depan kepemimpinan Polri yang Presisi.
                 </p>
               </div>
             </div>
           </Container>
-        </section>
+        </div>
       )}
+
+      <section className="border-b border-polri-gold/20 bg-polri-cream py-4">
+        <Container>
+          <Breadcrumb path={path} currentLabel={content.title} />
+        </Container>
+      </section>
 
       {moveResourcesAbove ? resourcesSection : null}
 
