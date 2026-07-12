@@ -127,6 +127,7 @@ export function ContentCollectionPage({ path, eyebrow, title, description, items
                     <option value="Sespimti">Sespimti</option>
                     <option value="Sespimmen">Sespimmen</option>
                     <option value="Sespimma">Sespimma</option>
+                    <option value="SPPK">SPPK</option>
                   </select>
 
                   {/* Year Selector */}

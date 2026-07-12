@@ -135,6 +135,36 @@ export const publicationItems: ArticleItem[] = [
     ],
     tags: ['Resensi', 'Literasi', 'Pelayanan Publik'],
     href: '/publikasi/resensi-buku-kepemimpinan-pelayanan-publik'
+  },
+  {
+    slug: 'kajian-kesiapan-polsek-sppk-4',
+    title: 'Kajian Kesiapan Polsek dalam Penerapan Keadilan Restoratif (Restorative Justice) Serdik SPPK Angkatan Ke-4',
+    category: 'Karya Peserta Didik',
+    date: '14 Juni 2026',
+    author: 'Serdik SPPK Angkatan Ke-4',
+    summary: 'Studi kasus mengenai evaluasi kesiapan operasional Polsek-Polsek di wilayah hukum Polda Jabar untuk implementasi penanganan perkara pidana ringan.',
+    body: [
+      'Pendidikan perwira pertama kepemimpinan (SPPK) berfokus pada kesiapan operasional taktis di lapangan.',
+      'Kajian ini mengevaluasi pemahaman personel Polsek mengenai Perpol No. 8 Tahun 2021 tentang Penanganan Tindak Pidana berdasarkan Keadilan Restoratif.',
+      'Disusun oleh tim peserta didik SPPK Angkatan Ke-4 sebagai prasyarat kelulusan akademik.'
+    ],
+    tags: ['SPPK', 'Restorative Justice', 'Karya Peserta Didik', 'Taktis'],
+    href: '/publikasi/kajian-kesiapan-polsek-sppk-4'
+  },
+  {
+    slug: 'strategi-manajemen-konflik-sppk-3',
+    title: 'Strategi Manajemen Konflik Sosial dan Pengamanan Teritorial Serdik SPPK Angkatan Ke-3',
+    category: 'Karya Peserta Didik',
+    date: '08 Desember 2025',
+    author: 'Serdik SPPK Angkatan Ke-3',
+    summary: 'Analisis taktis penanganan kerawanan keamanan dan ketertiban masyarakat pada wilayah perbatasan daerah hukum Polres.',
+    body: [
+      'Studi manajemen taktis SPPK Angkatan Ke-3 berfokus pada pencegahan dini eskalasi konflik komunal di tingkat Polres.',
+      'Membahas pembentukan unit reaksi cepat kemitraan kepolisian dengan tokoh masyarakat lokal.',
+      'Disusun guna memenuhi kelengkapan kurikulum pendidikan pertama perwira kepolisian.'
+    ],
+    tags: ['SPPK', 'Manajemen Konflik', 'Karya Peserta Didik', 'Taktis'],
+    href: '/publikasi/strategi-manajemen-konflik-sppk-3'
   }
 ]
 
