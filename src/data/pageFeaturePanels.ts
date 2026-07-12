@@ -153,9 +153,9 @@ export const pageFeaturePanels: Record<string, PageFeaturePanel> = {
       },
       {
         title: 'GADIKAN',
-        description: 'Tenaga pendidik fungsional, pengajar, instruktur fungsional, dan pembimbing yang bertugas mengasuh, melatih, serta mendampingi kegiatan operasional pendidikan secara langsung.',
-        meta: 'Pendidik',
-        href: '/widyaiswara/profil'
+        description: 'Tenaga Kependidikan yang bertugas sebagai staf operasional Sespim Polri untuk menyelenggarakan, memproses administrasi, dan mengawal kelancaran program pendidikan.',
+        meta: 'Kependidikan',
+        href: '/kelembagaan-internal/setlem'
       }
     ]
   },
