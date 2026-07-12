@@ -184,7 +184,9 @@ function DashboardContent() {
   const hasWriteAccess = activeRole === 'super_admin' || activeRole === 'admin'
   const hasDeleteAccess = activeRole === 'super_admin'
   
-  const sidebarItems = ADMIN_SIDEBAR_ITEMS
+  const sidebarItems: CMSSidebarItem[] = activeRole === 'super_admin'
+    ? [...ADMIN_SIDEBAR_ITEMS, { label: 'Analitik Kasespim', type: 'module', moduleName: 'Analitik Kasespim' }]
+    : ADMIN_SIDEBAR_ITEMS
 
   // States
   const [currentModule, setCurrentModule] = useState('Beranda')
@@ -406,6 +408,238 @@ function DashboardContent() {
       fetchClaimsList()
     }
   }, [currentModule])
+
+  // Load Serdik bimbingan data dynamically for real time activity in analitik
+  const [ssoSerdikList, setSsoSerdikList] = useState<any[]>([])
+
+  useEffect(() => {
+    if (currentModule === 'Analitik Kasespim') {
+      fetch('/api/naskap')
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data)) {
+            setSsoSerdikList(data)
+          }
+        })
+        .catch(err => console.error('Failed to fetch analitik bimbingan data:', err))
+    }
+  }, [currentModule])
+
+  const renderAnalitikKasespimWorkspace = () => {
+    const totalSerdik = 184
+    const countSelesai = 142
+    const rateKemajuan = 77
+    const countWidyaiswara = 24
+
+    return (
+      <div className="space-y-6">
+        {/* Header Summary Cards */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="bg-neutral-950 p-5 rounded-2xl border border-neutral-800">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">Total Serdik Aktif</p>
+            <p className="mt-2 text-2xl font-black text-white">{totalSerdik} Peserta</p>
+            <div className="mt-2 flex items-center gap-1 text-[10px] text-emerald-400 font-bold">
+              <span>●</span>
+              <span>4 Program Pendidikan</span>
+            </div>
+          </div>
+          <div className="bg-neutral-950 p-5 rounded-2xl border border-neutral-800">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">Kemajuan Naskap</p>
+            <p className="mt-2 text-2xl font-black text-polri-goldSoft">{rateKemajuan}% Rata-rata</p>
+            <div className="mt-2 w-full bg-neutral-900 rounded-full h-1.5 overflow-hidden">
+              <div className="bg-polri-goldSoft h-full rounded-full" style={{ width: `${rateKemajuan}%` }}></div>
+            </div>
+          </div>
+          <div className="bg-neutral-950 p-5 rounded-2xl border border-neutral-800">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">Lulus Naskah (ACC)</p>
+            <p className="mt-2 text-2xl font-black text-white">{countSelesai} / {totalSerdik}</p>
+            <p className="mt-2 text-[10px] text-neutral-400 font-semibold">Telah disetujui Widyaiswara</p>
+          </div>
+          <div className="bg-neutral-950 p-5 rounded-2xl border border-neutral-800">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">WI Pengampu</p>
+            <p className="mt-2 text-2xl font-black text-white">{countWidyaiswara} Dosen</p>
+            <p className="mt-2 text-[10px] text-emerald-400 font-bold">● Aktif Membimbing</p>
+          </div>
+        </div>
+
+        {/* Visual Charts / Stats Grid */}
+        <div className="grid gap-6 lg:grid-cols-2">
+          
+          {/* Sebaran Status Naskap */}
+          <div className="bg-neutral-950 p-6 rounded-2xl border border-neutral-800 space-y-4">
+            <div>
+              <h4 className="text-sm font-black uppercase text-polri-goldSoft tracking-wider">Sebaran Status Naskap</h4>
+              <p className="text-xs text-neutral-400 mt-1">Perkembangan tahap penyusunan naskah akademik oleh seluruh peserta didik aktif.</p>
+            </div>
+            
+            <div className="space-y-3.5 pt-2">
+              <div>
+                <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
+                  <span>Lulus Sidang / Selesai (ACC)</span>
+                  <span>142 Serdik (77%)</span>
+                </div>
+                <div className="w-full bg-neutral-900 rounded-full h-2">
+                  <div className="bg-emerald-500 h-full rounded-full" style={{ width: '77%' }}></div>
+                </div>
+              </div>
+              
+              <div>
+                <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
+                  <span>Proses Bimbingan Draf</span>
+                  <span>30 Serdik (16%)</span>
+                </div>
+                <div className="w-full bg-neutral-900 rounded-full h-2">
+                  <div className="bg-blue-500 h-full rounded-full" style={{ width: '16%' }}></div>
+                </div>
+              </div>
+
+              <div>
+                <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
+                  <span>Pengajuan Judul</span>
+                  <span>12 Serdik (7%)</span>
+                </div>
+                <div className="w-full bg-neutral-900 rounded-full h-2">
+                  <div className="bg-amber-500 h-full rounded-full" style={{ width: '7%' }}></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Tracer Study Kelulusan per Program */}
+          <div className="bg-neutral-950 p-6 rounded-2xl border border-neutral-800 space-y-4">
+            <div>
+              <h4 className="text-sm font-black uppercase text-polri-goldSoft tracking-wider">Tingkat Kelulusan per Program</h4>
+              <p className="text-xs text-neutral-400 mt-1">Laporan tingkat kelulusan dan penyelesaian naskah berdasarkan program pendidikan.</p>
+            </div>
+
+            <div className="space-y-3.5 pt-2">
+              <div>
+                <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
+                  <span>Sespimti Polri</span>
+                  <span>88% (44 / 50)</span>
+                </div>
+                <div className="w-full bg-neutral-900 rounded-full h-2">
+                  <div className="bg-polri-goldSoft h-full rounded-full" style={{ width: '88%' }}></div>
+                </div>
+              </div>
+
+              <div>
+                <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
+                  <span>Sespimmen Polri</span>
+                  <span>94% (82 / 87)</span>
+                </div>
+                <div className="w-full bg-neutral-900 rounded-full h-2">
+                  <div className="bg-polri-goldSoft h-full rounded-full" style={{ width: '94%' }}></div>
+                </div>
+              </div>
+
+              <div>
+                <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
+                  <span>Sespimma Polri</span>
+                  <span>100% (31 / 31)</span>
+                </div>
+                <div className="w-full bg-neutral-900 rounded-full h-2">
+                  <div className="bg-polri-goldSoft h-full rounded-full" style={{ width: '100%' }}></div>
+                </div>
+              </div>
+
+              <div>
+                <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
+                  <span>SPPK Polri</span>
+                  <span>100% (16 / 16)</span>
+                </div>
+                <div className="w-full bg-neutral-900 rounded-full h-2">
+                  <div className="bg-polri-goldSoft h-full rounded-full" style={{ width: '100%' }}></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Peta Keahlian Widyaiswara */}
+        <div className="bg-neutral-950 p-6 rounded-2xl border border-neutral-800 space-y-4">
+          <div>
+            <h4 className="text-sm font-black uppercase text-polri-goldSoft tracking-wider">Peta Bidang Keahlian Widyaiswara</h4>
+            <p className="text-xs text-neutral-400 mt-1">Peta distribusi bidang kepakaran akademik Widyaiswara Sespim Polri.</p>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 pt-2">
+            <div className="p-4 rounded-xl border border-neutral-800 bg-neutral-900/30 text-center">
+              <p className="text-2xl font-black text-white">8</p>
+              <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mt-1">Manajemen Strategis</p>
+            </div>
+            <div className="p-4 rounded-xl border border-neutral-800 bg-neutral-900/30 text-center">
+              <p className="text-2xl font-black text-white">6</p>
+              <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mt-1">Hukum & Restorative Justice</p>
+            </div>
+            <div className="p-4 rounded-xl border border-neutral-800 bg-neutral-900/30 text-center">
+              <p className="text-2xl font-black text-white">4</p>
+              <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mt-1">Cyber Crime & IT</p>
+            </div>
+            <div className="p-4 rounded-xl border border-neutral-800 bg-neutral-900/30 text-center">
+              <p className="text-2xl font-black text-white">6</p>
+              <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mt-1">Kamneg & Intelijen</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Real-time Aktivitas Bimbingan */}
+        <div className="bg-neutral-950 p-6 rounded-2xl border border-neutral-800 space-y-4">
+          <div className="flex justify-between items-center">
+            <div>
+              <h4 className="text-sm font-black uppercase text-polri-goldSoft tracking-wider">Aktivitas Asistensi Naskap Terkini</h4>
+              <p className="text-xs text-neutral-400 mt-1">Riwayat status pembimbingan naskah akademik terintegrasi database lokal.</p>
+            </div>
+            <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-polri-maroon text-white animate-pulse">Live</span>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse text-xs text-neutral-300">
+              <thead>
+                <tr className="border-b border-neutral-800 text-[10px] font-bold uppercase tracking-wider text-neutral-500">
+                  <th className="pb-3 pr-4">Nama Serdik</th>
+                  <th className="pb-3 px-4">Program Pendidikan</th>
+                  <th className="pb-3 px-4">Judul Aktif / Pengajuan</th>
+                  <th className="pb-3 px-4 text-center">Status</th>
+                  <th className="pb-3 pl-4">Aktivitas Terakhir</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-neutral-800/50">
+                {ssoSerdikList.map((serdik) => {
+                  const lastComment = serdik.comments[serdik.comments.length - 1]
+                  return (
+                    <tr key={serdik.id} className="hover:bg-neutral-900/30 transition">
+                      <td className="py-4 pr-4 font-bold text-white">{serdik.name}</td>
+                      <td className="py-4 px-4 text-neutral-400 font-semibold">{serdik.classGroup}</td>
+                      <td className="py-4 px-4 max-w-[240px] truncate font-medium">
+                        {serdik.activeTitle || (serdik.proposedTitles && serdik.proposedTitles[0]) || 'Belum mengajukan'}
+                      </td>
+                      <td className="py-4 px-4 text-center">
+                        <span className={`inline-block px-2.5 py-0.5 rounded text-[10px] font-bold ${
+                          serdik.status === 'Selesai' 
+                            ? 'bg-emerald-950 text-emerald-400 border border-emerald-900/50' 
+                            : serdik.status === 'Bimbingan Draf'
+                              ? 'bg-blue-950 text-blue-400 border border-blue-900/50'
+                              : 'bg-amber-950 text-amber-400 border border-amber-900/50'
+                        }`}>
+                          {serdik.status}
+                        </span>
+                      </td>
+                      <td className="py-4 pl-4 text-neutral-400 max-w-[200px] truncate">
+                        {lastComment ? `"${lastComment.text}"` : '-'}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    )
+  }
 
   const renderClaimsReportWorkspace = () => {
     return (
@@ -2080,6 +2314,8 @@ function DashboardContent() {
         <div className="flex-1 p-6 space-y-6 overflow-y-auto">
           {currentModule === 'Laporan Sertifikasi' ? (
             renderClaimsReportWorkspace()
+          ) : currentModule === 'Analitik Kasespim' ? (
+            renderAnalitikKasespimWorkspace()
           ) : (
             <>
               {/* Header Title Section */}

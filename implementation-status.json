@@ -70,6 +70,12 @@
       "deliverable": "Admin Dashboard & CMS Portal",
       "status": "Done",
       "approval": "Disetujui"
+    },
+    {
+      "phase": "Phase 10",
+      "deliverable": "Production Readiness Recommendations",
+      "status": "Done",
+      "approval": "Disetujui"
     }
   ]
 }
