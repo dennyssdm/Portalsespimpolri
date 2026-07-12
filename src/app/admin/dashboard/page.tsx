@@ -452,6 +452,46 @@ function DashboardContent() {
         .catch(err => console.error('Failed to fetch analitik bimbingan data:', err))
     }
   }, [currentModule])
+ 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+ 
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      const img = new window.Image()
+      img.onload = () => {
+        const canvas = document.createElement('canvas')
+        const MAX_WIDTH = 300
+        const MAX_HEIGHT = 300
+        let width = img.width
+        let height = img.height
+ 
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width
+            width = MAX_WIDTH
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height
+            height = MAX_HEIGHT
+          }
+        }
+ 
+        canvas.width = width
+        canvas.height = height
+        const ctx = canvas.getContext('2d')
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height)
+          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7)
+          setProfileFoto(compressedBase64)
+        }
+      }
+      img.src = event.target?.result as string
+    }
+    reader.readAsDataURL(file)
+  }
 
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -600,15 +640,28 @@ function DashboardContent() {
                 />
               </div>
  
-              <div className="col-span-2">
-                <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">URL Tautan Foto Profil</label>
-                <input
-                  type="text"
-                  value={profileFoto}
-                  onChange={(e) => setProfileFoto(e.target.value)}
-                  placeholder="Contoh: https://example.com/foto-anda.jpg"
-                  className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
-                />
+              <div className="col-span-2 space-y-2">
+                <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Unggah Foto Profil (Kompresi Otomatis)</label>
+                <div className="flex flex-col sm:flex-row items-center gap-4 bg-neutral-900 p-4 rounded-xl border border-neutral-800">
+                  <div className="h-20 w-20 rounded-full overflow-hidden bg-neutral-950 border border-neutral-800 flex items-center justify-center shrink-0">
+                    {profileFoto ? (
+                      <img src={profileFoto} alt="Preview Foto" className="h-full w-full object-cover" />
+                    ) : (
+                      <span className="text-neutral-500 text-xs">No Photo</span>
+                    )}
+                  </div>
+                  <div className="flex-1 w-full space-y-2">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="block w-full text-xs text-neutral-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:bg-neutral-850 file:text-polri-goldSoft hover:file:bg-neutral-800 transition cursor-pointer"
+                    />
+                    <p className="text-[10px] text-neutral-500 leading-normal">
+                      Foto akan otomatis dikompresi di peramban ke resolusi maksimal 300x300 piksel dengan kualitas optimal (JPEG 70%) untuk menghemat ruang penyimpanan.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
  
