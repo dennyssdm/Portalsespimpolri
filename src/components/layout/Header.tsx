@@ -287,14 +287,12 @@ export function Header() {
                 <p className="text-polri-goldSoft font-bold capitalize mt-0.5">{user.role.replace('_', ' ')}</p>
               </div>
               <div className="flex items-center gap-1.5 ml-2">
-                {(user.role === 'super_admin' || user.role === 'admin' || user.role === 'stakeholder') && (
-                  <Link
-                    href={`/admin/dashboard?role=${user.role}`}
-                    className="text-[10px] font-black uppercase text-polri-goldSoft hover:text-white transition-colors bg-polri-maroon px-2.5 py-1 rounded border border-polri-gold/30"
-                  >
-                    Dasbor CMS
-                  </Link>
-                )}
+                <Link
+                  href={`/admin/dashboard?role=${user.role}`}
+                  className="text-[10px] font-black uppercase text-polri-goldSoft hover:text-white transition-colors bg-polri-maroon px-2.5 py-1 rounded border border-polri-gold/30"
+                >
+                  {['super_admin', 'admin', 'stakeholder'].includes(user.role) ? 'Dasbor CMS' : 'Profil Saya'}
+                </Link>
                 <button
                   onClick={handleLogout}
                   className="text-[10px] font-black uppercase text-neutral-400 hover:text-white transition-colors bg-neutral-900 px-2.5 py-1 rounded border border-neutral-700"
@@ -340,15 +338,13 @@ export function Header() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  {(user.role === 'super_admin' || user.role === 'admin' || user.role === 'stakeholder') && (
-                    <Link
-                      href={`/admin/dashboard?role=${user.role}`}
-                      onClick={() => setOpen(false)}
-                      className="rounded-lg bg-polri-gold text-polri-brownDark px-3 py-1.5 text-xs font-bold transition hover:bg-polri-gold/90 border border-polri-gold/20"
-                    >
-                      CMS
-                    </Link>
-                  )}
+                  <Link
+                    href={`/admin/dashboard?role=${user.role}`}
+                    onClick={() => setOpen(false)}
+                    className="rounded-lg bg-polri-gold text-polri-brownDark px-3 py-1.5 text-xs font-bold transition hover:bg-polri-gold/90 border border-polri-gold/20"
+                  >
+                    {['super_admin', 'admin', 'stakeholder'].includes(user.role) ? 'CMS' : 'Profil'}
+                  </Link>
                   <button
                     onClick={handleLogout}
                     className="rounded-lg bg-polri-maroon text-white px-3 py-1.5 text-xs font-bold transition hover:bg-polri-brownDark border border-polri-gold/20"

@@ -165,7 +165,8 @@ function DashboardContent() {
     }
 
     const sessionUser = JSON.parse(userJson)
-    if (sessionUser.role !== 'super_admin' && sessionUser.role !== 'admin' && sessionUser.role !== 'stakeholder') {
+    const validRoles = ['super_admin', 'admin', 'stakeholder', 'serdik', 'widyaiswara']
+    if (!validRoles.includes(sessionUser.role)) {
       router.push('/login?message=forbidden')
       return
     }
@@ -184,14 +185,18 @@ function DashboardContent() {
   const hasWriteAccess = activeRole === 'super_admin' || activeRole === 'admin'
   const hasDeleteAccess = activeRole === 'super_admin'
   
-  const baseSidebarItems: CMSSidebarItem[] = (activeRole === 'super_admin' || activeRole === 'stakeholder')
-    ? [...ADMIN_SIDEBAR_ITEMS, { label: 'Analitik Kasespim', type: 'module', moduleName: 'Analitik Kasespim' }]
-    : ADMIN_SIDEBAR_ITEMS
-
-  const sidebarItems: CMSSidebarItem[] = [
-    { label: 'Profil Saya', type: 'module', moduleName: 'Profil Saya' },
-    ...baseSidebarItems
-  ]
+  const sidebarItems: CMSSidebarItem[] = (() => {
+    if (activeRole === 'serdik' || activeRole === 'widyaiswara') {
+      return [{ label: 'Profil Saya', type: 'module', moduleName: 'Profil Saya' }]
+    }
+    const baseItems = (activeRole === 'super_admin' || activeRole === 'stakeholder')
+      ? [...ADMIN_SIDEBAR_ITEMS, { label: 'Analitik Kasespim', type: 'module', moduleName: 'Analitik Kasespim' }]
+      : ADMIN_SIDEBAR_ITEMS
+    return [
+      { label: 'Profil Saya', type: 'module', moduleName: 'Profil Saya' },
+      ...baseItems
+    ]
+  })()
 
   // States
   const [currentModule, setCurrentModule] = useState('Profil Saya')
