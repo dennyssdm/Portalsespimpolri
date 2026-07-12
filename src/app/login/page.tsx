@@ -68,7 +68,24 @@ function LoginContent() {
       setRole(found.role)
       setIsReadOnly(false)
 
-      sessionStorage.setItem('sespim_user', JSON.stringify(found))
+      const mockSsoUser = {
+        id: 2,
+        name: found.name,
+        nrpNip: found.nrpNip,
+        phone: found.phone,
+        role: found.role,
+        roleLabel: found.roleLabel,
+        gelar: found.details?.Pangkat || '',
+        pangkat: found.details?.Pangkat || '',
+        email: '',
+        foto: '',
+        no_serdik: found.details?.NRP || '',
+        instansi_polri: '',
+        kementerian_lembaga: '',
+        negara_asal: 'Indonesia',
+        details: found.details || {}
+      }
+      sessionStorage.setItem('sespim_user', JSON.stringify(mockSsoUser))
       sessionStorage.setItem('sespim_token', 'mock_sso_siap_token')
       window.dispatchEvent(new Event('sespim_auth_change'))
 
@@ -97,7 +114,24 @@ function LoginContent() {
       if (found) {
         setRole(found.role)
         setIsReadOnly(false)
-        sessionStorage.setItem('sespim_user', JSON.stringify(found))
+        const mockSsoUser = {
+          id: 2,
+          name: found.name,
+          nrpNip: found.nrpNip,
+          phone: found.phone,
+          role: found.role,
+          roleLabel: found.roleLabel,
+          gelar: found.details?.Pangkat || '',
+          pangkat: found.details?.Pangkat || '',
+          email: '',
+          foto: '',
+          no_serdik: found.details?.NRP || '',
+          instansi_polri: '',
+          kementerian_lembaga: '',
+          negara_asal: 'Indonesia',
+          details: found.details || {}
+        }
+        sessionStorage.setItem('sespim_user', JSON.stringify(mockSsoUser))
         sessionStorage.setItem('sespim_token', 'mock_sso_siap_token')
         window.dispatchEvent(new Event('sespim_auth_change'))
         setAuthenticatedUser({
@@ -162,11 +196,20 @@ function LoginContent() {
         const token = data.token
 
         const sessionUser = {
+          id: apiUser.id,
           name: apiUser.name,
           nrpNip: apiUser.nrp_nip,
           phone: apiUser.phone,
           role: apiUser.role,
           roleLabel: apiUser.role_label,
+          gelar: apiUser.gelar || '',
+          pangkat: apiUser.pangkat || '',
+          email: apiUser.email || '',
+          foto: apiUser.foto || '',
+          no_serdik: apiUser.no_serdik || '',
+          instansi_polri: apiUser.instansi_polri || '',
+          kementerian_lembaga: apiUser.kementerian_lembaga || '',
+          negara_asal: apiUser.negara_asal || '',
           details: apiUser.details || {}
         }
 
@@ -221,8 +264,24 @@ function LoginContent() {
         setIsReadOnly(false)
       }
 
-      // Set session storage for authorization
-      sessionStorage.setItem('sespim_user', JSON.stringify(found))
+      const mockSessionUser = {
+        id: 2,
+        name: found.name,
+        nrpNip: found.nrpNip,
+        phone: found.phone,
+        role: found.role,
+        roleLabel: found.roleLabel,
+        gelar: found.details?.Pangkat || '',
+        pangkat: found.details?.Pangkat || '',
+        email: '',
+        foto: '',
+        no_serdik: found.details?.NRP || '',
+        instansi_polri: '',
+        kementerian_lembaga: '',
+        negara_asal: 'Indonesia',
+        details: found.details || {}
+      }
+      sessionStorage.setItem('sespim_user', JSON.stringify(mockSessionUser))
       sessionStorage.setItem('sespim_token', 'mock_fallback_token')
       window.dispatchEvent(new Event('sespim_auth_change'))
 
