@@ -22,8 +22,8 @@ export const dummyAccounts: DummyAccount[] = [
     }
   },
   {
-    name: 'Irjen Pol. Drs. H. Ahmad Fauzi',
-    nrpNip: '197204151996031001',
+    name: 'Irjen Pol. Midi Siswoko, S.I.K.',
+    nrpNip: '70012124',
     phone: '081122334455',
     password: 'polri123',
     role: 'stakeholder',
@@ -72,15 +72,15 @@ export const dummyAccounts: DummyAccount[] = [
     }
   },
   {
-    name: 'Kombes Pol. Drs. Midi Siswoko, S.I.K.',
-    nrpNip: '197008121995031002',
+    name: 'Irjen Pol. Chuzaini Patoppoi, S.St.Mk., S.H.',
+    nrpNip: '68120455',
     phone: '081277776666',
     password: 'polri123',
     role: 'widyaiswara',
     roleLabel: 'User Widyaiswara (Tenaga Pendidik)',
     details: {
-      'NIP': '197008121995031002',
-      'Keahlian': 'Kepemimpinan Strategis',
+      'NIP': '68120455',
+      'Keahlian': 'Manajemen Keamanan',
       'Sertifikasi': 'LSP Lemdiklat Polri'
     }
   }
