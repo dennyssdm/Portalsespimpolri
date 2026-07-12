@@ -185,7 +185,12 @@ function LoginContent() {
         setLoading(false)
 
         // Redirect
-        router.push(`/admin/dashboard?role=${sessionUser.role}`)
+        if (sessionUser.role === 'super_admin' || sessionUser.role === 'admin' || sessionUser.role === 'stakeholder') {
+          router.push(`/admin/dashboard?role=${sessionUser.role}`)
+        } else {
+          const redirectUrl = searchParams.get('redirect')
+          router.push(redirectUrl || '/')
+        }
         return
       } else {
         console.warn('API login failed:', data.message || response.statusText)
@@ -228,8 +233,13 @@ function LoginContent() {
         identifier: found.nrpNip
       })
 
-      // Redirect all roles to dashboard
-      router.push(`/admin/dashboard?role=${found.role}`)
+      // Redirect super_admin, admin, and stakeholder to admin dashboard, others stay on public portal
+      if (found.role === 'super_admin' || found.role === 'admin' || found.role === 'stakeholder') {
+        router.push(`/admin/dashboard?role=${found.role}`)
+      } else {
+        const redirectUrl = searchParams.get('redirect')
+        router.push(redirectUrl || '/')
+      }
     }, 1000)
   }
 
