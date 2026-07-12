@@ -431,6 +431,27 @@ export function ContentPage({ content, path }: ContentPageProps) {
               </Container>
             </section>
           )}
+          {path === '/widyaiswara' && (
+            <section className="bg-white pb-14">
+              <Container>
+                <div className="overflow-hidden rounded-xl border border-polri-gold/20 shadow-lg relative group h-[450px]">
+                  <div className="absolute inset-0 bg-gradient-to-t from-polri-brownDark via-transparent/40 to-transparent opacity-95 z-10" aria-hidden="true" />
+                  <img 
+                    src="/images/sespim_smart_class.png" 
+                    alt="Ilustrasi Smart Class Sespim Lemdiklat Polri" 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 p-8 z-20 text-white">
+                    <p className="text-xs font-bold uppercase tracking-[0.24em] text-polri-goldSoft">Smart Class Sespim Polri</p>
+                    <h4 className="mt-2 text-xl sm:text-3xl font-black tracking-tight text-white">Metode Pembelajaran Digital & Kolaboratif Widyaiswara</h4>
+                    <p className="mt-3 text-sm sm:text-base text-white/90 leading-relaxed max-w-3xl">
+                      Widyaiswara Sespim Lemdiklat Polri memanfaatkan fasilitas ruang kelas pintar (Smart Classroom) yang dilengkapi teknologi hybrid dan layar sentuh interaktif untuk mendukung proses belajar mengajar secara modern.
+                    </p>
+                  </div>
+                </div>
+              </Container>
+            </section>
+          )}
         </>
       ) : null}
 
