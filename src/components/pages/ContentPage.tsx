@@ -411,24 +411,26 @@ export function ContentPage({ content, path }: ContentPageProps) {
         <>
           <PageFeaturePanel panel={featurePanel} />
           {path === '/kelembagaan-internal' && (
-            <section className="bg-white pb-14">
-              <Container>
-                <div className="overflow-hidden rounded-xl border border-polri-gold/20 shadow-lg relative group">
-                  <div className="absolute inset-0 bg-gradient-to-t from-polri-brownDark via-transparent to-transparent opacity-80 z-10" aria-hidden="true" />
-                  <img 
-                    src="/images/sespim_kegiatan_pendidikan.png" 
-                    alt="Ilustrasi Kegiatan Pendidikan Sespim Lemdiklat Polri" 
-                    className="w-full h-[400px] object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 p-8 z-20 text-white">
-                    <p className="text-xs font-bold uppercase tracking-[0.24em] text-polri-goldSoft">Ilustrasi Kegiatan</p>
-                    <h4 className="mt-2 text-xl sm:text-2xl font-black tracking-tight text-white">Pendidikan & Pelatihan Reguler Sespim Lemdiklat Polri</h4>
-                    <p className="mt-2 text-sm text-white/80 max-w-2xl">
-                      Widyaiswara dan Tenaga Kependidikan (Gadikan) bersinergi menyelenggarakan pengajaran tatap muka, diskusi panel, simulasi operasional, dan pembimbingan akademik guna mencetak pemimpin Polri yang unggul dan presisi.
-                    </p>
-                  </div>
+            <section className="bg-white pb-14 w-full">
+              <div className="relative overflow-hidden group w-full h-[450px]">
+                <div className="absolute inset-0 bg-gradient-to-t from-polri-brownDark via-transparent/40 to-transparent opacity-95 z-10" aria-hidden="true" />
+                <img 
+                  src="/images/sespim_kegiatan_pendidikan.png" 
+                  alt="Ilustrasi Kegiatan Pendidikan Sespim Lemdiklat Polri" 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-x-0 bottom-0 z-20 pb-10">
+                  <Container>
+                    <div className="text-white max-w-3xl">
+                      <p className="text-xs font-bold uppercase tracking-[0.24em] text-polri-goldSoft">Ilustrasi Kegiatan</p>
+                      <h4 className="mt-2 text-2xl sm:text-4xl font-black tracking-tight text-white">Pendidikan & Pelatihan Reguler Sespim Lemdiklat Polri</h4>
+                      <p className="mt-3 text-sm sm:text-base text-white/90 leading-relaxed">
+                        Widyaiswara dan Tenaga Kependidikan (Gadikan) bersinergi menyelenggarakan pengajaran tatap muka, diskusi panel, simulasi operasional, dan pembimbingan akademik guna mencetak pemimpin Polri yang unggul dan presisi.
+                      </p>
+                    </div>
+                  </Container>
                 </div>
-              </Container>
+              </div>
             </section>
           )}
         </>
