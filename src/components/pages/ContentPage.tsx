@@ -1324,7 +1324,7 @@ export function ContentPage({ content, path }: ContentPageProps) {
             {!isEditorialBoardPage && (
               <aside className="space-y-5">
                 {/* Status Konten has been removed */}
-                {path !== '/profil/kontak/susunan-redaksi' && highlight?.sideNotes.map((note) => (
+                {path !== '/profil/kontak/susunan-redaksi' && path !== '/kelembagaan-internal' && highlight?.sideNotes.map((note) => (
                   <div key={note.title} className="rounded-lg border border-polri-gold/25 bg-polri-cream p-6">
                     <h3 className="font-black text-polri-brownDark">{note.title}</h3>
                     <p className="mt-3 text-sm leading-7 text-neutral-700">{note.body}</p>
@@ -1346,7 +1346,7 @@ export function ContentPage({ content, path }: ContentPageProps) {
                     </a>
                   </div>
                 ) : null}
-                {path !== '/profil/pejabat' && path !== '/profil/fasilitas' && path !== '/profil/kontak/contact' && path !== '/profil/kontak/susunan-redaksi' && path !== '/profil/struktur-organisasi' && path !== '/kontak' && (
+                {path !== '/profil/pejabat' && path !== '/profil/fasilitas' && path !== '/profil/kontak/contact' && path !== '/profil/kontak/susunan-redaksi' && path !== '/profil/struktur-organisasi' && path !== '/kontak' && path !== '/kelembagaan-internal' && (
                   <div className="rounded-lg border border-polri-gold/25 bg-polri-cream p-6">
                     <h3 className="font-black text-polri-brownDark">Tautan Terkait</h3>
                     <div className="mt-4 grid gap-2">
