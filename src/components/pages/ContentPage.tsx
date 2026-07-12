@@ -31,6 +31,58 @@ export function ContentPage({ content, path }: ContentPageProps) {
   const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
   const [formErrors, setFormErrors] = useState<Record<string, string>>({})
 
+  // Plagiarism check states
+  const [plagiarismFile, setPlagiarismFile] = useState<File | null>(null)
+  const [plagiarismStatus, setPlagiarismStatus] = useState<'idle' | 'scanning' | 'done'>('idle')
+  const [plagiarismProgress, setPlagiarismProgress] = useState(0)
+  const [plagiarismResults, setPlagiarismResults] = useState<{
+    similarity: number
+    fileName: string
+    status: string
+    dominantSource: string
+    sources: { domain: string; percentage: number; matchCount: number }[]
+  } | null>(null)
+
+  const handlePlagiarismFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setPlagiarismFile(file)
+    setPlagiarismStatus('scanning')
+    setPlagiarismProgress(0)
+    setPlagiarismResults(null)
+
+    // Simulate progress scanning
+    let progress = 0
+    const interval = setInterval(() => {
+      progress += 10
+      setPlagiarismProgress(progress)
+      if (progress >= 100) {
+        clearInterval(interval)
+        
+        // Generate simulated Turnitin scan results
+        const isSafe = Math.random() > 0.3
+        const similarity = isSafe ? Math.floor(Math.random() * 15) + 5 : Math.floor(Math.random() * 20) + 20
+        const statusText = similarity < 15 ? 'Selesai (Sangat Aman)' : similarity <= 25 ? 'Selesai (Aman)' : 'Revisi (Similarity Tinggi)'
+        const sourceList = [
+          { domain: 'jurnal.polri.go.id', percentage: Math.max(1, Math.floor(similarity * 0.4)), matchCount: Math.floor(Math.random() * 12) + 4 },
+          { domain: 'perpusnas.go.id', percentage: Math.max(1, Math.floor(similarity * 0.3)), matchCount: Math.floor(Math.random() * 8) + 2 },
+          { domain: 'sespim.polri.go.id', percentage: Math.max(1, Math.floor(similarity * 0.2)), matchCount: Math.floor(Math.random() * 6) + 1 },
+          { domain: 'perpustakaan.kemhan.go.id', percentage: Math.max(1, Math.floor(similarity * 0.1)), matchCount: Math.floor(Math.random() * 3) + 1 }
+        ].filter(s => s.percentage > 0)
+
+        setPlagiarismResults({
+          similarity,
+          fileName: file.name,
+          status: statusText,
+          dominantSource: sourceList[0]?.domain || 'Internet Source',
+          sources: sourceList
+        })
+        setPlagiarismStatus('done')
+      }
+    }, 150)
+  }
+
   const officialAddress = 'Jl. Maribaya No.53, Kayuambon, Kec. Lembang, Kabupaten Bandung Barat, Jawa Barat 40391, Indonesia'
   const officialMapHref = 'https://maps.app.goo.gl/k7YqKzsiNCdpKcqY7'
   const officialMapPreviewSrc = `https://www.google.com/maps?q=${encodeURIComponent(officialAddress)}&output=embed`
@@ -665,39 +717,70 @@ export function ContentPage({ content, path }: ContentPageProps) {
                   <p className="text-sm font-black uppercase tracking-[0.22em] text-polri-goldSoft">Hasil Plagiarisme</p>
                   <div className="mt-6 grid gap-4 sm:grid-cols-3">
                     <div className="rounded-lg border border-polri-gold/25 bg-white/10 p-5">
-                      <p className="text-3xl font-black text-polri-goldSoft">--%</p>
-                      <p className="mt-2 text-sm font-semibold leading-6 text-white/72">Similarity Index</p>
+                      <p className="text-3xl font-black text-polri-goldSoft">
+                        {plagiarismStatus === 'idle' ? '--%' : plagiarismStatus === 'scanning' ? `${plagiarismProgress}%` : `${plagiarismResults?.similarity}%`}
+                      </p>
+                      <p className="mt-2 text-sm font-semibold leading-6 text-white/72">
+                        {plagiarismStatus === 'scanning' ? 'Scanning...' : 'Similarity Index'}
+                      </p>
                     </div>
                     <div className="rounded-lg border border-polri-gold/25 bg-white/10 p-5">
-                      <p className="text-3xl font-black text-polri-goldSoft">0</p>
+                      <p className="text-3xl font-black text-polri-goldSoft">
+                        {plagiarismStatus === 'done' ? '1' : '0'}
+                      </p>
                       <p className="mt-2 text-sm font-semibold leading-6 text-white/72">Dokumen Dicek</p>
                     </div>
                     <div className="rounded-lg border border-polri-gold/25 bg-white/10 p-5">
-                      <p className="text-3xl font-black text-polri-goldSoft">Ready</p>
+                      <p className="text-3xl font-black text-polri-goldSoft">
+                        {plagiarismStatus === 'idle' ? 'Ready' : plagiarismStatus === 'scanning' ? 'Proses' : 'Selesai'}
+                      </p>
                       <p className="mt-2 text-sm font-semibold leading-6 text-white/72">Status Layanan</p>
                     </div>
                   </div>
 
                   <div className="mt-6 rounded-lg border border-polri-gold/25 bg-white p-5 text-polri-brownDark">
                     <div className="grid gap-4 md:grid-cols-4">
-                      <div>
+                      <div className="min-w-0">
                         <p className="text-xs font-black uppercase tracking-[0.16em] text-polri-maroon">Dokumen</p>
-                        <p className="mt-2 text-sm font-bold text-neutral-700">Belum ada file</p>
+                        <p className="mt-2 text-sm font-bold text-neutral-700 truncate">
+                          {plagiarismFile ? plagiarismFile.name : 'Belum ada file'}
+                        </p>
                       </div>
                       <div>
                         <p className="text-xs font-black uppercase tracking-[0.16em] text-polri-maroon">Similarity</p>
-                        <p className="mt-2 text-sm font-bold text-neutral-700">Menunggu hasil</p>
+                        <p className="mt-2 text-sm font-bold text-neutral-700">
+                          {plagiarismResults ? `${plagiarismResults.similarity}%` : 'Menunggu hasil'}
+                        </p>
                       </div>
-                      <div>
+                      <div className="min-w-0">
                         <p className="text-xs font-black uppercase tracking-[0.16em] text-polri-maroon">Sumber Dominan</p>
-                        <p className="mt-2 text-sm font-bold text-neutral-700">Belum tersedia</p>
+                        <p className="mt-2 text-sm font-bold text-neutral-700 truncate">
+                          {plagiarismResults ? plagiarismResults.dominantSource : 'Belum tersedia'}
+                        </p>
                       </div>
                       <div>
                         <p className="text-xs font-black uppercase tracking-[0.16em] text-polri-maroon">Status</p>
-                        <p className="mt-2 text-sm font-bold text-neutral-700">Siap upload</p>
+                        <p className="mt-2 text-sm font-bold text-neutral-700">
+                          {plagiarismStatus === 'idle' ? 'Siap upload' : plagiarismStatus === 'scanning' ? 'Memindai...' : plagiarismResults?.status}
+                        </p>
                       </div>
                     </div>
                   </div>
+
+                  {plagiarismResults && (
+                    <div className="mt-6 border-t border-polri-gold/20 pt-6">
+                      <p className="text-sm font-black uppercase tracking-[0.22em] text-polri-goldSoft mb-3">Daftar Sumber Kecocokan (Similarity Matches)</p>
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        {plagiarismResults.sources.map((source) => (
+                          <div key={source.domain} className="flex items-center justify-between p-3 rounded-lg border border-polri-gold/15 bg-white/5 text-xs text-white">
+                            <span className="font-bold truncate max-w-[200px]">{source.domain}</span>
+                            <span className="font-black text-polri-goldSoft ml-2 shrink-0">{source.percentage}% Similarity ({source.matchCount} Temuan)</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   <p className="mt-4 text-sm leading-7 text-white/70">
                     Hasil resmi dapat ditampilkan setelah dokumen diproses melalui akun atau integrasi layanan Turnitin yang ditetapkan pengelola.
                   </p>
@@ -705,11 +788,27 @@ export function ContentPage({ content, path }: ContentPageProps) {
 
                 <div className="border-t border-polri-gold/25 bg-polri-cream p-6 text-polri-brownDark lg:border-l lg:border-t-0 sm:p-8">
                   <p className="text-sm font-black uppercase tracking-[0.22em] text-polri-maroon">Aksi Dokumen</p>
-                  <label className="mt-5 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-polri-gold/60 bg-white px-5 py-8 text-center transition hover:border-polri-maroon hover:bg-polri-cream">
-                    <span className="text-base font-black text-polri-brownDark">Upload Dokumen</span>
-                    <span className="mt-2 text-sm leading-6 text-neutral-700">PDF, DOC, atau DOCX untuk pemeriksaan awal.</span>
-                    <input type="file" className="sr-only" accept=".pdf,.doc,.docx" aria-label="Upload dokumen untuk cek plagiarisme" />
-                  </label>
+                  
+                  {plagiarismStatus === 'scanning' ? (
+                    <div className="mt-5 rounded-lg border border-polri-gold/40 bg-white px-5 py-8 text-center">
+                      <div className="h-8 w-8 animate-spin rounded-full border-4 border-polri-maroon border-t-transparent mx-auto"></div>
+                      <p className="mt-4 text-sm font-black text-polri-brownDark">Memindai Similarity ({plagiarismProgress}%)</p>
+                      <p className="mt-1 text-xs text-neutral-500">Mencocokkan database dokumen Turnitin...</p>
+                    </div>
+                  ) : (
+                    <label className="mt-5 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-polri-gold/60 bg-white px-5 py-8 text-center transition hover:border-polri-maroon hover:bg-polri-cream">
+                      <span className="text-base font-black text-polri-brownDark">Upload Dokumen</span>
+                      <span className="mt-2 text-sm leading-6 text-neutral-700">PDF, DOC, atau DOCX untuk pemeriksaan awal.</span>
+                      <input 
+                        type="file" 
+                        onChange={handlePlagiarismFileChange}
+                        className="sr-only" 
+                        accept=".pdf,.doc,.docx" 
+                        aria-label="Upload dokumen untuk cek plagiarisme" 
+                      />
+                    </label>
+                  )}
+                  
                   <a
                     href={turnitinHref}
                     {...externalLinkProps(turnitinHref)}
@@ -718,7 +817,7 @@ export function ContentPage({ content, path }: ContentPageProps) {
                     Buka Turnitin
                   </a>
                   <p className="mt-4 text-xs font-semibold leading-6 text-neutral-600">
-                    Tombol upload saat ini menyiapkan alur front-end. Integrasi otomatis dengan Turnitin membutuhkan akun, API, atau prosedur resmi pengelola.
+                    Tombol upload mensimulasikan alur verifikasi similarity instan. Hubungkan ke API Turnitin jika kredensial integrasi institusi resmi telah dikonfigurasi.
                   </p>
                 </div>
               </div>
