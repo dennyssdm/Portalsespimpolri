@@ -287,7 +287,7 @@ export function Header() {
                 <p className="text-polri-goldSoft font-bold capitalize mt-0.5">{user.role.replace('_', ' ')}</p>
               </div>
               <div className="flex items-center gap-1.5 ml-2">
-                {(user.role === 'super_admin' || user.role === 'admin') && (
+                {(user.role === 'super_admin' || user.role === 'admin' || user.role === 'stakeholder') && (
                   <Link
                     href={`/admin/dashboard?role=${user.role}`}
                     className="text-[10px] font-black uppercase text-polri-goldSoft hover:text-white transition-colors bg-polri-maroon px-2.5 py-1 rounded border border-polri-gold/30"
@@ -340,7 +340,7 @@ export function Header() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  {(user.role === 'super_admin' || user.role === 'admin') && (
+                  {(user.role === 'super_admin' || user.role === 'admin' || user.role === 'stakeholder') && (
                     <Link
                       href={`/admin/dashboard?role=${user.role}`}
                       onClick={() => setOpen(false)}

@@ -233,8 +233,8 @@ function LoginContent() {
         identifier: found.nrpNip
       })
 
-      // Redirect super_admin and admin to admin dashboard, others stay on public portal
-      if (found.role === 'super_admin' || found.role === 'admin') {
+      // Redirect super_admin, admin, and stakeholder to admin dashboard, others stay on public portal
+      if (found.role === 'super_admin' || found.role === 'admin' || found.role === 'stakeholder') {
         router.push(`/admin/dashboard?role=${found.role}`)
       } else {
         const redirectUrl = searchParams.get('redirect')

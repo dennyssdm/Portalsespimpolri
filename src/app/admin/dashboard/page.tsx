@@ -165,7 +165,7 @@ function DashboardContent() {
     }
 
     const sessionUser = JSON.parse(userJson)
-    if (sessionUser.role !== 'super_admin' && sessionUser.role !== 'admin') {
+    if (sessionUser.role !== 'super_admin' && sessionUser.role !== 'admin' && sessionUser.role !== 'stakeholder') {
       router.push('/login?message=forbidden')
       return
     }
@@ -177,14 +177,14 @@ function DashboardContent() {
     }
   }, [router, activeRoleParam])
 
-  const activeRole: RoleType = ['super_admin', 'admin'].includes(activeRoleParam)
+  const activeRole: RoleType = ['super_admin', 'admin', 'stakeholder'].includes(activeRoleParam)
     ? activeRoleParam
     : (user ? (user.role as RoleType) : 'admin')
 
   const hasWriteAccess = activeRole === 'super_admin' || activeRole === 'admin'
   const hasDeleteAccess = activeRole === 'super_admin'
   
-  const sidebarItems: CMSSidebarItem[] = activeRole === 'super_admin'
+  const sidebarItems: CMSSidebarItem[] = (activeRole === 'super_admin' || activeRole === 'stakeholder')
     ? [...ADMIN_SIDEBAR_ITEMS, { label: 'Analitik Kasespim', type: 'module', moduleName: 'Analitik Kasespim' }]
     : ADMIN_SIDEBAR_ITEMS
 
