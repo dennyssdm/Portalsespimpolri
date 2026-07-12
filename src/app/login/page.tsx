@@ -185,7 +185,7 @@ function LoginContent() {
         setLoading(false)
 
         // Redirect
-        if (sessionUser.role === 'super_admin' || sessionUser.role === 'admin') {
+        if (sessionUser.role === 'super_admin' || sessionUser.role === 'admin' || sessionUser.role === 'stakeholder') {
           router.push(`/admin/dashboard?role=${sessionUser.role}`)
         } else {
           const redirectUrl = searchParams.get('redirect')
