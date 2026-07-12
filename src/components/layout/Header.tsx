@@ -288,11 +288,19 @@ export function Header() {
               </div>
               <div className="flex items-center gap-1.5 ml-2">
                 <Link
-                  href={`/admin/dashboard?role=${user.role}`}
+                  href={`/admin/dashboard?role=${user.role}&module=Profil Saya`}
                   className="text-[10px] font-black uppercase text-polri-goldSoft hover:text-white transition-colors bg-polri-maroon px-2.5 py-1 rounded border border-polri-gold/30"
                 >
-                  {['super_admin', 'admin', 'stakeholder'].includes(user.role) ? 'Dasbor CMS' : 'Profil Saya'}
+                  Profil Saya
                 </Link>
+                {['super_admin', 'admin', 'stakeholder'].includes(user.role) && (
+                  <Link
+                    href={`/admin/dashboard?role=${user.role}&module=Beranda`}
+                    className="text-[10px] font-black uppercase text-white hover:text-polri-goldSoft transition-colors bg-neutral-800 px-2.5 py-1 rounded border border-neutral-700"
+                  >
+                    Dasbor CMS
+                  </Link>
+                )}
                 <button
                   onClick={handleLogout}
                   className="text-[10px] font-black uppercase text-neutral-400 hover:text-white transition-colors bg-neutral-900 px-2.5 py-1 rounded border border-neutral-700"
@@ -339,15 +347,24 @@ export function Header() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Link
-                    href={`/admin/dashboard?role=${user.role}`}
+                    href={`/admin/dashboard?role=${user.role}&module=Profil Saya`}
                     onClick={() => setOpen(false)}
-                    className="rounded-lg bg-polri-gold text-polri-brownDark px-3 py-1.5 text-xs font-bold transition hover:bg-polri-gold/90 border border-polri-gold/20"
+                    className="rounded-lg bg-polri-maroon text-white px-3 py-1.5 text-xs font-bold transition hover:bg-polri-brownDark border border-polri-gold/20"
                   >
-                    {['super_admin', 'admin', 'stakeholder'].includes(user.role) ? 'CMS' : 'Profil'}
+                    Profil
                   </Link>
+                  {['super_admin', 'admin', 'stakeholder'].includes(user.role) && (
+                    <Link
+                      href={`/admin/dashboard?role=${user.role}&module=Beranda`}
+                      onClick={() => setOpen(false)}
+                      className="rounded-lg bg-polri-gold text-polri-brownDark px-3 py-1.5 text-xs font-bold transition hover:bg-polri-gold/90 border border-polri-gold/20"
+                    >
+                      CMS
+                    </Link>
+                  )}
                   <button
                     onClick={handleLogout}
-                    className="rounded-lg bg-polri-maroon text-white px-3 py-1.5 text-xs font-bold transition hover:bg-polri-brownDark border border-polri-gold/20"
+                    className="rounded-lg bg-neutral-800 text-neutral-400 px-3 py-1.5 text-xs font-bold transition hover:text-white border border-neutral-750"
                   >
                     Keluar
                   </button>

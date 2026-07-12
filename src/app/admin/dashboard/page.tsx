@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect, Suspense, useMemo } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -185,7 +185,7 @@ function DashboardContent() {
   const hasWriteAccess = activeRole === 'super_admin' || activeRole === 'admin'
   const hasDeleteAccess = activeRole === 'super_admin'
   
-  const sidebarItems: CMSSidebarItem[] = (() => {
+  const sidebarItems: CMSSidebarItem[] = useMemo(() => {
     if (activeRole === 'serdik' || activeRole === 'widyaiswara') {
       return [{ label: 'Profil Saya', type: 'module', moduleName: 'Profil Saya' }]
     }
@@ -196,11 +196,22 @@ function DashboardContent() {
       { label: 'Profil Saya', type: 'module', moduleName: 'Profil Saya' },
       ...baseItems
     ]
-  })()
+  }, [activeRole])
 
   // States
-  const [currentModule, setCurrentModule] = useState('Profil Saya')
-  const [currentSidebarLabel, setCurrentSidebarLabel] = useState('Profil Saya')
+  const moduleParam = searchParams.get('module')
+  const defaultModule = moduleParam || 'Profil Saya'
+
+  const [currentModule, setCurrentModule] = useState(defaultModule)
+  const [currentSidebarLabel, setCurrentSidebarLabel] = useState(defaultModule)
+
+  useEffect(() => {
+    const moduleParam = searchParams.get('module')
+    if (moduleParam) {
+      setCurrentModule(moduleParam)
+      setCurrentSidebarLabel(moduleParam)
+    }
+  }, [searchParams])
   const [items, setItems] = useState<CMSItem[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState<'All' | 'Published' | 'Draft'>('All')
