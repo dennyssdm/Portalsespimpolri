@@ -610,6 +610,28 @@ export function ContentPage({ content, path }: ContentPageProps) {
         </Container>
       </section>
 
+      {path === '/profil' && (
+        <section className="bg-neutral-900 py-12 text-white border-b border-polri-gold/20">
+          <Container className="max-w-xl">
+            <div className="overflow-hidden rounded-3xl border border-polri-gold/30 bg-neutral-950 p-5 shadow-2xl">
+              <div className="relative aspect-square w-full overflow-hidden rounded-2xl border border-polri-gold/20">
+                <img 
+                  src="/images/police_leaders_collage.png" 
+                  alt="Kolase Kepemimpinan 5 Pemimpin Kepolisian RI" 
+                  className="h-full w-full object-cover shadow-inner"
+                />
+              </div>
+              <div className="mt-5 text-center">
+                <h4 className="text-sm font-black uppercase tracking-wider text-polri-goldSoft">Kolase Kepemimpinan Sespim Polri</h4>
+                <p className="mt-2 text-xs text-neutral-400 font-semibold leading-relaxed">
+                  Sinergi kepemimpinan perwira tinggi, perwira menengah, dan perwira pertama menatap mantap ke depan demi mewujudkan masa depan kepemimpinan Polri yang Presisi.
+                </p>
+              </div>
+            </div>
+          </Container>
+        </section>
+      )}
+
       {moveResourcesAbove ? resourcesSection : null}
 
       {path !== '/profil/struktur-organisasi' && path !== '/profil/fasilitas' && path !== '/profil/pejabat' && path !== '/profil' && path !== '/sarana-prasarana/klinik-pratama' && !path.startsWith('/kelembagaan-internal') && !path.startsWith('/widyaiswara') && !path.startsWith('/program-pendidikan') && !path.includes('kontak') && !path.includes('contact') && !path.includes('redaksi') && (
