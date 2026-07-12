@@ -40,7 +40,7 @@ export default function RegisterPage() {
   const [pangkat, setPangkat] = useState('AKBP')
 
   // Widyaiswara Specific
-  const [keahlian, setKeahlian] = useState('Kepemimpinan Strategis')
+  const [keahlian, setKeahlian] = useState('')
   const [sertifikasi, setSertifikasi] = useState('LSP Lemdiklat Polri')
 
   // Admin Specific
@@ -323,16 +323,14 @@ export default function RegisterPage() {
                   </div>
                   <div>
                     <label className="block text-xs font-black uppercase tracking-[0.16em] text-polri-maroon">Bidang Keahlian Utama</label>
-                    <select
+                    <input
+                      type="text"
+                      required
                       value={keahlian}
                       onChange={(e) => setKeahlian(e.target.value)}
-                      className="mt-2 w-full rounded-xl border border-polri-gold/30 bg-white px-4 py-3 text-sm text-polri-brownDark outline-none focus:border-polri-maroon"
-                    >
-                      <option value="Kepemimpinan Strategis">Kepemimpinan Strategis</option>
-                      <option value="Manajemen Keamanan Strategis">Manajemen Keamanan Strategis</option>
-                      <option value="Hukum & HAM">Hukum & HAM</option>
-                      <option value="Teknologi Keamanan Cyber">Teknologi Keamanan Cyber</option>
-                    </select>
+                      placeholder="Contoh: Kepemimpinan Strategis"
+                      className="mt-2 w-full rounded-xl border border-polri-gold/30 bg-white px-4 py-3 text-sm text-polri-brownDark outline-none focus:border-polri-maroon placeholder:text-neutral-400"
+                    />
                   </div>
                   <div className="col-span-2">
                     <label className="block text-xs font-black uppercase tracking-[0.16em] text-polri-maroon">Sertifikasi Utama</label>
