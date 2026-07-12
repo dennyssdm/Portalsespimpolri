@@ -184,13 +184,18 @@ function DashboardContent() {
   const hasWriteAccess = activeRole === 'super_admin' || activeRole === 'admin'
   const hasDeleteAccess = activeRole === 'super_admin'
   
-  const sidebarItems: CMSSidebarItem[] = (activeRole === 'super_admin' || activeRole === 'stakeholder')
+  const baseSidebarItems: CMSSidebarItem[] = (activeRole === 'super_admin' || activeRole === 'stakeholder')
     ? [...ADMIN_SIDEBAR_ITEMS, { label: 'Analitik Kasespim', type: 'module', moduleName: 'Analitik Kasespim' }]
     : ADMIN_SIDEBAR_ITEMS
 
+  const sidebarItems: CMSSidebarItem[] = [
+    { label: 'Profil Saya', type: 'module', moduleName: 'Profil Saya' },
+    ...baseSidebarItems
+  ]
+
   // States
-  const [currentModule, setCurrentModule] = useState('Beranda')
-  const [currentSidebarLabel, setCurrentSidebarLabel] = useState('Beranda')
+  const [currentModule, setCurrentModule] = useState('Profil Saya')
+  const [currentSidebarLabel, setCurrentSidebarLabel] = useState('Profil Saya')
   const [items, setItems] = useState<CMSItem[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState<'All' | 'Published' | 'Draft'>('All')
@@ -212,6 +217,29 @@ function DashboardContent() {
   const [cpOtpTimer, setCpOtpTimer] = useState(60)
   // Selected item state for edit/delete/view
   const [selectedItem, setSelectedItem] = useState<CMSItem | null>(null)
+ 
+  // Profile update state
+  const [profileName, setProfileName] = useState('')
+  const [profileGelar, setProfileGelar] = useState('')
+  const [profilePangkat, setProfilePangkat] = useState('')
+  const [profileEmail, setProfileEmail] = useState('')
+  const [profilePhone, setProfilePhone] = useState('')
+  const [profileFoto, setProfileFoto] = useState('')
+  const [profileSuccessMsg, setProfileSuccessMsg] = useState('')
+  const [profileErrorMsg, setProfileErrorMsg] = useState('')
+  const [isUpdatingProfile, setIsUpdatingProfile] = useState(false)
+ 
+  // Initialize profile states when user is loaded
+  useEffect(() => {
+    if (user) {
+      setProfileName(user.name || '')
+      setProfileGelar((user as any).gelar || '')
+      setProfilePangkat((user as any).pangkat || '')
+      setProfileEmail((user as any).email || '')
+      setProfilePhone(user.phone || '')
+      setProfileFoto((user as any).foto || '')
+    }
+  }, [user])
 
   // Form Fields State
   const [formTitle, setFormTitle] = useState('')
@@ -424,6 +452,180 @@ function DashboardContent() {
         .catch(err => console.error('Failed to fetch analitik bimbingan data:', err))
     }
   }, [currentModule])
+
+  const handleUpdateProfile = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!user) return
+    setIsUpdatingProfile(true)
+    setProfileSuccessMsg('')
+    setProfileErrorMsg('')
+ 
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/users/${(user as any).id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${sessionStorage.getItem('sespim_token')}`
+        },
+        body: JSON.stringify({
+          name: profileName,
+          phone: profilePhone,
+          gelar: profileGelar,
+          pangkat: profilePangkat,
+          email: profileEmail,
+          foto: profileFoto
+        })
+      })
+ 
+      const data = await response.json()
+      if (response.ok && data.status === 'success') {
+        setProfileSuccessMsg('Profil pribadi berhasil diperbarui!')
+        // Update user state and session storage
+        const updatedUser = {
+          ...user,
+          name: profileName,
+          phone: profilePhone,
+          gelar: profileGelar,
+          pangkat: profilePangkat,
+          email: profileEmail,
+          foto: profileFoto
+        }
+        setUser(updatedUser)
+        sessionStorage.setItem('sespim_user', JSON.stringify(updatedUser))
+        window.dispatchEvent(new Event('sespim_auth_change'))
+      } else {
+        setProfileErrorMsg(data.message || 'Gagal memperbarui profil.')
+      }
+    } catch (err) {
+      console.error(err)
+      setProfileErrorMsg('Gagal terhubung ke API server.')
+    } finally {
+      setIsUpdatingProfile(false)
+    }
+  }
+ 
+  const renderMyProfileWorkspace = () => {
+    return (
+      <div className="space-y-6 max-w-4xl mx-auto">
+        <div className="bg-neutral-950 p-6 rounded-2xl border border-neutral-800 space-y-6">
+          <div className="flex items-center gap-4 border-b border-neutral-800 pb-5">
+            <div className="h-16 w-16 rounded-full overflow-hidden bg-polri-gold/20 flex items-center justify-center border border-polri-gold/40 text-polri-gold text-2xl font-black uppercase">
+              {profileFoto ? (
+                <img src={profileFoto} alt={profileName} className="h-full w-full object-cover" />
+              ) : (
+                profileName ? profileName.charAt(0) : 'U'
+              )}
+            </div>
+            <div>
+              <h4 className="text-base font-black uppercase text-polri-goldSoft tracking-wider">Profil Pribadi Saya</h4>
+              <p className="text-xs text-neutral-400 mt-0.5">Kelola informasi profil pribadi, pangkat, gelar, dan foto Anda untuk tampilan sistem.</p>
+            </div>
+          </div>
+ 
+          <form onSubmit={handleUpdateProfile} className="space-y-4">
+            {profileSuccessMsg && (
+              <div className="p-3 bg-emerald-950/40 border border-emerald-900/60 rounded-xl text-emerald-400 text-xs font-semibold">
+                ✓ {profileSuccessMsg}
+              </div>
+            )}
+            {profileErrorMsg && (
+              <div className="p-3 bg-red-950/40 border border-red-900/60 rounded-xl text-red-400 text-xs font-semibold">
+                ✗ {profileErrorMsg}
+              </div>
+            )}
+ 
+            <div className="grid gap-6 sm:grid-cols-2">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Nama Lengkap</label>
+                <input
+                  type="text"
+                  required
+                  value={profileName}
+                  onChange={(e) => setProfileName(e.target.value)}
+                  className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
+                />
+              </div>
+ 
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Gelar / Akademik</label>
+                <input
+                  type="text"
+                  value={profileGelar}
+                  onChange={(e) => setProfileGelar(e.target.value)}
+                  placeholder="Contoh: Drs., M.Si. / Dr., S.H."
+                  className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
+                />
+              </div>
+ 
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Pangkat Militer / Polisi</label>
+                <input
+                  type="text"
+                  value={profilePangkat}
+                  onChange={(e) => setProfilePangkat(e.target.value)}
+                  placeholder="Contoh: Irjen Pol / Kombes Pol"
+                  className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
+                />
+              </div>
+ 
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">NRP / NIP (ID Pengguna)</label>
+                <input
+                  type="text"
+                  disabled
+                  value={user?.nrpNip || ''}
+                  className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-950 px-4 py-3 text-sm text-neutral-500 outline-none cursor-not-allowed"
+                />
+              </div>
+ 
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Nomor Telepon / WhatsApp</label>
+                <input
+                  type="text"
+                  required
+                  value={profilePhone}
+                  onChange={(e) => setProfilePhone(e.target.value)}
+                  className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
+                />
+              </div>
+ 
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Alamat Email</label>
+                <input
+                  type="email"
+                  value={profileEmail}
+                  onChange={(e) => setProfileEmail(e.target.value)}
+                  placeholder="Contoh: kasespim@polri.go.id"
+                  className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
+                />
+              </div>
+ 
+              <div className="col-span-2">
+                <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">URL Tautan Foto Profil</label>
+                <input
+                  type="text"
+                  value={profileFoto}
+                  onChange={(e) => setProfileFoto(e.target.value)}
+                  placeholder="Contoh: https://example.com/foto-anda.jpg"
+                  className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
+                />
+              </div>
+            </div>
+ 
+            <div className="pt-4 flex justify-end">
+              <button
+                type="submit"
+                disabled={isUpdatingProfile}
+                className="bg-polri-gold hover:bg-polri-gold/90 text-polri-brownDark px-6 py-3 rounded-xl text-xs font-black uppercase transition shadow-md disabled:bg-neutral-800 disabled:text-neutral-500"
+              >
+                {isUpdatingProfile ? 'Menyimpan...' : 'Simpan Perubahan'}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    )
+  }
 
   const renderAnalitikKasespimWorkspace = () => {
     const totalSerdik = 184
@@ -2312,7 +2514,9 @@ function DashboardContent() {
 
         {/* PAGE CONTENT CONTAINER */}
         <div className="flex-1 p-6 space-y-6 overflow-y-auto">
-          {currentModule === 'Laporan Sertifikasi' ? (
+          {currentModule === 'Profil Saya' ? (
+            renderMyProfileWorkspace()
+          ) : currentModule === 'Laporan Sertifikasi' ? (
             renderClaimsReportWorkspace()
           ) : currentModule === 'Analitik Kasespim' ? (
             renderAnalitikKasespimWorkspace()
