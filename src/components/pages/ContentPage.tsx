@@ -1370,7 +1370,7 @@ export function ContentPage({ content, path }: ContentPageProps) {
       </section>
       {movePrioritySectionBelow ? prioritySection : null}
       {moveDiscoverySectionsBelow || moveSupportSectionsBelow ? discoverySections : null}
-      {path !== '/profil/sejarah' && path !== '/profil/visi-misi' && path !== '/profil/tugas-fungsi' && path !== '/profil/struktur-organisasi' && path !== '/profil/pejabat' && path !== '/profil/fasilitas' && path !== '/profil/kontak/contact' && path !== '/profil/kontak/susunan-redaksi' && path !== '/kontak' && (
+      {path !== '/profil/sejarah' && path !== '/profil/visi-misi' && path !== '/profil/tugas-fungsi' && path !== '/profil/struktur-organisasi' && path !== '/profil/pejabat' && path !== '/profil/fasilitas' && path !== '/profil/kontak/contact' && path !== '/profil/kontak/susunan-redaksi' && path !== '/kontak' && path !== '/kelembagaan-internal' && (
         <section className="bg-polri-cream py-14">
           <Container>
             <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
