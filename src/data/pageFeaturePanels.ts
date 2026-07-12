@@ -144,6 +144,18 @@ export const pageFeaturePanels: Record<string, PageFeaturePanel> = {
         description: 'Jejaring alumni dan tracer study sebagai bahan pengkajian, pemetaan alumni, serta pengembangan pendidikan.',
         meta: 'JIANBANG',
         href: '/kelembagaan-internal/jianbang/ikas-alumni'
+      },
+      {
+        title: 'WIDYAISWARA',
+        description: 'Kelompok tenaga pendidik fungsional yang bertugas mendesain kurikulum, mengampu mata pelajaran, menguji naskap, dan meningkatkan mutu akademik di Sespim Lemdiklat Polri.',
+        meta: 'Akademik',
+        href: '/widyaiswara/profil'
+      },
+      {
+        title: 'GADIKAN',
+        description: 'Tenaga pendidik fungsional, pengajar, instruktur fungsional, dan pembimbing yang bertugas mengasuh, melatih, serta mendampingi kegiatan operasional pendidikan secara langsung.',
+        meta: 'Pendidik',
+        href: '/widyaiswara/profil'
       }
     ]
   },
