@@ -38,6 +38,10 @@ export default function RegisterPage() {
   const [program, setProgram] = useState('sespimti')
   const [angkatan, setAngkatan] = useState('Dikreg-35')
   const [pangkat, setPangkat] = useState('AKBP')
+  const [noSerdik, setNoSerdik] = useState('')
+  const [instansiPolri, setInstansiPolri] = useState('')
+  const [kementerianLembaga, setKementerianLembaga] = useState('')
+  const [negaraAsal, setNegaraAsal] = useState('Indonesia')
 
   // Widyaiswara Specific
   const [keahlian, setKeahlian] = useState('')
@@ -114,7 +118,11 @@ export default function RegisterPage() {
           sertifikasi: role === 'widyaiswara' ? sertifikasi : undefined,
           program: role === 'serdik' ? program : undefined,
           angkatan: role === 'serdik' ? angkatan : undefined,
-          pangkat: role === 'serdik' ? pangkat : undefined
+          pangkat: role === 'serdik' ? pangkat : undefined,
+          no_serdik: role === 'serdik' ? noSerdik : undefined,
+          instansi_polri: role === 'serdik' ? instansiPolri : undefined,
+          kementerian_lembaga: role === 'serdik' ? kementerianLembaga : undefined,
+          negara_asal: role === 'serdik' ? negaraAsal : undefined
         })
       })
 
@@ -306,6 +314,48 @@ export default function RegisterPage() {
                       value={pangkat}
                       onChange={(e) => setPangkat(e.target.value)}
                       placeholder="Contoh: AKBP"
+                      className="mt-2 w-full rounded-xl border border-polri-gold/30 bg-white px-4 py-3 text-sm text-polri-brownDark outline-none focus:border-polri-maroon placeholder:text-neutral-400"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-black uppercase tracking-[0.16em] text-polri-maroon">No Serdik</label>
+                    <input
+                      type="text"
+                      required
+                      value={noSerdik}
+                      onChange={(e) => setNoSerdik(e.target.value)}
+                      placeholder="Contoh: 2026-X-045"
+                      className="mt-2 w-full rounded-xl border border-polri-gold/30 bg-white px-4 py-3 text-sm text-polri-brownDark outline-none focus:border-polri-maroon placeholder:text-neutral-400"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-black uppercase tracking-[0.16em] text-polri-maroon">Instansi Polri (Satker/Polda)</label>
+                    <input
+                      type="text"
+                      value={instansiPolri}
+                      onChange={(e) => setInstansiPolri(e.target.value)}
+                      placeholder="Contoh: Polda Metro Jaya / Bareskrim"
+                      className="mt-2 w-full rounded-xl border border-polri-gold/30 bg-white px-4 py-3 text-sm text-polri-brownDark outline-none focus:border-polri-maroon placeholder:text-neutral-400"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-black uppercase tracking-[0.16em] text-polri-maroon">Kementerian / Lembaga (Jika Non-Polri)</label>
+                    <input
+                      type="text"
+                      value={kementerianLembaga}
+                      onChange={(e) => setKementerianLembaga(e.target.value)}
+                      placeholder="Contoh: Kemenkumham / BIN"
+                      className="mt-2 w-full rounded-xl border border-polri-gold/30 bg-white px-4 py-3 text-sm text-polri-brownDark outline-none focus:border-polri-maroon placeholder:text-neutral-400"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-black uppercase tracking-[0.16em] text-polri-maroon">Negara Asal</label>
+                    <input
+                      type="text"
+                      required
+                      value={negaraAsal}
+                      onChange={(e) => setNegaraAsal(e.target.value)}
+                      placeholder="Contoh: Indonesia"
                       className="mt-2 w-full rounded-xl border border-polri-gold/30 bg-white px-4 py-3 text-sm text-polri-brownDark outline-none focus:border-polri-maroon placeholder:text-neutral-400"
                     />
                   </div>

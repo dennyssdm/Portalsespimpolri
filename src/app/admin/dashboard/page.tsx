@@ -233,6 +233,10 @@ function DashboardContent() {
   const [profileSuccessMsg, setProfileSuccessMsg] = useState('')
   const [profileErrorMsg, setProfileErrorMsg] = useState('')
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false)
+  const [profileNoSerdik, setProfileNoSerdik] = useState('')
+  const [profileInstansiPolri, setProfileInstansiPolri] = useState('')
+  const [profileKementerianLembaga, setProfileKementerianLembaga] = useState('')
+  const [profileNegaraAsal, setProfileNegaraAsal] = useState('')
  
   // Initialize profile states when user is loaded
   useEffect(() => {
@@ -243,6 +247,10 @@ function DashboardContent() {
       setProfileEmail((user as any).email || '')
       setProfilePhone(user.phone || '')
       setProfileFoto((user as any).foto || '')
+      setProfileNoSerdik((user as any).no_serdik || '')
+      setProfileInstansiPolri((user as any).instansi_polri || '')
+      setProfileKementerianLembaga((user as any).kementerian_lembaga || '')
+      setProfileNegaraAsal((user as any).negara_asal || '')
     }
   }, [user])
 
@@ -518,7 +526,11 @@ function DashboardContent() {
           gelar: profileGelar,
           pangkat: profilePangkat,
           email: profileEmail,
-          foto: profileFoto
+          foto: profileFoto,
+          no_serdik: activeRole === 'serdik' ? profileNoSerdik : undefined,
+          instansi_polri: activeRole === 'serdik' ? profileInstansiPolri : undefined,
+          kementerian_lembaga: activeRole === 'serdik' ? profileKementerianLembaga : undefined,
+          negara_asal: activeRole === 'serdik' ? profileNegaraAsal : undefined
         })
       })
  
@@ -533,7 +545,11 @@ function DashboardContent() {
           gelar: profileGelar,
           pangkat: profilePangkat,
           email: profileEmail,
-          foto: profileFoto
+          foto: profileFoto,
+          no_serdik: profileNoSerdik,
+          instansi_polri: profileInstansiPolri,
+          kementerian_lembaga: profileKementerianLembaga,
+          negara_asal: profileNegaraAsal
         }
         setUser(updatedUser)
         sessionStorage.setItem('sespim_user', JSON.stringify(updatedUser))
@@ -668,6 +684,51 @@ function DashboardContent() {
                   </div>
                 </div>
               </div>
+              {activeRole === 'serdik' && (
+                <div className="col-span-2 grid gap-6 sm:grid-cols-2 border-t border-neutral-800 pt-6 mt-4">
+                  <div className="col-span-2">
+                    <h5 className="text-xs font-black uppercase text-polri-goldSoft tracking-wider">Detail Pendidikan Serdik</h5>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">No Serdik</label>
+                    <input
+                      type="text"
+                      required
+                      value={profileNoSerdik}
+                      onChange={(e) => setProfileNoSerdik(e.target.value)}
+                      className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Instansi Polri (Satker/Polda)</label>
+                    <input
+                      type="text"
+                      value={profileInstansiPolri}
+                      onChange={(e) => setProfileInstansiPolri(e.target.value)}
+                      className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Kementerian / Lembaga (Jika Non-Polri)</label>
+                    <input
+                      type="text"
+                      value={profileKementerianLembaga}
+                      onChange={(e) => setProfileKementerianLembaga(e.target.value)}
+                      className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Negara Asal</label>
+                    <input
+                      type="text"
+                      required
+                      value={profileNegaraAsal}
+                      onChange={(e) => setProfileNegaraAsal(e.target.value)}
+                      className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
  
             <div className="pt-4 flex justify-end">
