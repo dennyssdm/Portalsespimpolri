@@ -659,18 +659,7 @@ export const pages: Record<string, PageContent> = {
     title: "Kelembagaan Internal",
     eyebrow: "Unit Internal",
     description: "Penjabaran unit operasional dan fungsional di lingkungan Sespim Polri.",
-    sections: [
-      {
-        title: 'Ringkasan Halaman',
-        body: "Penjabaran unit operasional dan fungsional di lingkungan Sespim Polri.",
-        items: ['Konten awal mengikuti sitemap Sespim Polri.', 'Layout disiapkan sebagai baseline front-end.', 'Detail konten dapat diperbarui setelah approval.']
-      },
-      {
-        title: 'Kebutuhan UI',
-        body: 'Halaman ini membutuhkan struktur hero, breadcrumb, konten utama, kartu informasi, dan CTA menuju halaman terkait.',
-        items: ['Hero halaman', 'Section konten utama', 'Kartu informasi', 'CTA dan tautan terkait']
-      }
-    ]
+    sections: []
   },
   '/kelembagaan-internal/setlem': {
     title: "Sekretariat Lembaga (SETLEM)",
