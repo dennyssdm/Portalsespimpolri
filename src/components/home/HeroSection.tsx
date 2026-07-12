@@ -38,10 +38,10 @@ export function HeroSection() {
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-[2rem] border border-polri-gold/40 bg-white/10 p-5 shadow-2xl backdrop-blur">
+          <div className="overflow-hidden rounded-3xl border border-polri-gold/40 bg-white/10 p-5 shadow-2xl backdrop-blur max-w-sm ml-auto w-full">
             <Link
               href={internalLoginLink.href}
-              className="flex items-center justify-between gap-3 rounded-t-[1.5rem] border-b border-polri-gold/25 bg-polri-brownDark px-5 py-3 text-sm font-black text-polri-goldSoft transition hover:bg-polri-maroon hover:text-white"
+              className="flex items-center justify-between gap-3 rounded-2xl border border-polri-gold/25 bg-polri-brownDark px-5 py-4 text-sm font-black text-polri-goldSoft transition hover:bg-polri-maroon hover:text-white"
             >
               <span className="inline-flex items-center gap-2">
                 <LockClosedIcon className="h-4 w-4" aria-hidden="true" />
@@ -49,22 +49,6 @@ export function HeroSection() {
               </span>
               <span className="text-xs font-bold uppercase tracking-[0.16em] text-white/70">Akses Personel</span>
             </Link>
-            <div className="rounded-b-[1.5rem] bg-white p-6 text-polri-brownDark">
-              <p className="text-sm font-bold uppercase tracking-[0.24em] text-polri-maroon">Dashboard Ringkas</p>
-              <div className="mt-6 grid grid-cols-2 gap-4">
-                {institutionStats.map((stat) => (
-                  <div key={stat.label} className="rounded-2xl bg-polri-cream p-4">
-                    <p className="text-3xl font-black text-polri-brownDark">{stat.value}</p>
-                    <p className="mt-1 text-sm font-semibold text-neutral-700">{stat.label}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-5 rounded-2xl border border-polri-gold/30 bg-white p-4">
-                <p className="text-sm leading-7 text-neutral-700">
-                  Baseline front-end sudah disiapkan untuk implementasi bertahap berbasis approval fase.
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </Container>
