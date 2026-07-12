@@ -46,17 +46,77 @@ function LoginContent() {
   const [ssoLoading, setSsoLoading] = useState(false)
   const [ssoError, setSsoError] = useState<string | null>(null)
 
-  const handleSSOSubmit = (e: React.FormEvent) => {
+  const handleSSOSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSsoLoading(true)
     setSsoError(null)
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          identifier: ssoIdentifier,
+          password: ssoPassword
+        })
+      })
+
+      const data = await response.json()
+      if (response.ok && data.status === 'success') {
+        const apiUser = data.data.user
+        const token = data.token
+        const sessionUser = {
+          id: apiUser.id,
+          name: apiUser.name,
+          nrpNip: apiUser.nrp_nip,
+          phone: apiUser.phone,
+          role: apiUser.role,
+          roleLabel: apiUser.role_label,
+          gelar: apiUser.gelar || '',
+          pangkat: apiUser.pangkat || '',
+          email: apiUser.email || '',
+          foto: apiUser.foto || '',
+          no_serdik: apiUser.no_serdik || '',
+          instansi_polri: apiUser.instansi_polri || '',
+          kementerian_lembaga: apiUser.kementerian_lembaga || '',
+          negara_asal: apiUser.negara_asal || '',
+          details: apiUser.details || {}
+        }
+
+        sessionStorage.setItem('sespim_token', token)
+        sessionStorage.setItem('sespim_user', JSON.stringify(sessionUser))
+        window.dispatchEvent(new Event('sespim_auth_change'))
+
+        setAuthenticatedUser({
+          name: sessionUser.name,
+          roleName: sessionUser.roleLabel,
+          roleKey: sessionUser.role as RoleType,
+          identifier: sessionUser.nrpNip
+        })
+
+        setSsoLoading(false)
+        setSsoModalOpen(false)
+
+        // Redirect
+        if (sessionUser.role === 'super_admin' || sessionUser.role === 'admin' || sessionUser.role === 'stakeholder') {
+          router.push(`/admin/dashboard?role=${sessionUser.role}`)
+        } else {
+          const redirectUrl = searchParams.get('redirect')
+          router.push(redirectUrl || '/')
+        }
+        return
+      }
+    } catch (err) {
+      console.warn('API SSO login failed, falling back to dummy accounts:', err)
+    }
 
     setTimeout(() => {
       const found = dummyAccounts.find(
         (acc) => 
           acc.nrpNip === ssoIdentifier && 
-          acc.password === ssoPassword &&
-          (acc.role === 'serdik' || acc.role === 'widyaiswara')
+          acc.password === ssoPassword
       )
 
       if (!found) {
@@ -100,8 +160,12 @@ function LoginContent() {
       setSsoModalOpen(false)
 
       // Redirect
-      const redirectUrl = searchParams.get('redirect')
-      router.push(redirectUrl || '/')
+      if (found.role === 'super_admin' || found.role === 'admin' || found.role === 'stakeholder') {
+        router.push(`/admin/dashboard?role=${found.role}`)
+      } else {
+        const redirectUrl = searchParams.get('redirect')
+        router.push(redirectUrl || '/')
+      }
     }, 1200)
   }
 

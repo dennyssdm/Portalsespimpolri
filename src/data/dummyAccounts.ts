@@ -11,7 +11,7 @@ export type DummyAccount = {
 export const dummyAccounts: DummyAccount[] = [
   {
     name: 'Denny',
-    nrpNip: '081973001974',
+    nrpNip: '197411152009121001',
     phone: '081973001974',
     password: 'polri123',
     role: 'super_admin',
