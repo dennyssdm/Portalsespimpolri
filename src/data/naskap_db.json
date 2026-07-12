@@ -1,0 +1,55 @@
+[
+  {
+    "id": "s-1",
+    "name": "AKBP Budi Santoso, S.I.K.",
+    "rank": "Ajun Komisaris Besar Polisi",
+    "classGroup": "Sespimmen Polri Dikreg Ke-64",
+    "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    "status": "Pengajuan Judul",
+    "proposedTitles": [
+      "Penerapan Restorative Justice dalam Penanganan Kasus Kejahatan Siber Minor di Wilayah Hukum Polda Metro Jaya",
+      "Optimalisasi Peran Bhabinkamtibmas dalam Deteksi Dini Radikalisme di Lingkungan Pendidikan Menengah",
+      "Strategi Pengamanan Pilkada Serentak Berbasis Kemitraan Komunitas Lokal di Daerah Rawan Konflik"
+    ],
+    "comments": [
+      { "sender": "Serdik", "text": "Mohon petunjuk Jenderal/Bapak Widyaiswara mengenai 3 judul naskap yang saya ajukan ini.", "date": "12 Jul 2026, 08:30" }
+    ],
+    "email": "budi.santoso@sespim.polri.go.id",
+    "phone": "6281234567891",
+    "meetingUrl": "https://meet.google.com/abc-defg-hij"
+  },
+  {
+    "id": "s-2",
+    "name": "Kompol Hendra Wijaya, S.H.",
+    "rank": "Komisaris Polisi",
+    "classGroup": "Sespimmen Polri Dikreg Ke-64",
+    "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    "status": "Bimbingan Draf",
+    "activeTitle": "Transformasi Digital Sistem Pelayanan Surat Izin Mengemudi (SIM) Online Guna Mewujudkan Pelayanan Publik yang Presisi",
+    "currentChapter": "Bab II: Tinjauan Pustaka & Analisis Data",
+    "comments": [
+      { "sender": "Serdik", "text": "Saya sudah merevisi draf Bab I dan mengunggah draf Bab II untuk dianalisis lebih lanjut.", "date": "11 Jul 2026, 14:15" },
+      { "sender": "Widyaiswara", "text": "Revisi Bab I sudah bagus. Untuk Bab II, tolong sertakan data statistik pelayanan SIM 3 tahun terakhir agar argumen lebih kuat.", "date": "11 Jul 2026, 16:30" },
+      { "sender": "Serdik", "text": "Siap, data statistik sudah saya sisipkan di halaman 14. Mohon arahannya kembali.", "date": "12 Jul 2026, 07:45" }
+    ],
+    "email": "hendra.wijaya@sespim.polri.go.id",
+    "phone": "6281234567892",
+    "meetingUrl": "https://meet.google.com/xyz-pdqr-lmn"
+  },
+  {
+    "id": "s-3",
+    "name": "AKBP Sri Wahyuni, M.Si.",
+    "rank": "Ajun Komisaris Besar Polisi",
+    "classGroup": "Sespimmen Polri Dikreg Ke-64",
+    "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    "status": "Selesai",
+    "activeTitle": "Model Kepemimpinan Melayani (Servant Leadership) Kombes Pol Sebagai Role Model Penguatan Integritas Anggota di Tingkat Polres",
+    "comments": [
+      { "sender": "Widyaiswara", "text": "Naskah akademik Anda secara keseluruhan dinyatakan lulus bimbingan dan siap diujikan di sidang pleno.", "date": "10 Jul 2026, 10:00" },
+      { "sender": "Serdik", "text": "Terima kasih banyak atas bimbingan dan arahan yang sangat berharga selama proses pengerjaan naskah ini.", "date": "10 Jul 2026, 11:20" }
+    ],
+    "email": "sri.wahyuni@sespim.polri.go.id",
+    "phone": "6281234567893",
+    "meetingUrl": "https://meet.google.com/qwe-rtyu-iop"
+  }
+]

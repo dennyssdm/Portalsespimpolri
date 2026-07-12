@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Container } from '@/components/ui/Container'
 import { 
   AcademicCapIcon, 
@@ -35,106 +35,103 @@ interface Serdik {
   meetingUrl: string
 }
 
-const initialSerdikList: Serdik[] = [
-  {
-    id: 's-1',
-    name: 'AKBP Budi Santoso, S.I.K.',
-    rank: 'Ajun Komisaris Besar Polisi',
-    classGroup: 'Sespimmen Polri Dikreg Ke-64',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    status: 'Pengajuan Judul',
-    proposedTitles: [
-      'Penerapan Restorative Justice dalam Penanganan Kasus Kejahatan Siber Minor di Wilayah Hukum Polda Metro Jaya',
-      'Optimalisasi Peran Bhabinkamtibmas dalam Deteksi Dini Radikalisme di Lingkungan Pendidikan Menengah',
-      'Strategi Pengamanan Pilkada Serentak Berbasis Kemitraan Komunitas Lokal di Daerah Rawan Konflik'
-    ],
-    comments: [
-      { sender: 'Serdik', text: 'Mohon petunjuk Jenderal/Bapak Widyaiswara mengenai 3 judul naskap yang saya ajukan ini.', date: '12 Jul 2026, 08:30' }
-    ],
-    email: 'budi.santoso@sespim.polri.go.id',
-    phone: '6281234567891',
-    meetingUrl: 'https://meet.google.com/abc-defg-hij'
-  },
-  {
-    id: 's-2',
-    name: 'Kompol Hendra Wijaya, S.H.',
-    rank: 'Komisaris Polisi',
-    classGroup: 'Sespimmen Polri Dikreg Ke-64',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    status: 'Bimbingan Draf',
-    activeTitle: 'Transformasi Digital Sistem Pelayanan Surat Izin Mengemudi (SIM) Online Guna Mewujudkan Pelayanan Publik yang Presisi',
-    currentChapter: 'Bab II: Tinjauan Pustaka & Analisis Data',
-    comments: [
-      { sender: 'Serdik', text: 'Saya sudah merevisi draf Bab I dan mengunggah draf Bab II untuk dianalisis lebih lanjut.', date: '11 Jul 2026, 14:15' },
-      { sender: 'Widyaiswara', text: 'Revisi Bab I sudah bagus. Untuk Bab II, tolong sertakan data statistik pelayanan SIM 3 tahun terakhir agar argumen lebih kuat.', date: '11 Jul 2026, 16:30' },
-      { sender: 'Serdik', text: 'Siap, data statistik sudah saya sisipkan di halaman 14. Mohon arahannya kembali.', date: '12 Jul 2026, 07:45' }
-    ],
-    email: 'hendra.wijaya@sespim.polri.go.id',
-    phone: '6281234567892',
-    meetingUrl: 'https://meet.google.com/xyz-pdqr-lmn'
-  },
-  {
-    id: 's-3',
-    name: 'AKBP Sri Wahyuni, M.Si.',
-    rank: 'Ajun Komisaris Besar Polisi',
-    classGroup: 'Sespimmen Polri Dikreg Ke-64',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    status: 'Selesai',
-    activeTitle: 'Model Kepemimpinan Melayani (Servant Leadership) Kombes Pol Sebagai Role Model Penguatan Integritas Anggota di Tingkat Polres',
-    comments: [
-      { sender: 'Widyaiswara', text: 'Naskah akademik Anda secara keseluruhan dinyatakan lulus bimbingan dan siap diujikan di sidang pleno.', date: '10 Jul 2026, 10:00' },
-      { sender: 'Serdik', text: 'Terima kasih banyak atas bimbingan dan arahan yang sangat berharga selama proses pengerjaan naskah ini.', date: '10 Jul 2026, 11:20' }
-    ],
-    email: 'sri.wahyuni@sespim.polri.go.id',
-    phone: '6281234567893',
-    meetingUrl: 'https://meet.google.com/qwe-rtyu-iop'
-  }
-]
-
 export default function Page() {
-  const [serdikList, setSerdikList] = useState<Serdik[]>(initialSerdikList)
+  const [serdikList, setSerdikList] = useState<Serdik[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
   const [selectedId, setSelectedId] = useState<string>('s-1')
   const [commentInput, setCommentInput] = useState<string>('')
   const [activeTab, setActiveTab] = useState<'workspace' | 'communications'>('workspace')
 
-  const currentSerdik = serdikList.find(s => s.id === selectedId) || serdikList[0]
-
-  const handleSelectTitle = (title: string) => {
-    setSerdikList(prev => prev.map(s => {
-      if (s.id === selectedId) {
-        return {
-          ...s,
-          status: 'Bimbingan Draf',
-          activeTitle: title,
-          currentChapter: 'Bab I: Pendahuluan',
-          proposedTitles: undefined,
-          comments: [
-            ...s.comments,
-            { sender: 'Widyaiswara', text: `Judul terpilih dan disetujui: "${title}". Silakan susun kerangka Bab I (Pendahuluan).`, date: new Date().toLocaleString('id-ID', { hour12: false }) }
-          ]
+  useEffect(() => {
+    fetch('/api/naskap')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setSerdikList(data)
         }
+        setLoading(false)
+      })
+      .catch(err => {
+        console.error('Failed to load naskap data:', err)
+        setLoading(false)
+      })
+  }, [])
+
+  const currentSerdik = serdikList.find(s => s.id === selectedId)
+
+  const handleSelectTitle = async (title: string) => {
+    try {
+      const res = await fetch('/api/naskap', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'select-title', id: selectedId, title })
+      })
+      if (res.ok) {
+        const json = await res.json()
+        setSerdikList(prev => prev.map(s => s.id === selectedId ? json.data : s))
       }
-      return s
-    }))
+    } catch (err) {
+      console.error('Failed to select title:', err)
+    }
   }
 
-  const handleSendComment = (e: React.FormEvent) => {
+  const handleSendComment = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!commentInput.trim()) return
 
-    setSerdikList(prev => prev.map(s => {
-      if (s.id === selectedId) {
-        return {
-          ...s,
-          comments: [
-            ...s.comments,
-            { sender: 'Widyaiswara', text: commentInput, date: new Date().toLocaleString('id-ID', { hour12: false }) }
-          ]
-        }
-      }
-      return s
-    }))
+    const commentText = commentInput
     setCommentInput('')
+
+    try {
+      const res = await fetch('/api/naskap', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'add-comment', id: selectedId, comment: commentText })
+      })
+      if (res.ok) {
+        const json = await res.json()
+        setSerdikList(prev => prev.map(s => s.id === selectedId ? json.data : s))
+      }
+    } catch (err) {
+      console.error('Failed to send comment:', err)
+    }
+  }
+
+  const handleApprove = async () => {
+    try {
+      const res = await fetch('/api/naskap', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'approve', id: selectedId })
+      })
+      if (res.ok) {
+        const json = await res.json()
+        setSerdikList(prev => prev.map(s => s.id === selectedId ? json.data : s))
+      }
+    } catch (err) {
+      console.error('Failed to approve chapter:', err)
+    }
+  }
+
+  if (loading) {
+    return (
+      <main className="bg-neutral-50 min-h-screen py-14 flex items-center justify-center">
+        <div className="text-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-polri-gold border-t-transparent mx-auto"></div>
+          <p className="mt-4 text-sm font-semibold text-neutral-500">Memuat lembar asistensi...</p>
+        </div>
+      </main>
+    )
+  }
+
+  if (!currentSerdik) {
+    return (
+      <main className="bg-neutral-50 min-h-screen py-14 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-sm font-semibold text-neutral-500">Data bimbingan tidak tersedia.</p>
+        </div>
+      </main>
+    )
   }
 
   return (
@@ -397,21 +394,7 @@ export default function Page() {
                               
                               {currentSerdik.status !== 'Selesai' && (
                                 <button 
-                                  onClick={() => {
-                                    setSerdikList(prev => prev.map(s => {
-                                      if (s.id === selectedId) {
-                                        return {
-                                          ...s,
-                                          status: 'Selesai',
-                                          comments: [
-                                            ...s.comments,
-                                            { sender: 'Widyaiswara', text: 'Saya sudah meninjau Bab II dan Bab III secara keseluruhan. Hasil kerja sangat memuaskan, naskah ini disetujui (ACC) untuk diujikan.', date: new Date().toLocaleString('id-ID', { hour12: false }) }
-                                          ]
-                                        }
-                                      }
-                                      return s
-                                    }))
-                                  }}
+                                  onClick={handleApprove}
                                   className="shrink-0 text-[10px] font-black bg-polri-maroon hover:bg-polri-brownDark text-white px-2 py-1 rounded transition"
                                 >
                                   ACC Bab
