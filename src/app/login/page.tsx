@@ -38,6 +38,81 @@ function LoginContent() {
     roleKey: RoleType
     identifier: string
   } | null>(null)
+
+  // SIAP SESPIM SSO States
+  const [ssoModalOpen, setSsoModalOpen] = useState(false)
+  const [ssoIdentifier, setSsoIdentifier] = useState('')
+  const [ssoPassword, setSsoPassword] = useState('')
+  const [ssoLoading, setSsoLoading] = useState(false)
+  const [ssoError, setSsoError] = useState<string | null>(null)
+
+  const handleSSOSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    setSsoLoading(true)
+    setSsoError(null)
+
+    setTimeout(() => {
+      const found = dummyAccounts.find(
+        (acc) => 
+          acc.nrpNip === ssoIdentifier && 
+          acc.password === ssoPassword &&
+          (acc.role === 'serdik' || acc.role === 'widyaiswara')
+      )
+
+      if (!found) {
+        setSsoError('NRP/NIP SIAP SESPIM tidak ditemukan atau kata sandi salah!')
+        setSsoLoading(false)
+        return
+      }
+
+      setRole(found.role)
+      setIsReadOnly(false)
+
+      sessionStorage.setItem('sespim_user', JSON.stringify(found))
+      sessionStorage.setItem('sespim_token', 'mock_sso_siap_token')
+      window.dispatchEvent(new Event('sespim_auth_change'))
+
+      setAuthenticatedUser({
+        name: found.name,
+        roleName: found.roleLabel,
+        roleKey: found.role,
+        identifier: found.nrpNip
+      })
+
+      setSsoLoading(false)
+      setSsoModalOpen(false)
+
+      // Redirect
+      const redirectUrl = searchParams.get('redirect')
+      router.push(redirectUrl || '/')
+    }, 1200)
+  }
+
+  const handleFastSSO = (nrp: string) => {
+    setSsoLoading(true)
+    setSsoError(null)
+
+    setTimeout(() => {
+      const found = dummyAccounts.find(acc => acc.nrpNip === nrp)
+      if (found) {
+        setRole(found.role)
+        setIsReadOnly(false)
+        sessionStorage.setItem('sespim_user', JSON.stringify(found))
+        sessionStorage.setItem('sespim_token', 'mock_sso_siap_token')
+        window.dispatchEvent(new Event('sespim_auth_change'))
+        setAuthenticatedUser({
+          name: found.name,
+          roleName: found.roleLabel,
+          roleKey: found.role,
+          identifier: found.nrpNip
+        })
+        setSsoLoading(false)
+        setSsoModalOpen(false)
+        const redirectUrl = searchParams.get('redirect')
+        router.push(redirectUrl || '/')
+      }
+    }, 1000)
+  }
   const [loginError, setLoginError] = useState<string | null>(null)
 
   // Handle Role tab change
@@ -509,6 +584,24 @@ function LoginContent() {
               </button>
             </form>
 
+            {/* Divider */}
+            <div className="relative my-4 flex items-center justify-center">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-neutral-200"></div>
+              </div>
+              <span className="relative bg-white px-3 text-[10px] font-black uppercase tracking-wider text-neutral-400">Atau</span>
+            </div>
+
+            {/* SSO Button */}
+            <button
+              type="button"
+              onClick={() => setSsoModalOpen(true)}
+              className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-polri-gold/50 bg-polri-cream hover:bg-white px-4 py-3 text-sm font-bold text-polri-brownDark hover:border-polri-maroon hover:shadow-soft transition"
+            >
+              <KeyIcon className="h-5 w-5 text-polri-gold shrink-0" />
+              <span>Masuk dengan SIAP SESPIM (SSO)</span>
+            </button>
+
             {/* Bottom Actions */}
             <div className="mt-6 border-t border-neutral-100 pt-4 text-center">
               <p className="text-xs text-neutral-500">
@@ -523,6 +616,108 @@ function LoginContent() {
 
 
       </Container>
+
+      {/* SSO MODAL OVERLAY */}
+      {ssoModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md rounded-2xl border border-polri-gold/30 bg-white p-6 shadow-2xl relative animate-scaleUp">
+            
+            {/* Close button */}
+            <button 
+              onClick={() => setSsoModalOpen(false)}
+              className="absolute right-4 top-4 rounded-full p-1.5 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 transition"
+              aria-label="Tutup SSO"
+            >
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Header */}
+            <div className="text-center">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center bg-polri-cream rounded-full border border-polri-gold/30">
+                <ShieldCheckIcon className="h-6 w-6 text-polri-maroon" />
+              </div>
+              <h3 className="mt-3 text-lg font-black text-polri-brownDark">SIAP SESPIM SSO</h3>
+              <p className="mt-1 text-xs text-neutral-500 font-semibold leading-relaxed">
+                Autentikasi terintegrasi menggunakan akun resmi Lembaga Pendidikan Sespim Lemdiklat Polri.
+              </p>
+            </div>
+
+            {ssoError && (
+              <div className="mt-4 rounded-xl bg-red-50 border border-red-200 p-3 text-xs font-semibold text-polri-red leading-5">
+                {ssoError}
+              </div>
+            )}
+
+            {/* Form */}
+            <form onSubmit={handleSSOSubmit} className="mt-5 space-y-4">
+              <div>
+                <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">NRP / NIP SIAP SESPIM</label>
+                <input 
+                  type="text"
+                  required
+                  value={ssoIdentifier}
+                  onChange={(e) => setSsoIdentifier(e.target.value)}
+                  placeholder="Masukkan NRP (contoh: 84081234)"
+                  className="mt-1.5 w-full rounded-xl border border-neutral-200 px-4 py-2.5 text-sm text-polri-brownDark outline-none focus:border-polri-maroon placeholder:text-neutral-400"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Kata Sandi SIAP</label>
+                <input 
+                  type="password"
+                  required
+                  value={ssoPassword}
+                  onChange={(e) => setSsoPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="mt-1.5 w-full rounded-xl border border-neutral-200 px-4 py-2.5 text-sm text-polri-brownDark outline-none focus:border-polri-maroon placeholder:text-neutral-400"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={ssoLoading}
+                className="w-full mt-4 flex items-center justify-center rounded-xl bg-polri-maroon hover:bg-polri-brownDark py-3 font-bold text-white transition disabled:bg-neutral-400"
+              >
+                {ssoLoading ? (
+                  <div className="flex items-center gap-2">
+                    <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                    Menghubungkan...
+                  </div>
+                ) : (
+                  'Otorisasi & Masuk'
+                )}
+              </button>
+            </form>
+
+            {/* Fast Demo Shortcuts */}
+            <div className="mt-5 border-t border-neutral-100 pt-4">
+              <p className="text-[10px] font-black uppercase tracking-wider text-neutral-400 text-center mb-2">Akses Cepat Demo SSO</p>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleFastSSO('84081234')}
+                  disabled={ssoLoading}
+                  className="text-[11px] font-bold bg-neutral-50 hover:bg-polri-cream hover:text-polri-maroon p-2 rounded-lg border border-neutral-100 transition text-center text-polri-brownDark"
+                >
+                  Akun Serdik (AKBP Deny)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleFastSSO('197008121995031002')}
+                  disabled={ssoLoading}
+                  className="text-[11px] font-bold bg-neutral-50 hover:bg-polri-cream hover:text-polri-maroon p-2 rounded-lg border border-neutral-100 transition text-center text-polri-brownDark"
+                >
+                  Akun WI (Kombes Midi)
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
     </main>
   )
 }
