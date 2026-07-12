@@ -21,6 +21,7 @@ function isActiveHref(pathname: string, href: string) {
 export function Header() {
   const router = useRouter()
   const [open, setOpen] = useState(false)
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false)
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null)
   const pathname = usePathname()
   
@@ -29,6 +30,7 @@ export function Header() {
     name: string
     role: string
     roleLabel: string
+    foto?: string
   } | null>(null)
 
   useEffect(() => {
@@ -278,36 +280,85 @@ export function Header() {
         <div className="hidden shrink-0 xl:flex xl:items-center xl:gap-3">
           
           {user ? (
-            <div className="flex items-center gap-2.5 bg-white/10 rounded-xl px-3 py-1.5 border border-polri-gold/20">
-              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-polri-gold text-polri-brownDark font-black text-xs uppercase">
-                {user.name.charAt(0)}
-              </div>
-              <div className="text-left text-[10px] leading-tight">
-                <p className="font-black text-white max-w-[110px] truncate" title={user.name}>{user.name}</p>
-                <p className="text-polri-goldSoft font-bold capitalize mt-0.5">{user.role.replace('_', ' ')}</p>
-              </div>
-              <div className="flex items-center gap-1.5 ml-2">
-                <Link
-                  href={`/admin/dashboard?role=${user.role}&module=Profil Saya`}
-                  className="text-[10px] font-black uppercase text-polri-goldSoft hover:text-white transition-colors bg-polri-maroon px-2.5 py-1 rounded border border-polri-gold/30"
-                >
-                  Profil Saya
-                </Link>
-                {['super_admin', 'admin', 'stakeholder'].includes(user.role) && (
-                  <Link
-                    href={`/admin/dashboard?role=${user.role}&module=Beranda`}
-                    className="text-[10px] font-black uppercase text-white hover:text-polri-goldSoft transition-colors bg-neutral-800 px-2.5 py-1 rounded border border-neutral-700"
-                  >
-                    Dasbor CMS
-                  </Link>
-                )}
-                <button
-                  onClick={handleLogout}
-                  className="text-[10px] font-black uppercase text-neutral-400 hover:text-white transition-colors bg-neutral-900 px-2.5 py-1 rounded border border-neutral-700"
-                >
-                  Keluar
-                </button>
-              </div>
+            <div className="relative">
+              {/* Trigger */}
+              <button
+                onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                className="flex items-center gap-2 bg-white/10 hover:bg-white/15 transition rounded-xl px-3 py-1.5 border border-polri-gold/20 text-left outline-none cursor-pointer"
+              >
+                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-polri-gold text-polri-brownDark font-black text-xs uppercase overflow-hidden">
+                  {user.foto ? (
+                    <img src={user.foto} alt={user.name} className="h-full w-full object-cover" />
+                  ) : (
+                    user.name.charAt(0)
+                  )}
+                </div>
+                <div className="text-left text-[10px] leading-tight pr-1">
+                  <p className="font-black text-white max-w-[100px] truncate" title={user.name}>{user.name}</p>
+                  <p className="text-polri-goldSoft font-bold capitalize mt-0.5">{user.role.replace('_', ' ')}</p>
+                </div>
+                <svg className="h-3 w-3 text-neutral-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {/* Dropdown Menu */}
+              {isProfileDropdownOpen && (
+                <>
+                  {/* Click outside backdrop */}
+                  <div className="fixed inset-0 z-40" onClick={() => setIsProfileDropdownOpen(false)} />
+                  
+                  <div className="absolute right-0 mt-2 w-52 rounded-xl bg-neutral-900 border border-neutral-850 shadow-xl py-2 z-50 animate-scaleUp">
+                    {/* Header info */}
+                    <div className="px-4 py-2 border-b border-neutral-800">
+                      <p className="text-xs font-black text-white truncate">{user.name}</p>
+                      <p className="text-[10px] text-polri-goldSoft font-bold capitalize mt-0.5">{user.role.replace('_', ' ')}</p>
+                    </div>
+
+                    <div className="py-1">
+                      <Link
+                        href={`/admin/dashboard?role=${user.role}&module=Profil Saya`}
+                        onClick={() => setIsProfileDropdownOpen(false)}
+                        className="flex w-full items-center px-4 py-2.5 text-xs font-bold text-neutral-300 hover:text-white hover:bg-neutral-800 transition"
+                      >
+                        <svg className="h-4 w-4 mr-2.5 text-polri-gold shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        Profil Saya
+                      </Link>
+
+                      {['super_admin', 'admin', 'stakeholder'].includes(user.role) && (
+                        <Link
+                          href={`/admin/dashboard?role=${user.role}&module=Beranda`}
+                          onClick={() => setIsProfileDropdownOpen(false)}
+                          className="flex w-full items-center px-4 py-2.5 text-xs font-bold text-neutral-300 hover:text-white hover:bg-neutral-800 transition"
+                        >
+                          <svg className="h-4 w-4 mr-2.5 text-polri-gold shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                          Dasbor CMS
+                        </Link>
+                      )}
+                    </div>
+
+                    <div className="border-t border-neutral-800 mt-1 pt-1">
+                      <button
+                        onClick={() => {
+                          setIsProfileDropdownOpen(false)
+                          handleLogout()
+                        }}
+                        className="flex w-full items-center px-4 py-2.5 text-xs font-bold text-red-400 hover:text-red-300 hover:bg-red-950/20 transition text-left cursor-pointer"
+                      >
+                        <svg className="h-4 w-4 mr-2.5 text-red-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        Keluar Akun
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           ) : (
             <Link
