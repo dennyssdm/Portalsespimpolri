@@ -47,28 +47,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-function getIsoDate(dateStr: string): string {
-  try {
-    const months: Record<string, string> = {
-      januari: '01', februari: '02', maret: '03', april: '04', mei: '05', juni: '06',
-      juli: '07', agustus: '08', september: '09', oktober: '10', november: '11', desember: '12',
-      jan: '01', feb: '02', mar: '03', apr: '04', jun: '06', jul: '07', ags: '08', sep: '09', okt: '10', nov: '11', des: '12'
-    }
-    const parts = dateStr.toLowerCase().replace(/[^a-z0-9 ]/g, '').split(' ')
-    if (parts.length === 3) {
-      const day = parts[0].padStart(2, '0')
-      const month = months[parts[1]] || '01'
-      const year = parts[2]
-      return `${year}-${month}-${day}T00:00:00Z`
-    }
-    const parsed = Date.parse(dateStr)
-    if (!isNaN(parsed)) {
-      return new Date(parsed).toISOString()
-    }
-  } catch (e) {}
-  return new Date().toISOString()
-}
-
 export default async function Page({ params }: PageProps) {
   const { slug } = await params
   let localItem = findNewsItem(slug)
@@ -133,17 +111,17 @@ export default async function Page({ params }: PageProps) {
     '@type': 'NewsArticle',
     'headline': itemToRender.title,
     'description': itemToRender.summary,
-    'datePublished': getIsoDate(itemToRender.date),
+    'datePublished': itemToRender.date,
     'author': {
       '@type': 'Person',
-      'name': itemToRender.author || 'Humas Sespim'
+      'name': itemToRender.author
     },
     'publisher': {
       '@type': 'Organization',
       'name': 'Sespim Lemdiklat Polri',
       'logo': {
         '@type': 'ImageObject',
-        'url': 'https://sespim.polri.go.id/images/logo-sespim.png'
+        'url': 'https://sespim.lemdiklat.polri.go.id/images/logo-sespim.png'
       }
     }
   }

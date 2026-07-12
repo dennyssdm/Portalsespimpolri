@@ -25,8 +25,8 @@
 - **Rekomendasi 3 (CMS & Filter Publikasi Karya Ilmiah Serdik)**: Memperkuat pencarian dan filter publikasi/karya ilmiah berdasarkan kategori angkatan (Sespimti, Sespimmen, Sespimma, SPPK) di halaman galeri karya ilmiah dan tracer study.
 - **Rekomendasi 4 (Integrasi SSO dengan SIAP SESPIM)**: Menambahkan integrasi otorisasi masuk SSO SIAP SESPIM di `/login` dengan modal dialog pop-up resmi.
 - **Rekomendasi 5 (Dasbor Analitik & Laporan Tracer Study Pimpinan/Kasespim)**: Mengintegrasikan halaman Workspace Analitik Kasespim ke `/admin/dashboard` dengan grafik visual, total kemajuan, persentase kelulusan naskah, dan daftar real-time log asistensi.
-- **SEO & Struktur Data JSON-LD**: Menambahkan implementasi skema struktur data JSON-LD (Schema.org `NewsArticle` untuk detail Berita dan `ScholarlyArticle` untuk detail Publikasi) lengkap dengan konverter format tanggal dinamis, untuk menunjang indeksasi optimal Google Rich Results.
 - Memperbaiki ketidaksesuaian tipe data pada `sidebarItems` di `/admin/dashboard/page.tsx` untuk meloloskan kompilasi TypeScript (`npm run typecheck`) dan Next.js production build secara penuh.
+- **Optimasi SEO (Struktur Data Google)**: Menambahkan skema struktur data JSON-LD (Schema.org) tipe `NewsArticle` pada halaman detail berita (`/berita/[slug]`) dan `ScholarlyArticle` pada halaman detail publikasi ilmiah (`/publikasi/[slug]`) agar terindeks sempurna di Google Search.
 
 ### 2026-07-06
 
