@@ -140,15 +140,15 @@ export function EducatorDirectoryPage({ items }: EducatorDirectoryPageProps) {
                     const activeExpertise = matchingClaim 
                       ? [...(item.expertise || []), 'Inpassing Widyaiswara'] 
                       : item.expertise
-                    const activeCertifications = matchingClaim 
-                      ? [...(item.professionalCertifications || []), 'Sertifikat Inpassing Widyaiswara'] 
-                      : item.professionalCertifications
 
                     const generalEducation = compactList(item.generalEducation, 'Belum tersedia')
                     const serviceEducation = compactList(item.serviceEducation, 'Belum tersedia')
                     const developmentEducation = compactList(item.developmentEducation, 'Belum tersedia')
                     const expertise = compactList(activeExpertise, 'Belum tersedia')
-                    const certifications = compactList(activeCertifications, 'Belum tersedia')
+                    const lspCertifications = compactList(item.professionalCertifications, 'Belum tersedia')
+                    const inpassingStatus = matchingClaim 
+                      ? 'Sertifikat Inpassing Widyaiswara' 
+                      : 'Belum Inpassing'
                     const subjects = compactList(item.subjects, 'Belum tersedia')
 
                     return (
@@ -191,7 +191,8 @@ export function EducatorDirectoryPage({ items }: EducatorDirectoryPageProps) {
                             <ProfileLine label="Dikpol" value={serviceEducation} />
                             <ProfileLine label="Dikbang" value={developmentEducation} />
                             <ProfileLine label="Kompetensi" value={expertise} />
-                            <ProfileLine label="Sertifikasi" value={certifications} />
+                            <ProfileLine label="Sertifikasi LSP/BNSP" value={lspCertifications} />
+                            <ProfileLine label="Sertifikasi Inpassing" value={inpassingStatus} />
                             <ProfileLine label="Mapel" value={subjects} />
                           </dl>
 
