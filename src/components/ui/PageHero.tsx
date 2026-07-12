@@ -8,6 +8,7 @@ type PageHeroProps = {
   imageSrc?: string
   imageAlt?: string
   imagePosition?: string
+  children?: React.ReactNode
 }
 
 export function PageHero({
@@ -16,7 +17,8 @@ export function PageHero({
   description,
   imageSrc = '/images/sespim-campus-hero.png',
   imageAlt = 'Kampus Sespim Lemdiklat Polri',
-  imagePosition = 'center'
+  imagePosition = 'center',
+  children
 }: PageHeroProps) {
   return (
     <section className="relative isolate overflow-hidden bg-polri-brownDark py-16 text-white sm:py-20">
@@ -36,6 +38,7 @@ export function PageHero({
           <p className="text-sm font-bold uppercase tracking-[0.28em] text-polri-goldSoft">{eyebrow}</p>
           <h1 className="mt-4 break-words text-3xl font-black leading-tight tracking-tight sm:text-5xl">{title}</h1>
           <p className="mt-5 max-w-3xl text-base leading-8 text-white/82 sm:text-lg">{description}</p>
+          {children}
         </div>
       </Container>
     </section>

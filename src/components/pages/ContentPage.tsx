@@ -602,11 +602,9 @@ export function ContentPage({ content, path }: ContentPageProps) {
 
   return (
     <main>
-      <PageHero eyebrow={content.eyebrow} title={content.title} description={content.description} />
-
-      {path === '/profil' && (
-        <div className="relative z-20 -mt-16 sm:-mt-24 md:-mt-28 -mb-12 sm:-mb-16 md:-mb-20">
-          <Container className="max-w-md mx-auto px-4">
+      <PageHero eyebrow={content.eyebrow} title={content.title} description={content.description}>
+        {path === '/profil' && (
+          <div className="mt-8 max-w-md">
             <div className="overflow-hidden rounded-3xl border-2 border-polri-gold/50 bg-neutral-950 p-4 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] transition transform hover:scale-[1.02] duration-300">
               <div className="relative aspect-square w-full overflow-hidden rounded-2xl border border-polri-gold/20">
                 <img 
@@ -622,9 +620,9 @@ export function ContentPage({ content, path }: ContentPageProps) {
                 </p>
               </div>
             </div>
-          </Container>
-        </div>
-      )}
+          </div>
+        )}
+      </PageHero>
 
       <section className="border-b border-polri-gold/20 bg-polri-cream py-4">
         <Container>
