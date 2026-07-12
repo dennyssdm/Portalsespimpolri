@@ -248,6 +248,10 @@ function DashboardContent() {
   const [profileInstansiPolri, setProfileInstansiPolri] = useState('')
   const [profileKementerianLembaga, setProfileKementerianLembaga] = useState('')
   const [profileNegaraAsal, setProfileNegaraAsal] = useState('')
+  const [profileProgram, setProfileProgram] = useState('sespimti')
+  const [profileAngkatan, setProfileAngkatan] = useState('')
+  const [profileKeahlian, setProfileKeahlian] = useState('')
+  const [profileSertifikasi, setProfileSertifikasi] = useState('')
  
   // Initialize profile states when user is loaded
   useEffect(() => {
@@ -262,6 +266,10 @@ function DashboardContent() {
       setProfileInstansiPolri((user as any).instansi_polri || '')
       setProfileKementerianLembaga((user as any).kementerian_lembaga || '')
       setProfileNegaraAsal((user as any).negara_asal || '')
+      setProfileProgram((user as any).program || 'sespimti')
+      setProfileAngkatan((user as any).angkatan || '')
+      setProfileKeahlian((user as any).keahlian || '')
+      setProfileSertifikasi((user as any).sertifikasi || '')
     }
   }, [user])
 
@@ -534,14 +542,18 @@ function DashboardContent() {
         body: JSON.stringify({
           name: profileName,
           phone: profilePhone,
-          gelar: profileGelar,
+          gelar: activeRole !== 'serdik' ? profileGelar : undefined,
           pangkat: profilePangkat,
           email: profileEmail,
           foto: profileFoto,
           no_serdik: activeRole === 'serdik' ? profileNoSerdik : undefined,
           instansi_polri: activeRole === 'serdik' ? profileInstansiPolri : undefined,
           kementerian_lembaga: activeRole === 'serdik' ? profileKementerianLembaga : undefined,
-          negara_asal: activeRole === 'serdik' ? profileNegaraAsal : undefined
+          negara_asal: activeRole === 'serdik' ? profileNegaraAsal : undefined,
+          program: activeRole === 'serdik' ? profileProgram : undefined,
+          angkatan: activeRole === 'serdik' ? profileAngkatan : undefined,
+          keahlian: activeRole === 'widyaiswara' ? profileKeahlian : undefined,
+          sertifikasi: activeRole === 'widyaiswara' ? profileSertifikasi : undefined
         })
       })
  
@@ -560,7 +572,11 @@ function DashboardContent() {
           no_serdik: profileNoSerdik,
           instansi_polri: profileInstansiPolri,
           kementerian_lembaga: profileKementerianLembaga,
-          negara_asal: profileNegaraAsal
+          negara_asal: profileNegaraAsal,
+          program: profileProgram,
+          angkatan: profileAngkatan,
+          keahlian: profileKeahlian,
+          sertifikasi: profileSertifikasi
         }
         setUser(updatedUser)
         sessionStorage.setItem('sespim_user', JSON.stringify(updatedUser))
@@ -606,7 +622,7 @@ function DashboardContent() {
               </div>
             )}
  
-            <div className="grid gap-6 sm:grid-cols-2">
+             <div className="grid gap-6 sm:grid-cols-2">
               <div>
                 <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Nama Lengkap</label>
                 <input
@@ -617,18 +633,20 @@ function DashboardContent() {
                   className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
                 />
               </div>
- 
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Gelar / Akademik</label>
-                <input
-                  type="text"
-                  value={profileGelar}
-                  onChange={(e) => setProfileGelar(e.target.value)}
-                  placeholder="Contoh: Drs., M.Si. / Dr., S.H."
-                  className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
-                />
-              </div>
- 
+
+              {activeRole !== 'serdik' && (
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Gelar / Akademik</label>
+                  <input
+                    type="text"
+                    value={profileGelar}
+                    onChange={(e) => setProfileGelar(e.target.value)}
+                    placeholder="Contoh: Drs., M.Si. / Dr., S.H."
+                    className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
+                  />
+                </div>
+              )}
+
               <div>
                 <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Pangkat Militer / Polisi</label>
                 <input
@@ -639,7 +657,7 @@ function DashboardContent() {
                   className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
                 />
               </div>
- 
+
               <div>
                 <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">NRP / NIP (ID Pengguna)</label>
                 <input
@@ -649,7 +667,7 @@ function DashboardContent() {
                   className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-950 px-4 py-3 text-sm text-neutral-500 outline-none cursor-not-allowed"
                 />
               </div>
- 
+
               <div>
                 <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Nomor Telepon / WhatsApp</label>
                 <input
@@ -660,7 +678,7 @@ function DashboardContent() {
                   className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
                 />
               </div>
- 
+
               <div>
                 <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Alamat Email</label>
                 <input
@@ -671,7 +689,7 @@ function DashboardContent() {
                   className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
                 />
               </div>
- 
+
               <div className="col-span-2 space-y-2">
                 <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Unggah Foto Profil (Kompresi Otomatis)</label>
                 <div className="flex flex-col sm:flex-row items-center gap-4 bg-neutral-900 p-4 rounded-xl border border-neutral-800">
@@ -695,10 +713,34 @@ function DashboardContent() {
                   </div>
                 </div>
               </div>
+
               {activeRole === 'serdik' && (
                 <div className="col-span-2 grid gap-6 sm:grid-cols-2 border-t border-neutral-800 pt-6 mt-4">
                   <div className="col-span-2">
                     <h5 className="text-xs font-black uppercase text-polri-goldSoft tracking-wider">Detail Pendidikan Serdik</h5>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Program Pendidikan</label>
+                    <select
+                      value={profileProgram}
+                      onChange={(e) => setProfileProgram(e.target.value)}
+                      className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3.5 text-sm text-white outline-none focus:border-polri-gold/60"
+                    >
+                      <option value="sespimti">SESPIMTI POLRI</option>
+                      <option value="sespimmen">SESPIMMEN POLRI</option>
+                      <option value="sespimma">SESPIMMA POLRI</option>
+                      <option value="sppk">SPPK POLRI</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Angkatan</label>
+                    <input
+                      type="text"
+                      required
+                      value={profileAngkatan}
+                      onChange={(e) => setProfileAngkatan(e.target.value)}
+                      className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
+                    />
                   </div>
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">No Serdik</label>
@@ -735,6 +777,36 @@ function DashboardContent() {
                       required
                       value={profileNegaraAsal}
                       onChange={(e) => setProfileNegaraAsal(e.target.value)}
+                      className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {activeRole === 'widyaiswara' && (
+                <div className="col-span-2 grid gap-6 sm:grid-cols-2 border-t border-neutral-800 pt-6 mt-4">
+                  <div className="col-span-2">
+                    <h5 className="text-xs font-black uppercase text-polri-goldSoft tracking-wider">Kompetensi Tenaga Pendidik</h5>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Bidang Keahlian Utama</label>
+                    <input
+                      type="text"
+                      required
+                      value={profileKeahlian}
+                      onChange={(e) => setProfileKeahlian(e.target.value)}
+                      placeholder="Contoh: Kepemimpinan Strategis"
+                      className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Sertifikasi Utama</label>
+                    <input
+                      type="text"
+                      required
+                      value={profileSertifikasi}
+                      onChange={(e) => setProfileSertifikasi(e.target.value)}
+                      placeholder="Contoh: LSP Lemdiklat Polri"
                       className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
                     />
                   </div>
