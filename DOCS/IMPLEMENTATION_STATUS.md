@@ -20,6 +20,9 @@
 
 ### 2026-07-12
 
+- **Penyesuaian Akses & Profil Kasespim (Stakeholder & Owner)**: Mengubah nama Kasespim di seluruh sistem ke profil riil **Irjen Pol. Midi Siswoko, S.I.K.** (NRP/NIP `70012124`) dengan hak akses Dasbor CMS khusus sebagai **Stakeholder (Read-Only)**.
+- **Otorisasi Dasbor CMS Kasespim**: Mengintegrasikan rute pengalihan login, navigasi header, dan pemeriksaan hak akses dasbor `/admin/dashboard` agar peran stakeholder dapat masuk dan mengakses menu **Laporan Sertifikasi** dan **Analitik Kasespim** secara *read-only*.
+- **Pembersihan Data Seeder Database**: Menghapus seluruh data insert dummy pada tabel konten di berkas `portalsespimpolri.sql` agar database bersih saat di-import kembali, dengan tetap mempertahankan data master user (role akses) dan modul widyaiswara.
 - **Rekomendasi 1 (Integrasi Riil Modul Pembimbingan Naskap)**: Modul bimbingan Naskap diintegrasikan secara persisten dengan database lokal via API rute `/api/naskap`.
 - **Rekomendasi 2 (Pengecekan Plagiarisme Otomatis)**: Pengecekan plagiarisme di `/sarana-prasarana/cek-plagiarisme` dilengkapi simulasi interaktif Turnitin/Copyleaks yang detail.
 - **Rekomendasi 3 (CMS & Filter Publikasi Karya Ilmiah Serdik)**: Memperkuat pencarian dan filter publikasi/karya ilmiah berdasarkan kategori angkatan (Sespimti, Sespimmen, Sespimma, SPPK) di halaman galeri karya ilmiah dan tracer study.
