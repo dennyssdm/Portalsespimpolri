@@ -26,8 +26,8 @@ export const dummyAccounts: DummyAccount[] = [
     nrpNip: '197204151996031001',
     phone: '081122334455',
     password: 'polri123',
-    role: 'super_admin',
-    roleLabel: 'Super Admin (All Action)',
+    role: 'stakeholder',
+    roleLabel: 'Super Admin Read Only / Stakeholder',
     details: {
       'Jabatan': 'Kasespim Lemdiklat Polri',
       'Pangkat': 'Inspektur Jenderal Polisi'
