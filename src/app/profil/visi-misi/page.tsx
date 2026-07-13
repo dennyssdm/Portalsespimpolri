@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { ContentPage } from '@/components/pages/ContentPage'
 import { pages } from '@/data/pages'
-import { serverFetch } from '@/lib/api'
+import { serverFetch, getMediaUrl } from '@/lib/api'
 
 export default async function Page() {
   const path = "/profil/visi-misi"
@@ -36,7 +36,7 @@ export default async function Page() {
         delete dynamicContent.media
       } else {
         dynamicContent.media = {
-          src: dbContent.image_url,
+          src: getMediaUrl(dbContent.image_url),
           alt: dbContent.title || 'Foto Visi Misi Sespim',
           caption: 'Foto Kampus Sespim Lemdiklat Polri'
         }

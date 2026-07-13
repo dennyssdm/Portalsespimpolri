@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { ContentPage } from '@/components/pages/ContentPage'
 import { pages } from '@/data/pages'
-import { serverFetch } from '@/lib/api'
+import { serverFetch, getMediaUrl } from '@/lib/api'
 
 export default async function Page() {
   const path = "/profil/struktur-organisasi"
@@ -33,7 +33,7 @@ export default async function Page() {
 
     // Keep image column/content, fallback to default bagan if empty
     dynamicContent.media = {
-      src: dbContent.image_url || '/images/struktur-sespim.png',
+      src: getMediaUrl(dbContent.image_url) || '/images/struktur-sespim.png',
       alt: dbContent.title || 'Bagan Struktur Organisasi',
       caption: 'Bagan Struktur Organisasi Sespim Lemdiklat Polri'
     }
