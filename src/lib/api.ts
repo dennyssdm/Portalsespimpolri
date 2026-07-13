@@ -68,3 +68,15 @@ export async function serverFetch(path: string, options: RequestInit = {}) {
     throw err
   }
 }
+
+/**
+ * Get full URL for media items. If it is a local upload path, prepend the backend API domain.
+ */
+export function getMediaUrl(url: string | null | undefined): string {
+  if (!url) return ''
+  if (url.startsWith('http')) return url
+  if (url.startsWith('/uploads/')) {
+    return `${API_BASE_URL}${url}`
+  }
+  return url
+}

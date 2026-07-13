@@ -4,7 +4,7 @@ import { InfoCard } from '@/components/ui/InfoCard'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { educationPrograms, kasespimGreeting, latestNews, quickLinks } from '@/data/homepage'
 import { KasespimPhoto } from '@/components/home/KasespimPhoto'
-import { serverFetch } from '@/lib/api'
+import { serverFetch, getMediaUrl } from '@/lib/api'
 
 export async function KasespimGreeting() {
   let dbGreeting = null
@@ -22,7 +22,7 @@ export async function KasespimGreeting() {
 
   // Parse fields dynamically
   const title = dbGreeting?.title || kasespimGreeting.title
-  const photoUrl = dbGreeting && dbGreeting.image_url !== null ? dbGreeting.image_url : '/images/kasespim.png'
+  const photoUrl = dbGreeting && dbGreeting.image_url ? getMediaUrl(dbGreeting.image_url) : '/images/kasespim.png'
   const bodyText = dbGreeting?.content || ''
 
   let openingLines: string[] = kasespimGreeting.openingLines

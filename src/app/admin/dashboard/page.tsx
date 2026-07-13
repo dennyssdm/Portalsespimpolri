@@ -280,6 +280,7 @@ function DashboardContent() {
   const [formStatus, setFormStatus] = useState<'Published' | 'Draft'>('Published')
   const [formImageUrl, setFormImageUrl] = useState('')
   const [formContent, setFormContent] = useState('')
+  const [formImageFile, setFormImageFile] = useState<File | null>(null)
 
   // Program Pendidikan Specific Form Fields
   const [formProgSlug, setFormProgSlug] = useState('')
@@ -2196,6 +2197,7 @@ function DashboardContent() {
     setFormStatus('Published')
     setFormImageUrl('')
     setFormContent('')
+    setFormImageFile(null)
     setFormProgSlug('')
     setFormProgAudience('')
     setFormProgDuration('')
@@ -2249,21 +2251,23 @@ function DashboardContent() {
       ? buildProgramContent(formTitle) 
       : (isProfilStructured ? buildProfilContent(finalId || '') : formContent)
 
-    const body = {
-      id: finalId,
-      title: formTitle,
-      category: formCategory || 'General',
-      date: dateStr,
-      status: formStatus,
-      author: authorName,
-      image_url: formImageUrl,
-      content: finalContent
+    const formData = new FormData()
+    if (finalId) formData.append('id', finalId)
+    formData.append('title', formTitle)
+    formData.append('category', formCategory || 'General')
+    formData.append('date', dateStr)
+    formData.append('status', formStatus)
+    formData.append('author', authorName)
+    if (formImageUrl) formData.append('image_url', formImageUrl)
+    if (finalContent) formData.append('content', finalContent)
+    if (formImageFile) {
+      formData.append('image', formImageFile)
     }
 
     try {
       const res = await apiFetch(`/api/${contentType}`, {
         method: 'POST',
-        body: JSON.stringify(body)
+        body: formData
       })
       if (res.ok) {
         const json = await res.json()
@@ -2377,6 +2381,7 @@ function DashboardContent() {
     setFormStatus(item.status)
     setFormImageUrl(item.image_url || '')
     setFormContent(item.content || '')
+    setFormImageFile(null)
 
     if (currentModule === 'Program Pendidikan' && isProgramSchool(item.category, item.id)) {
       parseProgramContent(item.content || '', item.title)
@@ -2461,20 +2466,22 @@ function DashboardContent() {
             )
         )
 
-    const body = {
-      title: formTitle,
-      category: formCategory,
-      status: formStatus,
-      date: selectedItem.date,
-      author: authorName,
-      image_url: formImageUrl,
-      content: finalContent
+    const formData = new FormData()
+    formData.append('title', formTitle)
+    formData.append('category', formCategory)
+    formData.append('status', formStatus)
+    formData.append('date', selectedItem.date)
+    formData.append('author', authorName)
+    if (formImageUrl) formData.append('image_url', formImageUrl)
+    if (finalContent) formData.append('content', finalContent)
+    if (formImageFile) {
+      formData.append('image', formImageFile)
     }
 
     try {
       const res = await apiFetch(`/api/${contentType}/${selectedItem.id}`, {
         method: 'PUT',
-        body: JSON.stringify(body)
+        body: formData
       })
       if (res.ok) {
         const json = await res.json()
@@ -2992,15 +2999,33 @@ function DashboardContent() {
                 </select>
               </div>
 
-              <div>
-                <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">URL Foto / Gambar</label>
-                <input
-                  type="text"
-                  value={formImageUrl}
-                  onChange={(e) => setFormImageUrl(e.target.value)}
-                  placeholder="Contoh: /images/kasespim.png atau link gambar..."
-                  className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold placeholder:text-neutral-600"
-                />
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Unggah Berkas Media (Foto / Video / Dokumen)</label>
+                  <input
+                    type="file"
+                    accept="image/*,video/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0]
+                      if (file) setFormImageFile(file)
+                    }}
+                    className="mt-2 block w-full text-xs text-neutral-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:bg-neutral-850 file:text-polri-goldSoft hover:file:bg-neutral-800 transition cursor-pointer"
+                  />
+                  {formImageFile && (
+                    <p className="mt-1.5 text-[10px] text-polri-goldSoft font-bold">Terpilih: {formImageFile.name} ({(formImageFile.size / (1024 * 1024)).toFixed(2)} MB)</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Atau Masukkan URL Media / Foto</label>
+                  <input
+                    type="text"
+                    value={formImageUrl}
+                    onChange={(e) => setFormImageUrl(e.target.value)}
+                    placeholder="Contoh: /images/kasespim.png atau link eksternal..."
+                    className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold placeholder:text-neutral-600"
+                  />
+                </div>
               </div>
 
               {currentModule === 'Program Pendidikan' && formCategory === 'program-sekolah' ? (
@@ -3229,15 +3254,33 @@ function DashboardContent() {
                 </select>
               </div>
 
-              <div>
-                <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">URL Foto / Gambar</label>
-                <input
-                  type="text"
-                  value={formImageUrl}
-                  onChange={(e) => setFormImageUrl(e.target.value)}
-                  placeholder="/images/kasespim.png"
-                  className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold"
-                />
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Unggah Berkas Media (Foto / Video / Dokumen)</label>
+                  <input
+                    type="file"
+                    accept="image/*,video/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0]
+                      if (file) setFormImageFile(file)
+                    }}
+                    className="mt-2 block w-full text-xs text-neutral-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:bg-neutral-850 file:text-polri-goldSoft hover:file:bg-neutral-800 transition cursor-pointer"
+                  />
+                  {formImageFile && (
+                    <p className="mt-1.5 text-[10px] text-polri-goldSoft font-bold">Terpilih: {formImageFile.name} ({(formImageFile.size / (1024 * 1024)).toFixed(2)} MB)</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Atau Perbarui URL Media / Foto</label>
+                  <input
+                    type="text"
+                    value={formImageUrl}
+                    onChange={(e) => setFormImageUrl(e.target.value)}
+                    placeholder="Contoh: /images/kasespim.png atau link eksternal..."
+                    className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold placeholder:text-neutral-600"
+                  />
+                </div>
               </div>
 
               {currentModule === 'Program Pendidikan' && isProgramSchool(formCategory, selectedItem?.id) ? (
