@@ -12,8 +12,10 @@ export default function SaranaPrasaranaLayout({
   const pathname = usePathname()
   const [authorized, setAuthorized] = useState(false)
 
-  // Klinik Pratama is public, other paths under sarana-prasarana require login
-  const isPublicRoute = pathname === '/sarana-prasarana/klinik-pratama'
+  // Klinik Pratama & Produk Karya are public, other paths under sarana-prasarana require login
+  const isPublicRoute = 
+    pathname === '/sarana-prasarana/klinik-pratama' || 
+    pathname === '/sarana-prasarana/produk-karya'
 
   useEffect(() => {
     if (isPublicRoute) {
