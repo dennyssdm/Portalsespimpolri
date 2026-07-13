@@ -2815,7 +2815,7 @@ function DashboardContent() {
                         <td className="px-6 py-4 whitespace-nowrap">
                           {item.image_url ? (
                             <img
-                              src={item.image_url}
+                              src={getMediaUrl(item.image_url)}
                               alt={item.title}
                               className="w-14 h-10 object-cover rounded-lg border border-neutral-800 shadow"
                             />

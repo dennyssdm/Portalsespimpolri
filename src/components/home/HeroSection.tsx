@@ -5,11 +5,30 @@ import { Container } from '@/components/ui/Container'
 import { institutionStats } from '@/data/homepage'
 import { internalLoginLink } from '@/data/navigation'
 
-export function HeroSection() {
+import { serverFetch, getMediaUrl } from '@/lib/api'
+
+export async function HeroSection() {
+  let dbHero = null
+  try {
+    const res = await serverFetch('/api/beranda-content/h-1')
+    if (res.ok) {
+      const json = await res.json()
+      if (json.status === 'success' && json.data?.record) {
+        dbHero = json.data.record
+      }
+    }
+  } catch (err) {
+    console.warn('Failed to fetch dynamic hero content from DB, using fallback:', err)
+  }
+
+  const title = dbHero?.title || 'Pusat Informasi Pendidikan Kepemimpinan Polri'
+  const description = dbHero?.content || 'Portal terpadu untuk profil kelembagaan, program pendidikan, widyaiswara, publikasi, berita kegiatan, galeri, unduhan, dan layanan pendukung akademik.'
+  const bgImage = dbHero && dbHero.image_url ? getMediaUrl(dbHero.image_url) : '/images/sespim-campus-hero.png'
+
   return (
     <section className="relative overflow-hidden bg-polri-brownDark text-white">
       <Image
-        src="/images/sespim-campus-hero.png"
+        src={bgImage}
         alt="Kampus Sespim Lemdiklat Polri"
         fill
         priority
@@ -23,10 +42,10 @@ export function HeroSection() {
           <div>
             <p className="text-sm font-bold uppercase tracking-[0.28em] text-polri-goldSoft">Portal Resmi Sespim Lemdiklat Polri</p>
             <h1 className="mt-5 text-4xl font-black tracking-tight sm:text-5xl lg:text-6xl">
-              Pusat Informasi Pendidikan Kepemimpinan Polri
+              {title}
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-white/82 sm:text-lg">
-              Portal terpadu untuk profil kelembagaan, program pendidikan, widyaiswara, publikasi, berita kegiatan, galeri, unduhan, dan layanan pendukung akademik.
+              {description}
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link href="/program-pendidikan" className="rounded-xl bg-polri-gold px-5 py-3 text-center font-black text-polri-brownDark transition hover:bg-polri-goldSoft">
