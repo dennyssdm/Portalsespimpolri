@@ -74,14 +74,12 @@ export function Header() {
       return true
     })
     .map((item) => {
-      // If not logged in, keep 'Sarana Prasarana' but only show 'Klinik Pratama' and 'Produk / Karya Akademis' as submenus
+      // If not logged in, convert 'Sarana Prasarana' top-level menu directly into 'Produk / Karya Akademis' without children
       if (!showRestricted && item.href === '/sarana-prasarana') {
         return {
-          ...item,
-          children: item.children?.filter(child => 
-            child.href === '/sarana-prasarana/klinik-pratama' || 
-            child.href === '/sarana-prasarana/produk-karya'
-          )
+          label: 'Sarana Prasarana',
+          href: '/sarana-prasarana/produk-karya',
+          description: 'Kanal repositori publikasi ilmiah, buku, naskah kajian, naskap, dan produk akademis.'
         }
       }
       return item
