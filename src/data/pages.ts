@@ -1960,5 +1960,22 @@ export const pages: Record<string, PageContent> = {
         items: ['Pelayanan pagi: 08.00 - 11.00 WIB', 'Pelayanan sore: 16.00 - 19.00 WIB', 'Telepon: (022) 2785594', 'WhatsApp: 0823-2134-9036', 'Antrian realtime: pelayanan pagi dan sore']
       }
     ]
+  },
+  '/sarana-prasarana/produk-karya': {
+    title: "Produk / Karya Akademis",
+    eyebrow: "Sarana Prasarana",
+    description: "Kanal repositori publikasi ilmiah, buku, naskah kajian, naskap, dan produk akademis orisinal civitas akademika Sespim Lemdiklat Polri.",
+    sections: [
+      {
+        title: 'Produk & Karya Akademis Sespim',
+        body: "Selamat datang di kanal repositori resmi Produk dan Karya Akademis Sespim Lemdiklat Polri. Bagian ini menampung naskah kajian strategis, tesis, buku saku, dan jurnal hasil pemikiran akademis peserta didik (Serdik) serta Widyaiswara Sespim Polri.",
+        items: ['Repositori naskah latihan kepemimpinan (Naskap)', 'Jurnal kajian kepolisian strategis', 'Buku saku dan panduan taktis operasional', 'Karya tulis ilmiah terakreditasi']
+      },
+      {
+        title: 'Ketentuan Unggah dan Akses',
+        body: 'Seluruh produk akademis yang dipublikasikan telah melalui proses pemeriksaan keaslian naskah (anti-plagiarisme) dan mendapatkan persetujuan dari dewan penguji/widyaiswara pengampu.',
+        items: ['Terbuka untuk dibaca oleh seluruh civitas akademika', 'Karya wajib bebas dari plagiarisme di atas 20%', 'Dikelola secara dinamis oleh staf administrasi akademik Sespim']
+      }
+    ]
   }
 }

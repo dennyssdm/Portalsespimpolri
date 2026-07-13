@@ -92,12 +92,14 @@ export function Footer() {
       return true
     })
     .map((item) => {
-      // If not logged in, convert 'Sarana Prasarana' top-level menu directly into 'Klinik Pratama' without children
+      // If not logged in, keep 'Sarana Prasarana' but only show 'Klinik Pratama' and 'Produk / Karya Akademis' as submenus
       if (!showRestricted && item.href === '/sarana-prasarana') {
         return {
-          label: 'Klinik Pratama',
-          href: '/sarana-prasarana/klinik-pratama',
-          description: 'Layanan Kesehatan Klinik Pratama Sespim Lemdiklat Polri.'
+          ...item,
+          children: item.children?.filter(child => 
+            child.href === '/sarana-prasarana/klinik-pratama' || 
+            child.href === '/sarana-prasarana/produk-karya'
+          )
         }
       }
       return item

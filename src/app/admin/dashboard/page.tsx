@@ -117,7 +117,8 @@ const initialMockData: Record<string, CMSItem[]> = {
     { id: 's-3', title: 'Koleksi Ejurnal Internasional', category: 'Ejurnal', date: '2026-07-02', status: 'Published' },
     { id: 's-4', title: 'LMS SIAPSESPIM Platform Pembelajaran', category: 'LMS SIAPSESPIM', date: '2026-07-02', status: 'Published' },
     { id: 's-5', title: 'Turnitin Cek Plagiarisme', category: 'Cek Plagiarisme', date: '2026-07-03', status: 'Published' },
-    { id: 's-6', title: 'Klinik Pratama Sespim Polri', category: 'Klinik Pratama', date: '2026-07-03', status: 'Published' }
+    { id: 's-6', title: 'Klinik Pratama Sespim Polri', category: 'Klinik Pratama', date: '2026-07-03', status: 'Published' },
+    { id: 's-7', title: 'Repositori Produk / Karya Akademis Sespim', category: 'Produk / Karya Akademis', date: '2026-07-13', status: 'Published' }
   ]
 }
 
