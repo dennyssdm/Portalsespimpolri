@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Container } from '@/components/ui/Container'
-import { apiFetch, MODULE_TO_CONTENT_TYPE, API_BASE_URL } from '@/lib/api'
+import { apiFetch, MODULE_TO_CONTENT_TYPE, API_BASE_URL, getMediaUrl } from '@/lib/api'
 import { 
   PlusIcon,
   PencilIcon,
@@ -3026,6 +3026,55 @@ function DashboardContent() {
                     className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold placeholder:text-neutral-600"
                   />
                 </div>
+
+                {/* Live Media Preview Box */}
+                {(formImageFile || formImageUrl) && (
+                  <div className="mt-2 bg-neutral-900 border border-neutral-800 rounded-xl p-3 flex flex-col items-center justify-center">
+                    <p className="text-[9px] font-black uppercase text-neutral-400 tracking-widest mb-2 w-full text-left">Pratinjau Media</p>
+                    {formImageFile ? (
+                      formImageFile.type.startsWith('image/') ? (
+                        <img
+                          src={URL.createObjectURL(formImageFile)}
+                          alt="Pratinjau Unggahan"
+                          className="max-h-40 rounded-lg object-contain border border-neutral-800"
+                        />
+                      ) : formImageFile.type.startsWith('video/') ? (
+                        <video
+                          src={URL.createObjectURL(formImageFile)}
+                          controls
+                          className="max-h-40 rounded-lg object-contain border border-neutral-800"
+                        />
+                      ) : (
+                        <div className="py-4 text-center text-xs text-neutral-500 font-bold">
+                          Dokumen Terpilih (Pratinjau tidak tersedia untuk format ini)
+                        </div>
+                      )
+                    ) : (
+                      formImageUrl && (
+                        formImageUrl.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i) || formImageUrl.startsWith('/uploads/') ? (
+                          <img
+                            src={getMediaUrl(formImageUrl)}
+                            alt="Pratinjau URL"
+                            className="max-h-40 rounded-lg object-contain border border-neutral-800"
+                            onError={(e) => {
+                              (e.target as HTMLElement).style.display = 'none'
+                            }}
+                          />
+                        ) : formImageUrl.match(/\.(mp4|webm|ogg)$/i) ? (
+                          <video
+                            src={getMediaUrl(formImageUrl)}
+                            controls
+                            className="max-h-40 rounded-lg object-contain border border-neutral-800"
+                          />
+                        ) : (
+                          <div className="py-2 text-center text-xs text-neutral-400">
+                            Tautan Media: <span className="text-polri-goldSoft underline break-all">{formImageUrl}</span>
+                          </div>
+                        )
+                      )
+                    )}
+                  </div>
+                )}
               </div>
 
               {currentModule === 'Program Pendidikan' && formCategory === 'program-sekolah' ? (
@@ -3281,6 +3330,55 @@ function DashboardContent() {
                     className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold placeholder:text-neutral-600"
                   />
                 </div>
+
+                {/* Live Media Preview Box */}
+                {(formImageFile || formImageUrl) && (
+                  <div className="mt-2 bg-neutral-900 border border-neutral-800 rounded-xl p-3 flex flex-col items-center justify-center">
+                    <p className="text-[9px] font-black uppercase text-neutral-400 tracking-widest mb-2 w-full text-left">Pratinjau Media</p>
+                    {formImageFile ? (
+                      formImageFile.type.startsWith('image/') ? (
+                        <img
+                          src={URL.createObjectURL(formImageFile)}
+                          alt="Pratinjau Unggahan"
+                          className="max-h-40 rounded-lg object-contain border border-neutral-800"
+                        />
+                      ) : formImageFile.type.startsWith('video/') ? (
+                        <video
+                          src={URL.createObjectURL(formImageFile)}
+                          controls
+                          className="max-h-40 rounded-lg object-contain border border-neutral-800"
+                        />
+                      ) : (
+                        <div className="py-4 text-center text-xs text-neutral-500 font-bold">
+                          Dokumen Terpilih (Pratinjau tidak tersedia untuk format ini)
+                        </div>
+                      )
+                    ) : (
+                      formImageUrl && (
+                        formImageUrl.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i) || formImageUrl.startsWith('/uploads/') ? (
+                          <img
+                            src={getMediaUrl(formImageUrl)}
+                            alt="Pratinjau URL"
+                            className="max-h-40 rounded-lg object-contain border border-neutral-800"
+                            onError={(e) => {
+                              (e.target as HTMLElement).style.display = 'none'
+                            }}
+                          />
+                        ) : formImageUrl.match(/\.(mp4|webm|ogg)$/i) ? (
+                          <video
+                            src={getMediaUrl(formImageUrl)}
+                            controls
+                            className="max-h-40 rounded-lg object-contain border border-neutral-800"
+                          />
+                        ) : (
+                          <div className="py-2 text-center text-xs text-neutral-400">
+                            Tautan Media: <span className="text-polri-goldSoft underline break-all">{formImageUrl}</span>
+                          </div>
+                        )
+                      )
+                    )}
+                  </div>
+                )}
               </div>
 
               {currentModule === 'Program Pendidikan' && isProgramSchool(formCategory, selectedItem?.id) ? (
