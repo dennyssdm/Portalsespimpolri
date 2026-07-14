@@ -188,13 +188,13 @@ function DashboardContent() {
   
   const sidebarItems: CMSSidebarItem[] = useMemo(() => {
     if (activeRole === 'serdik' || activeRole === 'widyaiswara') {
-      return [{ label: 'Profil Saya', type: 'module', moduleName: 'Profil Saya' }]
+      return [{ label: 'Profil Saya', type: 'module' as const, moduleName: 'Profil Saya' }]
     }
     const baseItems = (activeRole === 'super_admin' || activeRole === 'stakeholder')
-      ? [...ADMIN_SIDEBAR_ITEMS, { label: 'Analitik Kasespim', type: 'module', moduleName: 'Analitik Kasespim' }]
+      ? [...ADMIN_SIDEBAR_ITEMS, { label: 'Analitik Kasespim', type: 'module' as const, moduleName: 'Analitik Kasespim' }]
       : ADMIN_SIDEBAR_ITEMS
     return [
-      { label: 'Profil Saya', type: 'module', moduleName: 'Profil Saya' },
+      { label: 'Profil Saya', type: 'module' as const, moduleName: 'Profil Saya' },
       ...baseItems
     ]
   }, [activeRole])
