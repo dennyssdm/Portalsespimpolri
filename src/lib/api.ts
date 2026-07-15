@@ -76,6 +76,13 @@ export function getMediaUrl(url: string | null | undefined): string {
   if (!url) return ''
   if (url.startsWith('http')) return url
   if (url.startsWith('/uploads/')) {
+    const isVercel = process.env.VERCEL === '1' || 
+      (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')
+    const isApiLocalhost = API_BASE_URL.includes('localhost') || API_BASE_URL.includes('127.0.0.1')
+
+    if (isVercel && isApiLocalhost) {
+      return url
+    }
     return `${API_BASE_URL}${url}`
   }
   return url
