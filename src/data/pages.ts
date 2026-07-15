@@ -192,175 +192,175 @@ export const pages: Record<string, PageContent> = {
       },
       {
         group: 'JIANBANG',
-        name: 'Kombes Pol Drs. Anwar, M.Si.',
+        name: 'UTORO SAPUTRO, S.H., S.S.T.M.K.',
         rank: 'Kombes Pol',
         position: 'Kabag Jianbang',
         photoSrc: ''
       },
       {
         group: 'JIANBANG',
-        name: 'AKBP Supriyadi, S.H.',
+        name: 'Kosong',
         rank: 'AKBP',
         position: 'Kasubbag SLS',
         photoSrc: ''
       },
       {
         group: 'JIANBANG',
-        name: 'AKBP H. Mulyana, S.H.',
+        name: 'Kosong',
         rank: 'AKBP',
         position: 'Kasubbag Analis',
         photoSrc: ''
       },
       {
         group: 'JIANBANG',
-        name: 'AKBP Drs. H. Dedi',
+        name: 'SUBAGIO,S.T., M.M.',
         rank: 'AKBP',
         position: 'Kasubbag SMK',
         photoSrc: ''
       },
       {
         group: 'JIANBANG',
-        name: 'AKBP H. Sukarna, M.Si.',
+        name: 'BAMBANG KAYUN BAGUS PANJI SUGIHARTO, S.I.K., M.H.',
         rank: 'AKBP',
         position: 'Kasubbag SKK',
         photoSrc: ''
       },
       {
         group: 'JIANBANG',
-        name: 'Kombes Pol Drs. H. Subroto',
+        name: 'Drs. ZUBAIR RASYID',
         rank: 'Kombes Pol',
         position: 'Analis Utama Bagjianbang',
         photoSrc: ''
       },
       {
         group: 'JIANBANG',
-        name: 'Kombes Pol Drs. H. Mulyono',
+        name: 'ADI AFFANDI, S.I.K.',
         rank: 'Kombes Pol',
         position: 'Analis Utama Bagjianbang',
         photoSrc: ''
       },
       {
         group: 'BIDANG STRATEGI',
-        name: 'Kombes Pol Budi Utomo, S.I.K.',
+        name: 'LEONARDUS ERIC BHISMO, S.I.K., S.H., M.H.',
         rank: 'Kombes Pol',
         position: 'Kabid Strategi',
         photoSrc: ''
       },
       {
         group: 'BIDANG STRATEGI',
-        name: 'AKBP H. Jajat',
+        name: 'DEWI KANIA SUMPENA, S.E., M.M.',
         rank: 'AKBP',
         position: 'Kasubbid Sespimti Bidstrategi',
         photoSrc: ''
       },
       {
         group: 'BIDANG MANAJEMEN',
-        name: 'Kombes Pol Dra. Rina Sari',
+        name: 'RIVAI SINAMBELA, S.H.',
         rank: 'Kombes Pol',
         position: 'Kabid Jemen Sespim',
         photoSrc: ''
       },
       {
         group: 'BIDANG MANAJEMEN',
-        name: 'AKBP H. Dedy',
+        name: 'Kosong',
         rank: 'AKBP',
         position: 'Kasubbid Sespimti Bidjemen',
         photoSrc: ''
       },
       {
         group: 'BIDANG MANAJEMEN',
-        name: 'AKBP H. Santoso',
+        name: 'Kosong',
         rank: 'AKBP',
         position: 'Kasubbid Sespimmen Bidjemen',
         photoSrc: ''
       },
       {
         group: 'BIDANG MANAJEMEN',
-        name: 'AKBP H. Hermawan',
+        name: 'Kosong',
         rank: 'AKBP',
         position: 'Kasubbid Sespimma Bidjemen',
         photoSrc: ''
       },
       {
         group: 'BIDANG HUKUM & PERUNDANG-UNDANGAN (KUMDANG)',
-        name: 'Kombes Pol Drs. H. Sukarno',
+        name: 'DENNY YONO PUTRO, S.I.K., M.Si.',
         rank: 'Kombes Pol',
         position: 'Kabid Kumdang',
         photoSrc: ''
       },
       {
         group: 'BIDANG HUKUM & PERUNDANG-UNDANGAN (KUMDANG)',
-        name: 'AKBP H. Mulyana, S.H.',
+        name: 'Kosong',
         rank: 'AKBP',
         position: 'Kasubbid Sespimti Bidkumdang',
         photoSrc: ''
       },
       {
         group: 'BIDANG HUKUM & PERUNDANG-UNDANGAN (KUMDANG)',
-        name: 'AKBP H. Achmad',
+        name: 'Kosong',
         rank: 'AKBP',
         position: 'Kasubbid Sespimmen Bidkumdang',
         photoSrc: ''
       },
       {
         group: 'BIDANG HUKUM & PERUNDANG-UNDANGAN (KUMDANG)',
-        name: 'AKBP H. Syarif',
+        name: 'Kosong',
         rank: 'AKBP',
         position: 'Kasubbid Sespimma Bidkumdang',
         photoSrc: ''
       },
       {
         group: 'BIDANG PENGETAHUAN SOCIAL (PENGSOS)',
-        name: 'Kombes Pol Dra. H. Patrige',
+        name: 'SUGENG HARIYANTO, S.I.K., M.Hum.',
         rank: 'Kombes Pol',
         position: 'Kabid Pengsos',
         photoSrc: ''
       },
       {
         group: 'BIDANG PENGETAHUAN SOCIAL (PENGSOS)',
-        name: 'AKBP H. Supriyadi, S.H.',
+        name: 'Kosong',
         rank: 'AKBP',
         position: 'Kasubbid Sespimti Bidpengsos',
         photoSrc: ''
       },
       {
         group: 'BIDANG PENGETAHUAN SOCIAL (PENGSOS)',
-        name: 'AKBP H. Wahyudi, S.E.',
+        name: 'Kosong',
         rank: 'AKBP',
         position: 'Kasubbid Sespimmen Bidpengsos',
         photoSrc: ''
       },
       {
         group: 'BIDANG PENGETAHUAN SOCIAL (PENGSOS)',
-        name: 'AKBP H. Suhardi',
+        name: 'Kosong',
         rank: 'AKBP',
         position: 'Kasubbid Sespimma Bidpengsos',
         photoSrc: ''
       },
       {
         group: 'BIDANG PROFESI DAN TEKNOLOGI (PROFTEK)',
-        name: 'Kombes Pol Drs. Anwar, M.Si.',
+        name: 'Dr. ASWIN AZHAR SIREGAR, S.I.K., M.Si., M.Sc.(Eng)., Ph.D.',
         rank: 'Kombes Pol',
         position: 'Kabid Proftek',
         photoSrc: ''
       },
       {
         group: 'BIDANG PROFESI DAN TEKNOLOGI (PROFTEK)',
-        name: 'AKBP H. Patrige',
+        name: 'Kosong',
         rank: 'AKBP',
         position: 'Kasubbid Sespimti BidProftek',
         photoSrc: ''
       },
       {
         group: 'BIDANG PROFESI DAN TEKNOLOGI (PROFTEK)',
-        name: 'AKBP H. Solihin',
+        name: 'Kosong',
         rank: 'AKBP',
         position: 'Kasubbid Sespimmen BidProftek',
         photoSrc: ''
       },
       {
         group: 'BIDANG PROFESI DAN TEKNOLOGI (PROFTEK)',
-        name: 'AKBP H. Romli',
+        name: 'Kosong',
         rank: 'AKBP',
         position: 'Kasubbid Sespimma BidProftek',
         photoSrc: ''
@@ -374,49 +374,49 @@ export const pages: Record<string, PageContent> = {
       },
       {
         group: 'BIDANG PEMBINAAN TENAGA PENDIDIK (BIDBINGADIK)',
-        name: 'AKBP H. Romli',
+        name: 'BHIRAWA BRAJA PAKSA, S.I.K.',
         rank: 'AKBP',
         position: 'Kasubbid Sespimti Bidbingadik',
         photoSrc: ''
       },
       {
         group: 'BIDANG PEMBINAAN TENAGA PENDIDIK (BIDBINGADIK)',
-        name: 'AKBP H. Wahyu',
+        name: 'Kosong',
         rank: 'AKBP',
         position: 'Kasubbid Sespimmen Bidbingadik',
         photoSrc: ''
       },
       {
         group: 'BIDANG PEMBINAAN TENAGA PENDIDIK (BIDBINGADIK)',
-        name: 'AKBP H. Tri',
+        name: 'Kosong',
         rank: 'AKBP',
         position: 'Kasubbid Sespimma Bidbingadik',
         photoSrc: ''
       },
       {
         group: 'PARA KEPALA SEKOLAH',
-        name: 'Brigjen Pol Patrige R. Renwarin, S.H.',
+        name: 'Dr. EKO SUPRIHANTO, S.H., S.I.K., M.H.',
         rank: 'Brigjen Pol',
         position: 'Kepala Sekolah Staf dan Pimpinan Tinggi Polri (Kasespimti)',
         photoSrc: ''
       },
       {
         group: 'PARA KEPALA SEKOLAH',
-        name: 'Brigjen Pol Setijo Nugroho, S.I.K.',
+        name: 'RACHMAT PAMUDJI, S.I.K.',
         rank: 'Brigjen Pol',
         position: 'Kepala Sekolah Staf dan Pimpinan Menengah Polri (Kasespimmen)',
         photoSrc: ''
       },
       {
         group: 'PARA KEPALA SEKOLAH',
-        name: 'Brigjen Pol Drs. H. Mulyono',
+        name: 'PRIYO WASESO, S.Si., M.P.P.',
         rank: 'Brigjen Pol',
         position: 'Kepala Sekolah Pengembangan Profesi Kepolisian (Ka SPPK)',
         photoSrc: ''
       },
       {
         group: 'PARA KEPALA SEKOLAH',
-        name: 'Brigjen Pol Drs. H. M. Romli',
+        name: 'Victor Togi Tambunan, S.H., S.I.K',
         rank: 'Brigjen Pol',
         position: 'Kepala Sekolah Staf dan Pimpinan Pertama (Kasespimma)',
         photoSrc: ''
@@ -425,7 +425,7 @@ export const pages: Record<string, PageContent> = {
         group: 'SETLEM',
         name: 'LIDO RATRI ANTORO, S.H., S.I.K., M.M.',
         rank: 'AKBP',
-        position: 'KASUBBAG SDM',
+        position: 'Kasubbag SDM',
         photoSrc: ''
       }
     ],
