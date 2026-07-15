@@ -3,6 +3,8 @@ import { ContentPage } from '@/components/pages/ContentPage'
 import { pages } from '@/data/pages'
 import { serverFetch } from '@/lib/api'
 
+export const dynamic = 'force-dynamic'
+
 export default async function Page() {
   const path = "/widyaiswara/materi-terbuka"
   const content = pages[path]

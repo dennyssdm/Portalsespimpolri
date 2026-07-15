@@ -3,6 +3,8 @@ import { ContentPage } from '@/components/pages/ContentPage'
 import { pages } from '@/data/pages'
 import { serverFetch, getMediaUrl } from '@/lib/api'
 
+export const dynamic = 'force-dynamic'
+
 export default async function Page() {
   const path = "/profil/visi-misi"
   const content = pages[path]

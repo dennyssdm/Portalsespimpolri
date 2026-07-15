@@ -6,6 +6,8 @@ import { InpassingModuleWorkspace } from '@/components/pages/InpassingModuleWork
 import { inpassingModules } from '@/data/inpassingModules'
 import { serverFetch } from '@/lib/api'
 
+export const dynamic = 'force-dynamic'
+
 export default async function Page() {
   // Fetch dynamic inpassing modules from database
   let dbContent = null
