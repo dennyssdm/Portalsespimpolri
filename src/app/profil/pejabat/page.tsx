@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { ContentPage } from '@/components/pages/ContentPage'
 import { pages } from '@/data/pages'
-import { serverFetch } from '@/lib/api'
+import { serverFetch, getMediaUrl } from '@/lib/api'
 
 export const dynamic = 'force-dynamic'
 
@@ -68,7 +68,7 @@ export default async function Page() {
           } else if (trimmed.toUpperCase().startsWith('JABATAN:')) {
             currentOfficial.position = trimmed.substring(8).trim()
           } else if (trimmed.toUpperCase().startsWith('FOTO:')) {
-            currentOfficial.photoSrc = trimmed.substring(5).trim()
+            currentOfficial.photoSrc = getMediaUrl(trimmed.substring(5).trim())
           }
         }
       }
