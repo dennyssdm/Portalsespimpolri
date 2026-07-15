@@ -1992,7 +1992,12 @@ export const pages: Record<string, PageContent> = {
   '/sarana-prasarana/ejurnal': {
     title: "Ejurnal",
     eyebrow: "Portal Pendukung",
-    description: "Akses pendukung eJurnal untuk penelusuran artikel ilmiah, jurnal, dan referensi akademik.",
+    description: "Akses resmi portal E-Jurnal Sespim Lemdiklat Polri untuk pencarian artikel ilmiah dan jurnal akademik.",
+    externalLink: {
+      label: 'Buka E-Jurnal Sespim Lemdiklat Polri',
+      href: 'https://ejurnal-copus.sespimpolri.id/',
+      description: 'Portal resmi E-Jurnal Sespim Lemdiklat Polri'
+    },
     sections: [
       {
         title: 'Akses Ejurnal',
@@ -2000,7 +2005,7 @@ export const pages: Record<string, PageContent> = {
         items: [
           'Mendukung pencarian artikel ilmiah dan jurnal akademik.',
           'Menjadi rujukan awal untuk pengayaan kajian dan penulisan akademik.',
-          'Dapat dilengkapi tautan portal dan panduan akses setelah data resmi tersedia.'
+          'Dapat dilengkapi tautan portal dan panduan akses resmi.'
         ]
       },
       {
