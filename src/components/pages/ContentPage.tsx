@@ -411,7 +411,8 @@ export function ContentPage({ content, path }: ContentPageProps) {
     path === '/widyaiswara' ||
     path === '/kelembagaan-internal/setlem' ||
     path === '/kelembagaan-internal/jianbang' ||
-    path === '/kelembagaan-internal/bidang'
+    path === '/kelembagaan-internal/bidang' ||
+    path === '/sarana-prasarana/ejurnal'
   const promoteSpotlight = path === '/widyaiswara/pembimbingan-naskap'
   const isContactPage = path === '/kontak' || path === '/berita/contact' || path === '/profil/kontak' || path === '/profil/kontak/contact'
   const isEditorialBoardPage = path === '/berita/susunan-redaksi' || path === '/profil/kontak/susunan-redaksi'
