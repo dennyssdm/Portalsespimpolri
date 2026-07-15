@@ -1654,7 +1654,7 @@ function DashboardContent() {
         'BIDANG PEMBINAAN TENAGA PENDIDIK (BIDBINGADIK)', 'PARA KEPALA SEKOLAH'
       ]
       return (
-        <div className="space-y-4 max-h-[350px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3 text-neutral-200">
+        <div className="space-y-4 max-h-[450px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3 text-neutral-200">
           <div className="flex justify-between items-center">
             <p className="text-[10px] font-bold text-polri-goldSoft uppercase tracking-wider">Daftar Pejabat Utama</p>
             <button
@@ -1667,7 +1667,7 @@ function DashboardContent() {
           </div>
           <div className="space-y-4">
             {formPejabatItems.map((item, idx) => (
-              <div key={idx} className="p-3 bg-neutral-950 rounded-xl border border-neutral-850 space-y-2 relative">
+              <div key={idx} className="p-4 bg-neutral-950 rounded-xl border border-neutral-850 space-y-3 relative">
                 <button
                   type="button"
                   onClick={() => setFormPejabatItems(formPejabatItems.filter((_, i) => i !== idx))}
@@ -1675,7 +1675,7 @@ function DashboardContent() {
                 >
                   Hapus
                 </button>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                   <div>
                     <label className="block text-[8px] uppercase text-neutral-500 font-bold">Kelompok / Divisi</label>
                     <select
@@ -1705,8 +1705,6 @@ function DashboardContent() {
                       className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
                     />
                   </div>
-                </div>
-                <div className="grid grid-cols-3 gap-2">
                   <div>
                     <label className="block text-[8px] uppercase text-neutral-500 font-bold">Pangkat</label>
                     <input
@@ -1735,8 +1733,48 @@ function DashboardContent() {
                       className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
                     />
                   </div>
-                  <div>
-                    <label className="block text-[8px] uppercase text-neutral-500 font-bold">Foto URL</label>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-3 items-center bg-neutral-900/50 p-2.5 rounded-lg border border-neutral-800/80">
+                  <div className="flex-shrink-0 w-12 h-14 rounded border border-neutral-700 bg-neutral-900 overflow-hidden flex items-center justify-center">
+                    {item.foto ? (
+                      <img src={getMediaUrl(item.foto)} alt="Preview" className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-[8px] text-neutral-600">No Foto</span>
+                    )}
+                  </div>
+                  <div className="flex-1 w-full min-w-0">
+                    <label className="block text-[8px] uppercase text-neutral-400 font-bold mb-1">Unggah Foto (Lokal)</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0]
+                        if (!file) return
+                        try {
+                          const formData = new FormData()
+                          formData.append('image', file)
+                          const res = await apiFetch('/api/upload', {
+                            method: 'POST',
+                            body: formData
+                          })
+                          if (res.ok) {
+                            const json = await res.json()
+                            if (json.status === 'success' && json.fileUrl) {
+                              const updated = [...formPejabatItems]
+                              updated[idx].foto = json.fileUrl
+                              setFormPejabatItems(updated)
+                            }
+                          }
+                        } catch (err) {
+                          console.error("Failed to upload image:", err)
+                        }
+                      }}
+                      className="w-full text-[10px] text-neutral-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-[9px] file:font-semibold file:bg-neutral-800 file:text-polri-goldSoft file:cursor-pointer hover:file:bg-neutral-700"
+                    />
+                  </div>
+                  <div className="flex-1 w-full">
+                    <label className="block text-[8px] uppercase text-neutral-400 font-bold mb-1">Atau Tautan Foto (Drive/URL)</label>
                     <input
                       type="text"
                       value={item.foto}
@@ -1745,8 +1783,8 @@ function DashboardContent() {
                         updated[idx].foto = e.target.value
                         setFormPejabatItems(updated)
                       }}
-                      placeholder="/images/kasespim.png"
-                      className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                      placeholder="Contoh: https://drive.google.com/..."
+                      className="w-full rounded bg-neutral-900 border border-neutral-800 px-2 py-1 text-[11px] text-white outline-none focus:border-polri-gold"
                     />
                   </div>
                 </div>
@@ -1760,7 +1798,7 @@ function DashboardContent() {
     if (itemId === 'p-6') {
       const groups = ['INFORMASI FASILITAS PENDIDIKAN', 'RUANG KELAS', 'ASRAMA', 'PENDUKUNG AKADEMIK', 'FASILITAS UMUM']
       return (
-        <div className="space-y-4 max-h-[350px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3 text-neutral-200">
+        <div className="space-y-4 max-h-[450px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3 text-neutral-200">
           <div className="flex justify-between items-center">
             <p className="text-[10px] font-bold text-polri-goldSoft uppercase tracking-wider">Daftar Fasilitas Sespim</p>
             <button
@@ -1773,7 +1811,7 @@ function DashboardContent() {
           </div>
           <div className="space-y-4">
             {formFasilitasItems.map((item, idx) => (
-              <div key={idx} className="p-3 bg-neutral-950 rounded-xl border border-neutral-850 space-y-2 relative">
+              <div key={idx} className="p-4 bg-neutral-950 rounded-xl border border-neutral-850 space-y-3 relative">
                 <button
                   type="button"
                   onClick={() => setFormFasilitasItems(formFasilitasItems.filter((_, i) => i !== idx))}
@@ -1781,7 +1819,7 @@ function DashboardContent() {
                 >
                   Hapus
                 </button>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div>
                     <label className="block text-[8px] uppercase text-neutral-500 font-bold">Kelompok / Kategori</label>
                     <select
@@ -1811,34 +1849,74 @@ function DashboardContent() {
                       className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
                     />
                   </div>
+                  <div>
+                    <label className="block text-[8px] uppercase text-neutral-500 font-bold">Keterangan / Deskripsi</label>
+                    <input
+                      type="text"
+                      value={item.keterangan}
+                      onChange={(e) => {
+                        const updated = [...formFasilitasItems]
+                        updated[idx].keterangan = e.target.value
+                        setFormFasilitasItems(updated)
+                      }}
+                      placeholder="Deskripsi fasilitas..."
+                      className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Keterangan / Deskripsi</label>
-                  <input
-                    type="text"
-                    value={item.keterangan}
-                    onChange={(e) => {
-                      const updated = [...formFasilitasItems]
-                      updated[idx].keterangan = e.target.value
-                      setFormFasilitasItems(updated)
-                    }}
-                    placeholder="Deskripsi fasilitas..."
-                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Foto URL</label>
-                  <input
-                    type="text"
-                    value={item.foto}
-                    onChange={(e) => {
-                      const updated = [...formFasilitasItems]
-                      updated[idx].foto = e.target.value
-                      setFormFasilitasItems(updated)
-                    }}
-                    placeholder="/images/fasilitas.png"
-                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
-                  />
+
+                <div className="flex flex-col sm:flex-row gap-3 items-center bg-neutral-900/50 p-2.5 rounded-lg border border-neutral-800/80">
+                  <div className="flex-shrink-0 w-12 h-14 rounded border border-neutral-700 bg-neutral-900 overflow-hidden flex items-center justify-center">
+                    {item.foto ? (
+                      <img src={getMediaUrl(item.foto)} alt="Preview" className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-[8px] text-neutral-600">No Foto</span>
+                    )}
+                  </div>
+                  <div className="flex-1 w-full min-w-0">
+                    <label className="block text-[8px] uppercase text-neutral-400 font-bold mb-1">Unggah Foto (Lokal)</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0]
+                        if (!file) return
+                        try {
+                          const formData = new FormData()
+                          formData.append('image', file)
+                          const res = await apiFetch('/api/upload', {
+                            method: 'POST',
+                            body: formData
+                          })
+                          if (res.ok) {
+                            const json = await res.json()
+                            if (json.status === 'success' && json.fileUrl) {
+                              const updated = [...formFasilitasItems]
+                              updated[idx].foto = json.fileUrl
+                              setFormFasilitasItems(updated)
+                            }
+                          }
+                        } catch (err) {
+                          console.error("Failed to upload image:", err)
+                        }
+                      }}
+                      className="w-full text-[10px] text-neutral-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-[9px] file:font-semibold file:bg-neutral-800 file:text-polri-goldSoft file:cursor-pointer hover:file:bg-neutral-700"
+                    />
+                  </div>
+                  <div className="flex-1 w-full">
+                    <label className="block text-[8px] uppercase text-neutral-400 font-bold mb-1">Atau Tautan Foto (Drive/URL)</label>
+                    <input
+                      type="text"
+                      value={item.foto}
+                      onChange={(e) => {
+                        const updated = [...formFasilitasItems]
+                        updated[idx].foto = e.target.value
+                        setFormFasilitasItems(updated)
+                      }}
+                      placeholder="Contoh: https://drive.google.com/..."
+                      className="w-full rounded bg-neutral-900 border border-neutral-800 px-2 py-1 text-[11px] text-white outline-none focus:border-polri-gold"
+                    />
+                  </div>
                 </div>
               </div>
             ))}
@@ -2958,7 +3036,7 @@ function DashboardContent() {
       {/* CREATE MODAL */}
       {isCreateModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-neutral-900 border border-neutral-800 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl animate-scaleUp text-neutral-200">
+          <div className={`bg-neutral-900 border border-neutral-800 rounded-3xl w-full ${currentModule === 'Profil' && ['p-5', 'p-6', 'p-7', 'p-8'].includes(formCategory) ? 'max-w-3xl' : 'max-w-md'} overflow-hidden shadow-2xl animate-scaleUp text-neutral-200`}>
             <div className="bg-neutral-950 p-5 border-b border-neutral-800 flex justify-between items-center">
               <h4 className="text-sm font-black uppercase text-polri-goldSoft tracking-wider">Tambah Konten Baru</h4>
               <button onClick={() => setIsCreateModalOpen(false)} className="text-neutral-500 hover:text-white font-bold">&times;</button>
@@ -3264,7 +3342,7 @@ function DashboardContent() {
       {/* EDIT MODAL */}
       {isEditModalOpen && selectedItem && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-neutral-900 border border-neutral-800 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl animate-scaleUp text-neutral-200">
+          <div className={`bg-neutral-900 border border-neutral-800 rounded-3xl w-full ${['p-5', 'p-6', 'p-7', 'p-8'].includes(selectedItem.id) ? 'max-w-3xl' : 'max-w-md'} overflow-hidden shadow-2xl animate-scaleUp text-neutral-200`}>
             <div className="bg-neutral-950 p-5 border-b border-neutral-800 flex justify-between items-center">
               <h4 className="text-sm font-black uppercase text-polri-goldSoft tracking-wider">Perbarui Konten</h4>
               <button onClick={() => setIsEditModalOpen(false)} className="text-neutral-500 hover:text-white font-bold">&times;</button>
