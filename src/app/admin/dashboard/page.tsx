@@ -3036,290 +3036,292 @@ function DashboardContent() {
       {/* CREATE MODAL */}
       {isCreateModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className={`bg-neutral-900 border border-neutral-800 rounded-3xl w-full ${currentModule === 'Profil' && ['p-5', 'p-6', 'p-7', 'p-8'].includes(formCategory) ? 'max-w-3xl' : 'max-w-md'} overflow-hidden shadow-2xl animate-scaleUp text-neutral-200`}>
-            <div className="bg-neutral-950 p-5 border-b border-neutral-800 flex justify-between items-center">
+          <div className={`bg-neutral-900 border border-neutral-800 rounded-3xl w-full ${currentModule === 'Profil' && ['p-5', 'p-6', 'p-7', 'p-8'].includes(formCategory) ? 'max-w-3xl' : 'max-w-md'} max-h-[85vh] flex flex-col overflow-hidden shadow-2xl animate-scaleUp text-neutral-200`}>
+            <div className="bg-neutral-950 p-5 border-b border-neutral-800 flex justify-between items-center flex-shrink-0">
               <h4 className="text-sm font-black uppercase text-polri-goldSoft tracking-wider">Tambah Konten Baru</h4>
               <button onClick={() => setIsCreateModalOpen(false)} className="text-neutral-500 hover:text-white font-bold">&times;</button>
             </div>
-            <form onSubmit={handleCreate} className="p-6 space-y-4">
-              <div>
-                <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Judul Konten</label>
-                <input
-                  type="text"
-                  required
-                  value={formTitle}
-                  onChange={(e) => setFormTitle(e.target.value)}
-                  placeholder="Masukkan judul konten..."
-                  className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold placeholder:text-neutral-600"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Sub-Kategori</label>
-                <input
-                  type="text"
-                  value={formCategory}
-                  onChange={(e) => setFormCategory(e.target.value)}
-                  placeholder="Contoh: Sejarah Sespim, Kurikulum, dll."
-                  className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold placeholder:text-neutral-600"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Status Publikasi</label>
-                <select
-                  value={formStatus}
-                  onChange={(e) => setFormStatus(e.target.value as any)}
-                  className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold"
-                >
-                  <option value="Published">Published</option>
-                  <option value="Draft">Draft</option>
-                </select>
-              </div>
-
-              <div className="space-y-4">
+            <form onSubmit={handleCreate} className="flex flex-col flex-1 min-h-0">
+              <div className="p-6 space-y-4 overflow-y-auto flex-1">
                 <div>
-                  <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Unggah Berkas Media (Foto / Video / Dokumen)</label>
-                  <input
-                    type="file"
-                    accept="image/*,video/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0]
-                      if (file) setFormImageFile(file)
-                    }}
-                    className="mt-2 block w-full text-xs text-neutral-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:bg-neutral-850 file:text-polri-goldSoft hover:file:bg-neutral-800 transition cursor-pointer"
-                  />
-                  {formImageFile && (
-                    <p className="mt-1.5 text-[10px] text-polri-goldSoft font-bold">Terpilih: {formImageFile.name} ({(formImageFile.size / (1024 * 1024)).toFixed(2)} MB)</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Atau Masukkan URL Media / Foto</label>
+                  <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Judul Konten</label>
                   <input
                     type="text"
-                    value={formImageUrl}
-                    onChange={(e) => setFormImageUrl(e.target.value)}
-                    placeholder="Contoh: /images/kasespim.png atau link eksternal..."
+                    required
+                    value={formTitle}
+                    onChange={(e) => setFormTitle(e.target.value)}
+                    placeholder="Masukkan judul konten..."
+                    className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold placeholder:text-neutral-600"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Sub-Kategori</label>
+                  <input
+                    type="text"
+                    value={formCategory}
+                    onChange={(e) => setFormCategory(e.target.value)}
+                    placeholder="Contoh: Sejarah Sespim, Kurikulum, dll."
                     className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold placeholder:text-neutral-600"
                   />
                 </div>
 
-                {/* Live Media Preview Box */}
-                {(formImageFile || formImageUrl) && (
-                  <div className="mt-2 bg-neutral-900 border border-neutral-800 rounded-xl p-3 flex flex-col items-center justify-center">
-                    <p className="text-[9px] font-black uppercase text-neutral-400 tracking-widest mb-2 w-full text-left">Pratinjau Media</p>
-                    {formImageFile ? (
-                      formImageFile.type.startsWith('image/') ? (
-                        <img
-                          src={URL.createObjectURL(formImageFile)}
-                          alt="Pratinjau Unggahan"
-                          className="max-h-40 rounded-lg object-contain border border-neutral-800"
-                        />
-                      ) : formImageFile.type.startsWith('video/') ? (
-                        <video
-                          src={URL.createObjectURL(formImageFile)}
-                          controls
-                          className="max-h-40 rounded-lg object-contain border border-neutral-800"
-                        />
-                      ) : (
-                        <div className="py-4 text-center text-xs text-neutral-500 font-bold">
-                          Dokumen Terpilih (Pratinjau tidak tersedia untuk format ini)
-                        </div>
-                      )
-                    ) : (
-                      formImageUrl && (
-                        formImageUrl.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i) || formImageUrl.startsWith('/uploads/') ? (
+                <div>
+                  <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Status Publikasi</label>
+                  <select
+                    value={formStatus}
+                    onChange={(e) => setFormStatus(e.target.value as any)}
+                    className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold"
+                  >
+                    <option value="Published">Published</option>
+                    <option value="Draft">Draft</option>
+                  </select>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Unggah Berkas Media (Foto / Video / Dokumen)</label>
+                    <input
+                      type="file"
+                      accept="image/*,video/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0]
+                        if (file) setFormImageFile(file)
+                      }}
+                      className="mt-2 block w-full text-xs text-neutral-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:bg-neutral-850 file:text-polri-goldSoft hover:file:bg-neutral-800 transition cursor-pointer"
+                    />
+                    {formImageFile && (
+                      <p className="mt-1.5 text-[10px] text-polri-goldSoft font-bold">Terpilih: {formImageFile.name} ({(formImageFile.size / (1024 * 1024)).toFixed(2)} MB)</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Atau Masukkan URL Media / Foto</label>
+                    <input
+                      type="text"
+                      value={formImageUrl}
+                      onChange={(e) => setFormImageUrl(e.target.value)}
+                      placeholder="Contoh: /images/kasespim.png atau link eksternal..."
+                      className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold placeholder:text-neutral-600"
+                    />
+                  </div>
+
+                  {/* Live Media Preview Box */}
+                  {(formImageFile || formImageUrl) && (
+                    <div className="mt-2 bg-neutral-900 border border-neutral-800 rounded-xl p-3 flex flex-col items-center justify-center">
+                      <p className="text-[9px] font-black uppercase text-neutral-400 tracking-widest mb-2 w-full text-left">Pratinjau Media</p>
+                      {formImageFile ? (
+                        formImageFile.type.startsWith('image/') ? (
                           <img
-                            src={getMediaUrl(formImageUrl)}
-                            alt="Pratinjau URL"
+                            src={URL.createObjectURL(formImageFile)}
+                            alt="Pratinjau Unggahan"
                             className="max-h-40 rounded-lg object-contain border border-neutral-800"
-                            onError={(e) => {
-                              (e.target as HTMLElement).style.display = 'none'
-                            }}
                           />
-                        ) : formImageUrl.match(/\.(mp4|webm|ogg)$/i) ? (
+                        ) : formImageFile.type.startsWith('video/') ? (
                           <video
-                            src={getMediaUrl(formImageUrl)}
+                            src={URL.createObjectURL(formImageFile)}
                             controls
                             className="max-h-40 rounded-lg object-contain border border-neutral-800"
                           />
                         ) : (
-                          <div className="py-2 text-center text-xs text-neutral-400">
-                            Tautan Media: <span className="text-polri-goldSoft underline break-all">{formImageUrl}</span>
+                          <div className="py-4 text-center text-xs text-neutral-500 font-bold">
+                            Dokumen Terpilih (Pratinjau tidak tersedia untuk format ini)
                           </div>
                         )
-                      )
-                    )}
+                      ) : (
+                        formImageUrl && (
+                          formImageUrl.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i) || formImageUrl.startsWith('/uploads/') ? (
+                            <img
+                              src={getMediaUrl(formImageUrl)}
+                              alt="Pratinjau URL"
+                              className="max-h-40 rounded-lg object-contain border border-neutral-800"
+                              onError={(e) => {
+                                (e.target as HTMLElement).style.display = 'none'
+                              }}
+                            />
+                          ) : formImageUrl.match(/\.(mp4|webm|ogg)$/i) ? (
+                            <video
+                              src={getMediaUrl(formImageUrl)}
+                              controls
+                              className="max-h-40 rounded-lg object-contain border border-neutral-800"
+                            />
+                          ) : (
+                            <div className="py-2 text-center text-xs text-neutral-400">
+                              Tautan Media: <span className="text-polri-goldSoft underline break-all">{formImageUrl}</span>
+                            </div>
+                          )
+                        )
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {currentModule === 'Program Pendidikan' && formCategory === 'program-sekolah' ? (
+                  <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3">
+                    <p className="text-[10px] font-bold text-polri-goldSoft uppercase tracking-wider">Detail Program Pendidikan (Structured)</p>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Slug Halaman (e.g. sespimma, leadership-camp)</label>
+                      <input
+                        type="text"
+                        required
+                        value={formProgSlug}
+                        onChange={(e) => setFormProgSlug(e.target.value)}
+                        placeholder="sespimma"
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Sasaran Peserta</label>
+                      <input
+                        type="text"
+                        value={formProgAudience}
+                        onChange={(e) => setFormProgAudience(e.target.value)}
+                        placeholder="e.g. Perwira siswa Sespimma"
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Durasi Pendidikan</label>
+                      <input
+                        type="text"
+                        value={formProgDuration}
+                        onChange={(e) => setFormProgDuration(e.target.value)}
+                        placeholder="e.g. Menyesuaikan kalender pendidikan"
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Tingkat / Level Kepemimpinan</label>
+                      <input
+                        type="text"
+                        value={formProgLevel}
+                        onChange={(e) => setFormProgLevel(e.target.value)}
+                        placeholder="e.g. Kepemimpinan tingkat pertama"
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Judul Blok Fokus (Opsional)</label>
+                      <input
+                        type="text"
+                        value={formProgFocusTitle}
+                        onChange={(e) => setFormProgFocusTitle(e.target.value)}
+                        placeholder="e.g. Tugas Sespimma"
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Judul Blok Capaian (Opsional)</label>
+                      <input
+                        type="text"
+                        value={formProgOutcomesTitle}
+                        onChange={(e) => setFormProgOutcomesTitle(e.target.value)}
+                        placeholder="e.g. Ruang Tanggung Jawab"
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Judul Blok Tahapan (Opsional)</label>
+                      <input
+                        type="text"
+                        value={formProgStagesTitle}
+                        onChange={(e) => setFormProgStagesTitle(e.target.value)}
+                        placeholder="e.g. Fungsi Sespimma"
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Judul Status / Badge (Opsional)</label>
+                      <input
+                        type="text"
+                        value={formProgStatusTitle}
+                        onChange={(e) => setFormProgStatusTitle(e.target.value)}
+                        placeholder="e.g. Unsur Pelaksana Utama"
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Deskripsi Status (Opsional)</label>
+                      <textarea
+                        value={formProgStatusDescription}
+                        onChange={(e) => setFormProgStatusDescription(e.target.value)}
+                        placeholder="Deskripsi status program..."
+                        rows={2}
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold resize-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Gambaran Program (Pisahkan dengan 2 baris baru)</label>
+                      <textarea
+                        value={formProgOverview}
+                        onChange={(e) => setFormProgOverview(e.target.value)}
+                        placeholder="Paragraf 1&#10;&#10;Paragraf 2..."
+                        rows={4}
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Fokus Pembelajaran (Satu baris per item)</label>
+                      <textarea
+                        value={formProgFocusAreas}
+                        onChange={(e) => setFormProgFocusAreas(e.target.value)}
+                        placeholder="Fokus 1&#10;Fokus 2..."
+                        rows={3}
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Capaian Program (Satu baris per item)</label>
+                      <textarea
+                        value={formProgOutcomes}
+                        onChange={(e) => setFormProgOutcomes(e.target.value)}
+                        placeholder="Capaian 1&#10;Capaian 2..."
+                        rows={3}
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Tahapan Pendidikan (Format: Judul Tahap: Deskripsi, satu per baris)</label>
+                      <textarea
+                        value={formProgStages}
+                        onChange={(e) => setFormProgStages(e.target.value)}
+                        placeholder="Rencana pendidikan: Menyusun rencana pendidikan...&#10;Tahap Kedua: Melaksanakan koordinasi..."
+                        rows={4}
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Dokumen Terkait (Format: Nama Dokumen: /url/link, satu per baris)</label>
+                      <textarea
+                        value={formProgDocuments}
+                        onChange={(e) => setFormProgDocuments(e.target.value)}
+                        placeholder="Kalender Pendidikan: /program-pendidikan/kalender-pendidikan&#10;Pedoman Akademik: /program-pendidikan/pedoman-akademik"
+                        rows={3}
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                  </div>
+                ) : currentModule === 'Profil' && ['p-5', 'p-6', 'p-7', 'p-8'].includes(formCategory) ? (
+                  renderProfilStructuredFields(formCategory)
+                ) : currentModule === 'Widyaiswara' && formCategory === 'Materi Terbuka' ? (
+                  renderMateriTerbukaStructuredFields()
+                ) : currentModule === 'Widyaiswara' && formCategory === 'Inpassing' ? (
+                  renderInpassingStructuredFields()
+                ) : (
+                  <div>
+                    <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Isi Konten (News / Detail)</label>
+                    <textarea
+                      value={formContent}
+                      onChange={(e) => setFormContent(e.target.value)}
+                      placeholder="Tuliskan detail konten / teks artikel..."
+                      rows={4}
+                      className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold placeholder:text-neutral-600 resize-none"
+                    />
                   </div>
                 )}
               </div>
 
-              {currentModule === 'Program Pendidikan' && formCategory === 'program-sekolah' ? (
-                <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3">
-                  <p className="text-[10px] font-bold text-polri-goldSoft uppercase tracking-wider">Detail Program Pendidikan (Structured)</p>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Slug Halaman (e.g. sespimma, leadership-camp)</label>
-                    <input
-                      type="text"
-                      required
-                      value={formProgSlug}
-                      onChange={(e) => setFormProgSlug(e.target.value)}
-                      placeholder="sespimma"
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Sasaran Peserta</label>
-                    <input
-                      type="text"
-                      value={formProgAudience}
-                      onChange={(e) => setFormProgAudience(e.target.value)}
-                      placeholder="e.g. Perwira siswa Sespimma"
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Durasi Pendidikan</label>
-                    <input
-                      type="text"
-                      value={formProgDuration}
-                      onChange={(e) => setFormProgDuration(e.target.value)}
-                      placeholder="e.g. Menyesuaikan kalender pendidikan"
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Tingkat / Level Kepemimpinan</label>
-                    <input
-                      type="text"
-                      value={formProgLevel}
-                      onChange={(e) => setFormProgLevel(e.target.value)}
-                      placeholder="e.g. Kepemimpinan tingkat pertama"
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Judul Blok Fokus (Opsional)</label>
-                    <input
-                      type="text"
-                      value={formProgFocusTitle}
-                      onChange={(e) => setFormProgFocusTitle(e.target.value)}
-                      placeholder="e.g. Tugas Sespimma"
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Judul Blok Capaian (Opsional)</label>
-                    <input
-                      type="text"
-                      value={formProgOutcomesTitle}
-                      onChange={(e) => setFormProgOutcomesTitle(e.target.value)}
-                      placeholder="e.g. Ruang Tanggung Jawab"
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Judul Blok Tahapan (Opsional)</label>
-                    <input
-                      type="text"
-                      value={formProgStagesTitle}
-                      onChange={(e) => setFormProgStagesTitle(e.target.value)}
-                      placeholder="e.g. Fungsi Sespimma"
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Judul Status / Badge (Opsional)</label>
-                    <input
-                      type="text"
-                      value={formProgStatusTitle}
-                      onChange={(e) => setFormProgStatusTitle(e.target.value)}
-                      placeholder="e.g. Unsur Pelaksana Utama"
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Deskripsi Status (Opsional)</label>
-                    <textarea
-                      value={formProgStatusDescription}
-                      onChange={(e) => setFormProgStatusDescription(e.target.value)}
-                      placeholder="Deskripsi status program..."
-                      rows={2}
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold resize-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Gambaran Program (Pisahkan dengan 2 baris baru)</label>
-                    <textarea
-                      value={formProgOverview}
-                      onChange={(e) => setFormProgOverview(e.target.value)}
-                      placeholder="Paragraf 1&#10;&#10;Paragraf 2..."
-                      rows={4}
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Fokus Pembelajaran (Satu baris per item)</label>
-                    <textarea
-                      value={formProgFocusAreas}
-                      onChange={(e) => setFormProgFocusAreas(e.target.value)}
-                      placeholder="Fokus 1&#10;Fokus 2..."
-                      rows={3}
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Capaian Program (Satu baris per item)</label>
-                    <textarea
-                      value={formProgOutcomes}
-                      onChange={(e) => setFormProgOutcomes(e.target.value)}
-                      placeholder="Capaian 1&#10;Capaian 2..."
-                      rows={3}
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Tahapan Pendidikan (Format: Judul Tahap: Deskripsi, satu per baris)</label>
-                    <textarea
-                      value={formProgStages}
-                      onChange={(e) => setFormProgStages(e.target.value)}
-                      placeholder="Rencana pendidikan: Menyusun rencana pendidikan...&#10;Tahap Kedua: Melaksanakan koordinasi..."
-                      rows={4}
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Dokumen Terkait (Format: Nama Dokumen: /url/link, satu per baris)</label>
-                    <textarea
-                      value={formProgDocuments}
-                      onChange={(e) => setFormProgDocuments(e.target.value)}
-                      placeholder="Kalender Pendidikan: /program-pendidikan/kalender-pendidikan&#10;Pedoman Akademik: /program-pendidikan/pedoman-akademik"
-                      rows={3}
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                </div>
-              ) : currentModule === 'Profil' && ['p-5', 'p-6', 'p-7', 'p-8'].includes(formCategory) ? (
-                renderProfilStructuredFields(formCategory)
-              ) : currentModule === 'Widyaiswara' && formCategory === 'Materi Terbuka' ? (
-                renderMateriTerbukaStructuredFields()
-              ) : currentModule === 'Widyaiswara' && formCategory === 'Inpassing' ? (
-                renderInpassingStructuredFields()
-              ) : (
-                <div>
-                  <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Isi Konten (News / Detail)</label>
-                  <textarea
-                    value={formContent}
-                    onChange={(e) => setFormContent(e.target.value)}
-                    placeholder="Tuliskan detail konten / teks artikel..."
-                    rows={4}
-                    className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold placeholder:text-neutral-600 resize-none"
-                  />
-                </div>
-              )}
-
-              <div className="pt-2 flex gap-2">
+              <div className="p-5 bg-neutral-950 border-t border-neutral-800 flex gap-2 flex-shrink-0">
                 <button
                   type="button"
                   onClick={() => setIsCreateModalOpen(false)}
@@ -3342,287 +3344,289 @@ function DashboardContent() {
       {/* EDIT MODAL */}
       {isEditModalOpen && selectedItem && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className={`bg-neutral-900 border border-neutral-800 rounded-3xl w-full ${['p-5', 'p-6', 'p-7', 'p-8'].includes(selectedItem.id) ? 'max-w-3xl' : 'max-w-md'} overflow-hidden shadow-2xl animate-scaleUp text-neutral-200`}>
-            <div className="bg-neutral-950 p-5 border-b border-neutral-800 flex justify-between items-center">
+          <div className={`bg-neutral-900 border border-neutral-800 rounded-3xl w-full ${['p-5', 'p-6', 'p-7', 'p-8'].includes(selectedItem.id) ? 'max-w-3xl' : 'max-w-md'} max-h-[85vh] flex flex-col overflow-hidden shadow-2xl animate-scaleUp text-neutral-200`}>
+            <div className="bg-neutral-950 p-5 border-b border-neutral-800 flex justify-between items-center flex-shrink-0">
               <h4 className="text-sm font-black uppercase text-polri-goldSoft tracking-wider">Perbarui Konten</h4>
               <button onClick={() => setIsEditModalOpen(false)} className="text-neutral-500 hover:text-white font-bold">&times;</button>
             </div>
-            <form onSubmit={handleEdit} className="p-6 space-y-4">
-              <div>
-                <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Judul Konten</label>
-                <input
-                  type="text"
-                  required
-                  value={formTitle}
-                  onChange={(e) => setFormTitle(e.target.value)}
-                  className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Sub-Kategori</label>
-                <input
-                  type="text"
-                  value={formCategory}
-                  onChange={(e) => setFormCategory(e.target.value)}
-                  className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Status Publikasi</label>
-                <select
-                  value={formStatus}
-                  onChange={(e) => setFormStatus(e.target.value as any)}
-                  className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold"
-                >
-                  <option value="Published">Published</option>
-                  <option value="Draft">Draft</option>
-                </select>
-              </div>
-
-              <div className="space-y-4">
+            <form onSubmit={handleEdit} className="flex flex-col flex-1 min-h-0">
+              <div className="p-6 space-y-4 overflow-y-auto flex-1">
                 <div>
-                  <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Unggah Berkas Media (Foto / Video / Dokumen)</label>
-                  <input
-                    type="file"
-                    accept="image/*,video/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0]
-                      if (file) setFormImageFile(file)
-                    }}
-                    className="mt-2 block w-full text-xs text-neutral-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:bg-neutral-850 file:text-polri-goldSoft hover:file:bg-neutral-800 transition cursor-pointer"
-                  />
-                  {formImageFile && (
-                    <p className="mt-1.5 text-[10px] text-polri-goldSoft font-bold">Terpilih: {formImageFile.name} ({(formImageFile.size / (1024 * 1024)).toFixed(2)} MB)</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Atau Perbarui URL Media / Foto</label>
+                  <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Judul Konten</label>
                   <input
                     type="text"
-                    value={formImageUrl}
-                    onChange={(e) => setFormImageUrl(e.target.value)}
-                    placeholder="Contoh: /images/kasespim.png atau link eksternal..."
-                    className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold placeholder:text-neutral-600"
+                    required
+                    value={formTitle}
+                    onChange={(e) => setFormTitle(e.target.value)}
+                    className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Sub-Kategori</label>
+                  <input
+                    type="text"
+                    value={formCategory}
+                    onChange={(e) => setFormCategory(e.target.value)}
+                    className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold"
                   />
                 </div>
 
-                {/* Live Media Preview Box */}
-                {(formImageFile || formImageUrl) && (
-                  <div className="mt-2 bg-neutral-900 border border-neutral-800 rounded-xl p-3 flex flex-col items-center justify-center">
-                    <p className="text-[9px] font-black uppercase text-neutral-400 tracking-widest mb-2 w-full text-left">Pratinjau Media</p>
-                    {formImageFile ? (
-                      formImageFile.type.startsWith('image/') ? (
-                        <img
-                          src={URL.createObjectURL(formImageFile)}
-                          alt="Pratinjau Unggahan"
-                          className="max-h-40 rounded-lg object-contain border border-neutral-800"
-                        />
-                      ) : formImageFile.type.startsWith('video/') ? (
-                        <video
-                          src={URL.createObjectURL(formImageFile)}
-                          controls
-                          className="max-h-40 rounded-lg object-contain border border-neutral-800"
-                        />
-                      ) : (
-                        <div className="py-4 text-center text-xs text-neutral-500 font-bold">
-                          Dokumen Terpilih (Pratinjau tidak tersedia untuk format ini)
-                        </div>
-                      )
-                    ) : (
-                      formImageUrl && (
-                        formImageUrl.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i) || formImageUrl.startsWith('/uploads/') ? (
+                <div>
+                  <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Status Publikasi</label>
+                  <select
+                    value={formStatus}
+                    onChange={(e) => setFormStatus(e.target.value as any)}
+                    className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold"
+                  >
+                    <option value="Published">Published</option>
+                    <option value="Draft">Draft</option>
+                  </select>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Unggah Berkas Media (Foto / Video / Dokumen)</label>
+                    <input
+                      type="file"
+                      accept="image/*,video/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0]
+                        if (file) setFormImageFile(file)
+                      }}
+                      className="mt-2 block w-full text-xs text-neutral-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:bg-neutral-850 file:text-polri-goldSoft hover:file:bg-neutral-800 transition cursor-pointer"
+                    />
+                    {formImageFile && (
+                      <p className="mt-1.5 text-[10px] text-polri-goldSoft font-bold">Terpilih: {formImageFile.name} ({(formImageFile.size / (1024 * 1024)).toFixed(2)} MB)</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Atau Perbarui URL Media / Foto</label>
+                    <input
+                      type="text"
+                      value={formImageUrl}
+                      onChange={(e) => setFormImageUrl(e.target.value)}
+                      placeholder="Contoh: /images/kasespim.png atau link eksternal..."
+                      className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold placeholder:text-neutral-600"
+                    />
+                  </div>
+
+                  {/* Live Media Preview Box */}
+                  {(formImageFile || formImageUrl) && (
+                    <div className="mt-2 bg-neutral-900 border border-neutral-800 rounded-xl p-3 flex flex-col items-center justify-center">
+                      <p className="text-[9px] font-black uppercase text-neutral-400 tracking-widest mb-2 w-full text-left">Pratinjau Media</p>
+                      {formImageFile ? (
+                        formImageFile.type.startsWith('image/') ? (
                           <img
-                            src={getMediaUrl(formImageUrl)}
-                            alt="Pratinjau URL"
+                            src={URL.createObjectURL(formImageFile)}
+                            alt="Pratinjau Unggahan"
                             className="max-h-40 rounded-lg object-contain border border-neutral-800"
-                            onError={(e) => {
-                              (e.target as HTMLElement).style.display = 'none'
-                            }}
                           />
-                        ) : formImageUrl.match(/\.(mp4|webm|ogg)$/i) ? (
+                        ) : formImageFile.type.startsWith('video/') ? (
                           <video
-                            src={getMediaUrl(formImageUrl)}
+                            src={URL.createObjectURL(formImageFile)}
                             controls
                             className="max-h-40 rounded-lg object-contain border border-neutral-800"
                           />
                         ) : (
-                          <div className="py-2 text-center text-xs text-neutral-400">
-                            Tautan Media: <span className="text-polri-goldSoft underline break-all">{formImageUrl}</span>
+                          <div className="py-4 text-center text-xs text-neutral-500 font-bold">
+                            Dokumen Terpilih (Pratinjau tidak tersedia untuk format ini)
                           </div>
                         )
-                      )
-                    )}
+                      ) : (
+                        formImageUrl && (
+                          formImageUrl.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i) || formImageUrl.startsWith('/uploads/') ? (
+                            <img
+                              src={getMediaUrl(formImageUrl)}
+                              alt="Pratinjau URL"
+                              className="max-h-40 rounded-lg object-contain border border-neutral-800"
+                              onError={(e) => {
+                                (e.target as HTMLElement).style.display = 'none'
+                              }}
+                            />
+                          ) : formImageUrl.match(/\.(mp4|webm|ogg)$/i) ? (
+                            <video
+                              src={getMediaUrl(formImageUrl)}
+                              controls
+                              className="max-h-40 rounded-lg object-contain border border-neutral-800"
+                            />
+                          ) : (
+                            <div className="py-2 text-center text-xs text-neutral-400">
+                              Tautan Media: <span className="text-polri-goldSoft underline break-all">{formImageUrl}</span>
+                            </div>
+                          )
+                        )
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {currentModule === 'Program Pendidikan' && isProgramSchool(formCategory, selectedItem?.id) ? (
+                  <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3">
+                    <p className="text-[10px] font-bold text-polri-goldSoft uppercase tracking-wider">Detail Program Pendidikan (Structured)</p>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Slug Halaman (e.g. sespimma, leadership-camp)</label>
+                      <input
+                        type="text"
+                        required
+                        value={formProgSlug}
+                        onChange={(e) => setFormProgSlug(e.target.value)}
+                        placeholder="sespimma"
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Sasaran Peserta</label>
+                      <input
+                        type="text"
+                        value={formProgAudience}
+                        onChange={(e) => setFormProgAudience(e.target.value)}
+                        placeholder="e.g. Perwira siswa Sespimma"
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Durasi Pendidikan</label>
+                      <input
+                        type="text"
+                        value={formProgDuration}
+                        onChange={(e) => setFormProgDuration(e.target.value)}
+                        placeholder="e.g. Menyesuaikan kalender pendidikan"
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Tingkat / Level Kepemimpinan</label>
+                      <input
+                        type="text"
+                        value={formProgLevel}
+                        onChange={(e) => setFormProgLevel(e.target.value)}
+                        placeholder="e.g. Kepemimpinan tingkat pertama"
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Judul Blok Fokus (Opsional)</label>
+                      <input
+                        type="text"
+                        value={formProgFocusTitle}
+                        onChange={(e) => setFormProgFocusTitle(e.target.value)}
+                        placeholder="e.g. Tugas Sespimma"
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Judul Blok Capaian (Opsional)</label>
+                      <input
+                        type="text"
+                        value={formProgOutcomesTitle}
+                        onChange={(e) => setFormProgOutcomesTitle(e.target.value)}
+                        placeholder="e.g. Ruang Tanggung Jawab"
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Judul Blok Tahapan (Opsional)</label>
+                      <input
+                        type="text"
+                        value={formProgStagesTitle}
+                        onChange={(e) => setFormProgStagesTitle(e.target.value)}
+                        placeholder="e.g. Fungsi Sespimma"
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Judul Status / Badge (Opsional)</label>
+                      <input
+                        type="text"
+                        value={formProgStatusTitle}
+                        onChange={(e) => setFormProgStatusTitle(e.target.value)}
+                        placeholder="e.g. Unsur Pelaksana Utama"
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Deskripsi Status (Opsional)</label>
+                      <textarea
+                        value={formProgStatusDescription}
+                        onChange={(e) => setFormProgStatusDescription(e.target.value)}
+                        placeholder="Deskripsi status program..."
+                        rows={2}
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold resize-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Gambaran Program (Pisahkan dengan 2 baris baru)</label>
+                      <textarea
+                        value={formProgOverview}
+                        onChange={(e) => setFormProgOverview(e.target.value)}
+                        placeholder="Paragraf 1&#10;&#10;Paragraf 2..."
+                        rows={4}
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Fokus Pembelajaran (Satu baris per item)</label>
+                      <textarea
+                        value={formProgFocusAreas}
+                        onChange={(e) => setFormProgFocusAreas(e.target.value)}
+                        placeholder="Fokus 1&#10;Fokus 2..."
+                        rows={3}
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Capaian Program (Satu baris per item)</label>
+                      <textarea
+                        value={formProgOutcomes}
+                        onChange={(e) => setFormProgOutcomes(e.target.value)}
+                        placeholder="Capaian 1&#10;Capaian 2..."
+                        rows={3}
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Tahapan Pendidikan (Format: Judul Tahap: Deskripsi, satu per baris)</label>
+                      <textarea
+                        value={formProgStages}
+                        onChange={(e) => setFormProgStages(e.target.value)}
+                        placeholder="Rencana pendidikan: Menyusun rencana pendidikan...&#10;Tahap Kedua: Melaksanakan koordinasi..."
+                        rows={4}
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-neutral-400">Dokumen Terkait (Format: Nama Dokumen: /url/link, satu per baris)</label>
+                      <textarea
+                        value={formProgDocuments}
+                        onChange={(e) => setFormProgDocuments(e.target.value)}
+                        placeholder="Kalender Pendidikan: /program-pendidikan/kalender-pendidikan&#10;Pedoman Akademik: /program-pendidikan/pedoman-akademik"
+                        rows={3}
+                        className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                      />
+                    </div>
+                  </div>
+                ) : currentModule === 'Profil' && ['p-5', 'p-6', 'p-7', 'p-8'].includes(selectedItem?.id || '') ? (
+                  renderProfilStructuredFields(selectedItem?.id || '')
+                ) : currentModule === 'Widyaiswara' && selectedItem?.id === 'w-4' ? (
+                  renderMateriTerbukaStructuredFields()
+                ) : currentModule === 'Widyaiswara' && selectedItem?.id === 'w-6' ? (
+                  renderInpassingStructuredFields()
+                ) : (
+                  <div>
+                    <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Isi Konten (News / Detail)</label>
+                    <textarea
+                      value={formContent}
+                      onChange={(e) => setFormContent(e.target.value)}
+                      rows={4}
+                      className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold resize-none"
+                    />
                   </div>
                 )}
               </div>
 
-              {currentModule === 'Program Pendidikan' && isProgramSchool(formCategory, selectedItem?.id) ? (
-                <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3">
-                  <p className="text-[10px] font-bold text-polri-goldSoft uppercase tracking-wider">Detail Program Pendidikan (Structured)</p>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Slug Halaman (e.g. sespimma, leadership-camp)</label>
-                    <input
-                      type="text"
-                      required
-                      value={formProgSlug}
-                      onChange={(e) => setFormProgSlug(e.target.value)}
-                      placeholder="sespimma"
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Sasaran Peserta</label>
-                    <input
-                      type="text"
-                      value={formProgAudience}
-                      onChange={(e) => setFormProgAudience(e.target.value)}
-                      placeholder="e.g. Perwira siswa Sespimma"
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Durasi Pendidikan</label>
-                    <input
-                      type="text"
-                      value={formProgDuration}
-                      onChange={(e) => setFormProgDuration(e.target.value)}
-                      placeholder="e.g. Menyesuaikan kalender pendidikan"
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Tingkat / Level Kepemimpinan</label>
-                    <input
-                      type="text"
-                      value={formProgLevel}
-                      onChange={(e) => setFormProgLevel(e.target.value)}
-                      placeholder="e.g. Kepemimpinan tingkat pertama"
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Judul Blok Fokus (Opsional)</label>
-                    <input
-                      type="text"
-                      value={formProgFocusTitle}
-                      onChange={(e) => setFormProgFocusTitle(e.target.value)}
-                      placeholder="e.g. Tugas Sespimma"
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Judul Blok Capaian (Opsional)</label>
-                    <input
-                      type="text"
-                      value={formProgOutcomesTitle}
-                      onChange={(e) => setFormProgOutcomesTitle(e.target.value)}
-                      placeholder="e.g. Ruang Tanggung Jawab"
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Judul Blok Tahapan (Opsional)</label>
-                    <input
-                      type="text"
-                      value={formProgStagesTitle}
-                      onChange={(e) => setFormProgStagesTitle(e.target.value)}
-                      placeholder="e.g. Fungsi Sespimma"
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Judul Status / Badge (Opsional)</label>
-                    <input
-                      type="text"
-                      value={formProgStatusTitle}
-                      onChange={(e) => setFormProgStatusTitle(e.target.value)}
-                      placeholder="e.g. Unsur Pelaksana Utama"
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Deskripsi Status (Opsional)</label>
-                    <textarea
-                      value={formProgStatusDescription}
-                      onChange={(e) => setFormProgStatusDescription(e.target.value)}
-                      placeholder="Deskripsi status program..."
-                      rows={2}
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold resize-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Gambaran Program (Pisahkan dengan 2 baris baru)</label>
-                    <textarea
-                      value={formProgOverview}
-                      onChange={(e) => setFormProgOverview(e.target.value)}
-                      placeholder="Paragraf 1&#10;&#10;Paragraf 2..."
-                      rows={4}
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Fokus Pembelajaran (Satu baris per item)</label>
-                    <textarea
-                      value={formProgFocusAreas}
-                      onChange={(e) => setFormProgFocusAreas(e.target.value)}
-                      placeholder="Fokus 1&#10;Fokus 2..."
-                      rows={3}
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Capaian Program (Satu baris per item)</label>
-                    <textarea
-                      value={formProgOutcomes}
-                      onChange={(e) => setFormProgOutcomes(e.target.value)}
-                      placeholder="Capaian 1&#10;Capaian 2..."
-                      rows={3}
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Tahapan Pendidikan (Format: Judul Tahap: Deskripsi, satu per baris)</label>
-                    <textarea
-                      value={formProgStages}
-                      onChange={(e) => setFormProgStages(e.target.value)}
-                      placeholder="Rencana pendidikan: Menyusun rencana pendidikan...&#10;Tahap Kedua: Melaksanakan koordinasi..."
-                      rows={4}
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-black uppercase text-neutral-400">Dokumen Terkait (Format: Nama Dokumen: /url/link, satu per baris)</label>
-                    <textarea
-                      value={formProgDocuments}
-                      onChange={(e) => setFormProgDocuments(e.target.value)}
-                      placeholder="Kalender Pendidikan: /program-pendidikan/kalender-pendidikan&#10;Pedoman Akademik: /program-pendidikan/pedoman-akademik"
-                      rows={3}
-                      className="mt-1 w-full rounded-lg bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                    />
-                  </div>
-                </div>
-              ) : currentModule === 'Profil' && ['p-5', 'p-6', 'p-7', 'p-8'].includes(selectedItem?.id || '') ? (
-                renderProfilStructuredFields(selectedItem?.id || '')
-              ) : currentModule === 'Widyaiswara' && selectedItem?.id === 'w-4' ? (
-                renderMateriTerbukaStructuredFields()
-              ) : currentModule === 'Widyaiswara' && selectedItem?.id === 'w-6' ? (
-                renderInpassingStructuredFields()
-              ) : (
-                <div>
-                  <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Isi Konten (News / Detail)</label>
-                  <textarea
-                    value={formContent}
-                    onChange={(e) => setFormContent(e.target.value)}
-                    rows={4}
-                    className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold resize-none"
-                  />
-                </div>
-              )}
-
-              <div className="pt-2 flex gap-2">
+              <div className="p-5 bg-neutral-950 border-t border-neutral-800 flex gap-2 flex-shrink-0">
                 <button
                   type="button"
                   onClick={() => setIsEditModalOpen(false)}
