@@ -93,6 +93,25 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-polri-gold/30 bg-polri-brownDark/95 text-white shadow-lg backdrop-blur">
+      {/* E-Jurnal Sespim Lemdiklat Polri Top Banner */}
+      <a 
+        href="https://ejurnal-copus.sespimpolri.id/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block bg-gradient-to-r from-polri-gold via-yellow-400 to-polri-gold text-polri-brownDark text-center py-2 px-4 text-xs font-black hover:opacity-95 transition relative overflow-hidden group select-none border-b border-polri-gold/20"
+      >
+        <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-[1500ms] ease-out" />
+        <div className="flex items-center justify-center gap-2 flex-wrap text-[11px] sm:text-xs">
+          <span className="bg-polri-maroon text-white text-[9px] font-black uppercase px-2 py-0.5 rounded-md animate-pulse">BARU</span>
+          <span className="tracking-wide">
+            📖 <strong>E-Jurnal Sespim Lemdiklat Polri</strong>: Akses Portal Publikasi Ilmiah & Kajian Kepolisian Terakreditasi
+          </span>
+          <span className="underline decoration-polri-maroon group-hover:text-polri-maroon transition-colors font-bold">
+            ejurnal-copus.sespimpolri.id &rarr;
+          </span>
+        </div>
+      </a>
+
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-2 sm:px-6 lg:px-8">
         <Link href="/welcome" className="flex shrink-0 items-center gap-3" aria-label="Buka welcome page Sespim Lemdiklat Polri">
           <div className="flex h-[60px] w-[60px] shrink-0 items-center justify-center">
