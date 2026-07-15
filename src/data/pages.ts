@@ -1993,6 +1993,8 @@ export const pages: Record<string, PageContent> = {
     title: "Ejurnal",
     eyebrow: "Portal Pendukung",
     description: "Akses resmi portal E-Jurnal Sespim Lemdiklat Polri untuk pencarian artikel ilmiah dan jurnal akademik.",
+    heroImage: '/images/ejurnal-hero.jpg',
+    heroImageAlt: 'Banner Journal of Leadership and Staff Sespim Lemdiklat Polri',
     externalLink: {
       label: 'Buka E-Jurnal Sespim Lemdiklat Polri',
       href: 'https://ejurnal-copus.sespimpolri.id/',

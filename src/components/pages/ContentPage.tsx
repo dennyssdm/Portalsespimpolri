@@ -602,7 +602,13 @@ export function ContentPage({ content, path }: ContentPageProps) {
 
   return (
     <main>
-      <PageHero eyebrow={content.eyebrow} title={content.title} description={content.description}>
+      <PageHero 
+        eyebrow={content.eyebrow} 
+        title={content.title} 
+        description={content.description}
+        imageSrc={content.heroImage}
+        imageAlt={content.heroImageAlt}
+      >
         {path === '/profil' && (
           <div className="mt-8 max-w-md">
             <div className="overflow-hidden rounded-3xl border-2 border-polri-gold/50 bg-neutral-950 p-4 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] transition transform hover:scale-[1.02] duration-300">

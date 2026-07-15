@@ -15,6 +15,8 @@ export type PageContent = {
   title: string
   eyebrow: string
   description: string
+  heroImage?: string
+  heroImageAlt?: string
   media?: {
     src: string
     alt: string
