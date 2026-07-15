@@ -156,67 +156,277 @@ export const pages: Record<string, PageContent> = {
     description: "Daftar pejabat struktural dan unsur pimpinan di lingkungan Sespim Lemdiklat Polri.",
     officials: [
       {
-        position: 'Kasespim'
+        group: 'UNSUR PIMPINAN',
+        name: 'MIDI SISWOKO, S.I.K.',
+        rank: 'IRJEN POL.',
+        position: 'Kasespim',
+        photoSrc: '/images/kasespim.png'
       },
       {
-        position: 'Seslem'
+        group: 'SETLEM',
+        name: 'AGUS SETIYAWAN, S.I.K',
+        rank: 'KOMBES POL',
+        position: 'Seslem',
+        photoSrc: ''
       },
       {
-        position: 'Kasubbag Ren'
+        group: 'SETLEM',
+        name: 'H. MAX ALFRADIANTO, S.TP., S.H., M.H.',
+        rank: 'AKBP',
+        position: 'Kasubbag Ren',
+        photoSrc: ''
       },
       {
-        position: 'Kasubbag Log'
+        group: 'SETLEM',
+        name: 'WIDI SETIAWAN, S.I.K., M.I.K.',
+        rank: 'AKBP',
+        position: 'Kasubbag Log',
+        photoSrc: ''
       },
       {
-        position: 'Kasubbag SDM'
+        group: 'SETLEM',
+        name: 'AKBP AWAN SURYAWANA',
+        rank: 'Kompol',
+        position: 'Kasubbag Um',
+        photoSrc: ''
       },
       {
-        position: 'Kasubbag UM'
+        group: 'JIANBANG',
+        name: 'Kombes Pol Drs. Anwar, M.Si.',
+        rank: 'Kombes Pol',
+        position: 'Kabag Jianbang',
+        photoSrc: ''
       },
       {
-        position: 'Kabag Jianbang'
+        group: 'JIANBANG',
+        name: 'AKBP Supriyadi, S.H.',
+        rank: 'AKBP',
+        position: 'Kasubbag SLS',
+        photoSrc: ''
       },
       {
-        position: 'Kasubbag SLS'
+        group: 'JIANBANG',
+        name: 'AKBP H. Mulyana, S.H.',
+        rank: 'AKBP',
+        position: 'Kasubbag Analis',
+        photoSrc: ''
       },
       {
-        position: 'Kasubbag SMK'
+        group: 'JIANBANG',
+        name: 'AKBP Drs. H. Dedi',
+        rank: 'AKBP',
+        position: 'Kasubbag SMK',
+        photoSrc: ''
       },
       {
-        position: 'Kasubbag SKK'
+        group: 'JIANBANG',
+        name: 'AKBP H. Sukarna, M.Si.',
+        rank: 'AKBP',
+        position: 'Kasubbag SKK',
+        photoSrc: ''
       },
       {
-        position: 'Kasubbag ANALIS'
+        group: 'JIANBANG',
+        name: 'Kombes Pol Drs. H. Subroto',
+        rank: 'Kombes Pol',
+        position: 'Analis Utama Bagjianbang',
+        photoSrc: ''
       },
       {
-        position: 'Kabid Strategi'
+        group: 'JIANBANG',
+        name: 'Kombes Pol Drs. H. Mulyono',
+        rank: 'Kombes Pol',
+        position: 'Analis Utama Bagjianbang',
+        photoSrc: ''
       },
       {
-        position: 'Kabid Bidjemen'
+        group: 'BIDANG STRATEGI',
+        name: 'Kombes Pol Budi Utomo, S.I.K.',
+        rank: 'Kombes Pol',
+        position: 'Kabid Strategi',
+        photoSrc: ''
       },
       {
-        position: 'Kabid Bidkumdang'
+        group: 'BIDANG STRATEGI',
+        name: 'AKBP H. Jajat',
+        rank: 'AKBP',
+        position: 'Kasubbid Sespimti Bidstrategi',
+        photoSrc: ''
       },
       {
-        position: 'Kabid Bidpengsos'
+        group: 'BIDANG MANAJEMEN',
+        name: 'Kombes Pol Dra. Rina Sari',
+        rank: 'Kombes Pol',
+        position: 'Kabid Jemen Sespim',
+        photoSrc: ''
       },
       {
-        position: 'Kabid Bidproftek'
+        group: 'BIDANG MANAJEMEN',
+        name: 'AKBP H. Dedy',
+        rank: 'AKBP',
+        position: 'Kasubbid Sespimti Bidjemen',
+        photoSrc: ''
       },
       {
-        position: 'Kabid Bidbingadik'
+        group: 'BIDANG MANAJEMEN',
+        name: 'AKBP H. Santoso',
+        rank: 'AKBP',
+        position: 'Kasubbid Sespimmen Bidjemen',
+        photoSrc: ''
       },
       {
-        position: 'Kasespimma'
+        group: 'BIDANG MANAJEMEN',
+        name: 'AKBP H. Hermawan',
+        rank: 'AKBP',
+        position: 'Kasubbid Sespimma Bidjemen',
+        photoSrc: ''
       },
       {
-        position: 'Kasespimmen'
+        group: 'BIDANG HUKUM & PERUNDANG-UNDANGAN (KUMDANG)',
+        name: 'Kombes Pol Drs. H. Sukarno',
+        rank: 'Kombes Pol',
+        position: 'Kabid Kumdang',
+        photoSrc: ''
       },
       {
-        position: 'Ka SPPK'
+        group: 'BIDANG HUKUM & PERUNDANG-UNDANGAN (KUMDANG)',
+        name: 'AKBP H. Mulyana, S.H.',
+        rank: 'AKBP',
+        position: 'Kasubbid Sespimti Bidkumdang',
+        photoSrc: ''
       },
       {
-        position: 'Kasespimti'
+        group: 'BIDANG HUKUM & PERUNDANG-UNDANGAN (KUMDANG)',
+        name: 'AKBP H. Achmad',
+        rank: 'AKBP',
+        position: 'Kasubbid Sespimmen Bidkumdang',
+        photoSrc: ''
+      },
+      {
+        group: 'BIDANG HUKUM & PERUNDANG-UNDANGAN (KUMDANG)',
+        name: 'AKBP H. Syarif',
+        rank: 'AKBP',
+        position: 'Kasubbid Sespimma Bidkumdang',
+        photoSrc: ''
+      },
+      {
+        group: 'BIDANG PENGETAHUAN SOCIAL (PENGSOS)',
+        name: 'Kombes Pol Dra. H. Patrige',
+        rank: 'Kombes Pol',
+        position: 'Kabid Pengsos',
+        photoSrc: ''
+      },
+      {
+        group: 'BIDANG PENGETAHUAN SOCIAL (PENGSOS)',
+        name: 'AKBP H. Supriyadi, S.H.',
+        rank: 'AKBP',
+        position: 'Kasubbid Sespimti Bidpengsos',
+        photoSrc: ''
+      },
+      {
+        group: 'BIDANG PENGETAHUAN SOCIAL (PENGSOS)',
+        name: 'AKBP H. Wahyudi, S.E.',
+        rank: 'AKBP',
+        position: 'Kasubbid Sespimmen Bidpengsos',
+        photoSrc: ''
+      },
+      {
+        group: 'BIDANG PENGETAHUAN SOCIAL (PENGSOS)',
+        name: 'AKBP H. Suhardi',
+        rank: 'AKBP',
+        position: 'Kasubbid Sespimma Bidpengsos',
+        photoSrc: ''
+      },
+      {
+        group: 'BIDANG PROFESI DAN TEKNOLOGI (PROFTEK)',
+        name: 'Kombes Pol Drs. Anwar, M.Si.',
+        rank: 'Kombes Pol',
+        position: 'Kabid Proftek',
+        photoSrc: ''
+      },
+      {
+        group: 'BIDANG PROFESI DAN TEKNOLOGI (PROFTEK)',
+        name: 'AKBP H. Patrige',
+        rank: 'AKBP',
+        position: 'Kasubbid Sespimti BidProftek',
+        photoSrc: ''
+      },
+      {
+        group: 'BIDANG PROFESI DAN TEKNOLOGI (PROFTEK)',
+        name: 'AKBP H. Solihin',
+        rank: 'AKBP',
+        position: 'Kasubbid Sespimmen BidProftek',
+        photoSrc: ''
+      },
+      {
+        group: 'BIDANG PROFESI DAN TEKNOLOGI (PROFTEK)',
+        name: 'AKBP H. Romli',
+        rank: 'AKBP',
+        position: 'Kasubbid Sespimma BidProftek',
+        photoSrc: ''
+      },
+      {
+        group: 'BIDANG PEMBINAAN TENAGA PENDIDIK (BIDBINGADIK)',
+        name: 'Kombes Pol Drs. H. Solihin',
+        rank: 'Kombes Pol',
+        position: 'Kabid Bidbingadik',
+        photoSrc: ''
+      },
+      {
+        group: 'BIDANG PEMBINAAN TENAGA PENDIDIK (BIDBINGADIK)',
+        name: 'AKBP H. Romli',
+        rank: 'AKBP',
+        position: 'Kasubbid Sespimti Bidbingadik',
+        photoSrc: ''
+      },
+      {
+        group: 'BIDANG PEMBINAAN TENAGA PENDIDIK (BIDBINGADIK)',
+        name: 'AKBP H. Wahyu',
+        rank: 'AKBP',
+        position: 'Kasubbid Sespimmen Bidbingadik',
+        photoSrc: ''
+      },
+      {
+        group: 'BIDANG PEMBINAAN TENAGA PENDIDIK (BIDBINGADIK)',
+        name: 'AKBP H. Tri',
+        rank: 'AKBP',
+        position: 'Kasubbid Sespimma Bidbingadik',
+        photoSrc: ''
+      },
+      {
+        group: 'PARA KEPALA SEKOLAH',
+        name: 'Brigjen Pol Patrige R. Renwarin, S.H.',
+        rank: 'Brigjen Pol',
+        position: 'Kepala Sekolah Staf dan Pimpinan Tinggi Polri (Kasespimti)',
+        photoSrc: ''
+      },
+      {
+        group: 'PARA KEPALA SEKOLAH',
+        name: 'Brigjen Pol Setijo Nugroho, S.I.K.',
+        rank: 'Brigjen Pol',
+        position: 'Kepala Sekolah Staf dan Pimpinan Menengah Polri (Kasespimmen)',
+        photoSrc: ''
+      },
+      {
+        group: 'PARA KEPALA SEKOLAH',
+        name: 'Brigjen Pol Drs. H. Mulyono',
+        rank: 'Brigjen Pol',
+        position: 'Kepala Sekolah Pengembangan Profesi Kepolisian (Ka SPPK)',
+        photoSrc: ''
+      },
+      {
+        group: 'PARA KEPALA SEKOLAH',
+        name: 'Brigjen Pol Drs. H. M. Romli',
+        rank: 'Brigjen Pol',
+        position: 'Kepala Sekolah Staf dan Pimpinan Pertama (Kasespimma)',
+        photoSrc: ''
+      },
+      {
+        group: 'SETLEM',
+        name: 'LIDO RATRI ANTORO, S.H., S.I.K., M.M.',
+        rank: 'AKBP',
+        position: 'KASUBBAG SDM',
+        photoSrc: ''
       }
     ],
     sections: []
