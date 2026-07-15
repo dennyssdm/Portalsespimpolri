@@ -195,7 +195,7 @@ export const pages: Record<string, PageContent> = {
         name: 'UTORO SAPUTRO, S.H., S.S.T.M.K.',
         rank: 'Kombes Pol',
         position: 'Kabag Jianbang',
-        photoSrc: ''
+        photoSrc: '/uploads/image-1784091163854-431788198.png'
       },
       {
         group: 'JIANBANG',
