@@ -1349,6 +1349,37 @@ export function ContentPage({ content, path }: ContentPageProps) {
               : "lg:grid-cols-[minmax(0,1fr)_340px]"
           )}>
             <div className="min-w-0 space-y-6">
+              {path === '/sarana-prasarana/ejurnal' && (
+                <a
+                  href="https://ejurnal-copus.sespimpolri.id/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative block overflow-hidden rounded-2xl border border-polri-gold/30 shadow-soft transition hover:shadow-gold duration-300 transform hover:scale-[1.01]"
+                >
+                  <div className="relative aspect-[942/260] w-full bg-polri-brownDark">
+                    <Image
+                      src="/images/ejurnal-hero.jpg"
+                      alt="Banner Journal of Leadership and Staff Sespim Lemdiklat Polri"
+                      fill
+                      sizes="(min-width: 1024px) 760px, calc(100vw - 32px)"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      priority
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-6">
+                      <span className="inline-flex max-w-max items-center gap-1.5 rounded-full bg-polri-gold px-3 py-1 text-[10px] font-black text-polri-brownDark shadow-md">
+                        <span className="h-2 w-2 rounded-full bg-polri-maroon animate-pulse" />
+                        PORTAL RESMI E-JURNAL
+                      </span>
+                      <h3 className="mt-3 text-lg font-black text-white sm:text-2xl drop-shadow">
+                        Journal of Leadership and Staff
+                      </h3>
+                      <p className="mt-1.5 text-xs text-neutral-200 font-semibold max-w-xl drop-shadow">
+                        Klik banner ini untuk langsung mengunjungi dan membaca publikasi ilmiah di E-Jurnal Sespim Lemdiklat Polri.
+                      </p>
+                    </div>
+                  </div>
+                </a>
+              )}
               {content.sections.map((section) => {
                 const isEducatorRankSection = path === '/widyaiswara' && section.title === 'Jenjang Jabatan'
                 const usesStructuredCards = isEducatorRankSection
