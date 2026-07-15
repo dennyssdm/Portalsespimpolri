@@ -1991,7 +1991,7 @@ export const pages: Record<string, PageContent> = {
   },
   '/sarana-prasarana/ejurnal': {
     title: "Ejurnal",
-    eyebrow: "Portal Pendukung",
+    eyebrow: "",
     description: "Akses resmi portal E-Jurnal Sespim Lemdiklat Polri untuk pencarian artikel ilmiah dan jurnal akademik.",
     externalLink: {
       label: 'Buka E-Jurnal Sespim Lemdiklat Polri',

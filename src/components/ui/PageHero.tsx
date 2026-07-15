@@ -35,7 +35,7 @@ export function PageHero({
       <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-polri-gold to-transparent" />
       <Container className="relative z-10">
         <div className="max-w-4xl">
-          <p className="text-sm font-bold uppercase tracking-[0.28em] text-polri-goldSoft">{eyebrow}</p>
+          {eyebrow && <p className="text-sm font-bold uppercase tracking-[0.28em] text-polri-goldSoft">{eyebrow}</p>}
           <h1 className="mt-4 break-words text-3xl font-black leading-tight tracking-tight sm:text-5xl">{title}</h1>
           <p className="mt-5 max-w-3xl text-base leading-8 text-white/82 sm:text-lg">{description}</p>
           {children}
