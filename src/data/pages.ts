@@ -2059,6 +2059,11 @@ export const pages: Record<string, PageContent> = {
     title: "Cek Plagiarisme",
     eyebrow: "Portal Pendukung",
     description: "Layanan pendukung pemeriksaan kemiripan naskah akademik, karya tulis, dan dokumen pembelajaran dengan alur pengecekan dokumen melalui Turnitin.",
+    externalLink: {
+      label: 'Buka Portal Turnitin',
+      href: 'https://www.turnitin.com/',
+      description: 'Layanan resmi pemeriksaan kemiripan karya tulis akademik via Turnitin.'
+    },
     sections: [
       {
         title: 'Layanan Cek Plagiarisme',
