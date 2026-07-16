@@ -152,7 +152,6 @@ export const navigation: NavItem[] = [
     description: 'Link pendukung kegiatan akademik dan kesejahteraan.',
     children: [
       { label: 'eLibrary', href: '/sarana-prasarana/elibrary' },
-      { label: 'Perpusnas', href: 'https://satudata.perpusnas.go.id/' },
       { label: 'Ejurnal', href: '/sarana-prasarana/ejurnal' },
       { label: 'LMS SIAPSESPIM', href: '/sarana-prasarana/lms-siapsespim' },
       { label: 'Cek Plagiarisme', href: '/sarana-prasarana/cek-plagiarisme' },

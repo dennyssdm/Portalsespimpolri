@@ -436,14 +436,9 @@ export function ContentPage({ content, path }: ContentPageProps) {
   const clinicServices = ['Pendaftaran pasien', 'Pelayanan rawat jalan', 'Pelayanan rawat inap', 'UGD 24 jam']
   const plagiarismReferenceLinks = [
     {
-      label: 'eLibrary Sespim',
+      label: 'eLibrary',
       href: '/sarana-prasarana/elibrary',
       description: 'Rujukan koleksi digital dan sumber belajar internal Sespim.'
-    },
-    {
-      label: 'Perpusnas',
-      href: 'https://satudata.perpusnas.go.id/',
-      description: 'Akses literatur nasional untuk penelusuran referensi akademik.'
     },
     {
       label: 'Ejurnal',
@@ -610,7 +605,7 @@ export function ContentPage({ content, path }: ContentPageProps) {
         imageSrc={content.heroImage}
         imageAlt={content.heroImageAlt}
       >
-        {(path === '/sarana-prasarana/elibrary' || path === '/sarana-prasarana/ejurnal' || path === '/sarana-prasarana/lms-siapsespim' || path === '/sarana-prasarana/cek-plagiarisme' || path === '/sarana-prasarana/perpusnas') && content.externalLink && (
+        {(path === '/sarana-prasarana/elibrary' || path === '/sarana-prasarana/ejurnal' || path === '/sarana-prasarana/lms-siapsespim' || path === '/sarana-prasarana/cek-plagiarisme') && content.externalLink && (
           <div className="mt-8">
             <a
               href={content.externalLink.href}
@@ -1518,7 +1513,7 @@ export function ContentPage({ content, path }: ContentPageProps) {
                     <p className="mt-3 text-sm leading-7 text-neutral-700">{note.body}</p>
                   </div>
                 ))}
-                {content.externalLink && path !== '/sarana-prasarana/elibrary' && path !== '/sarana-prasarana/ejurnal' && path !== '/sarana-prasarana/lms-siapsespim' && path !== '/sarana-prasarana/cek-plagiarisme' && path !== '/sarana-prasarana/perpusnas' ? (
+                {content.externalLink && path !== '/sarana-prasarana/elibrary' && path !== '/sarana-prasarana/ejurnal' && path !== '/sarana-prasarana/lms-siapsespim' && path !== '/sarana-prasarana/cek-plagiarisme' ? (
                   <div className="rounded-lg border border-polri-gold/25 bg-polri-cream p-6">
                     <h3 className="font-black text-polri-brownDark">Akses Layanan</h3>
                     {content.externalLink.description ? (
@@ -1558,7 +1553,7 @@ export function ContentPage({ content, path }: ContentPageProps) {
       </section>
       {movePrioritySectionBelow ? prioritySection : null}
       {moveDiscoverySectionsBelow || moveSupportSectionsBelow ? discoverySections : null}
-      {path !== '/profil/sejarah' && path !== '/profil/visi-misi' && path !== '/profil/tugas-fungsi' && path !== '/profil/struktur-organisasi' && path !== '/profil/pejabat' && path !== '/profil/fasilitas' && path !== '/profil/kontak/contact' && path !== '/profil/kontak/susunan-redaksi' && path !== '/kontak' && path !== '/kelembagaan-internal' && path !== '/sarana-prasarana/elibrary' && path !== '/sarana-prasarana/ejurnal' && path !== '/sarana-prasarana/lms-siapsespim' && path !== '/sarana-prasarana/cek-plagiarisme' && path !== '/sarana-prasarana/perpusnas' && (
+      {path !== '/profil/sejarah' && path !== '/profil/visi-misi' && path !== '/profil/tugas-fungsi' && path !== '/profil/struktur-organisasi' && path !== '/profil/pejabat' && path !== '/profil/fasilitas' && path !== '/profil/kontak/contact' && path !== '/profil/kontak/susunan-redaksi' && path !== '/kontak' && path !== '/kelembagaan-internal' && path !== '/sarana-prasarana/elibrary' && path !== '/sarana-prasarana/ejurnal' && path !== '/sarana-prasarana/lms-siapsespim' && path !== '/sarana-prasarana/cek-plagiarisme' && (
         <section className="bg-polri-cream py-14">
           <Container>
             <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">

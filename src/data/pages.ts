@@ -1964,37 +1964,6 @@ export const pages: Record<string, PageContent> = {
       }
     ]
   },
-  '/sarana-prasarana/perpusnas': {
-    title: "Perpusnas",
-    eyebrow: "Portal Pendukung",
-    description: "Akses pendukung ke layanan Perpustakaan Nasional untuk penelusuran literatur, referensi ilmiah, dan sumber belajar digital.",
-    externalLink: {
-      label: 'Buka Satu Data Perpusnas',
-      href: 'https://satudata.perpusnas.go.id/',
-      description: 'Akses resmi Satu Data Perpusnas untuk mendukung penelusuran data, literatur, dan referensi nasional.'
-    },
-    sections: [
-      {
-        title: 'Akses Perpusnas',
-        body: "Halaman ini disiapkan sebagai ruang akses informasi Perpusnas untuk mendukung kebutuhan literasi akademik, riset, dan pengayaan referensi peserta didik serta tenaga pendidik.",
-        items: [
-          'Alamat resmi: https://satudata.perpusnas.go.id/.',
-          'Mendukung penelusuran literatur dan referensi ilmiah.',
-          'Menjadi penghubung awal menuju layanan data dan referensi Perpusnas.',
-          'Dapat dilengkapi panduan akses akun atau keanggotaan bila diperlukan.'
-        ]
-      },
-      {
-        title: 'Kebutuhan Akses',
-        body: 'Jika layanan membutuhkan akun, nomor anggota, atau akses tertentu, ketentuan penggunaan dapat ditambahkan setelah informasi resmi tersedia.',
-        items: [
-          'Gunakan identitas resmi sesuai ketentuan layanan.',
-          'Pastikan penelusuran referensi mengikuti kebutuhan akademik.',
-          'Hubungi admin internal apabila membutuhkan bantuan akses.'
-        ]
-      }
-    ]
-  },
   '/sarana-prasarana/ejurnal': {
     title: "Ejurnal",
     eyebrow: "",

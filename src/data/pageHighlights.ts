@@ -849,11 +849,6 @@ export const pageHighlights: Record<string, PageHighlight> = {
         href: '/sarana-prasarana/elibrary'
       },
       {
-        title: 'Perpusnas',
-        description: 'Akses pendukung ke layanan Perpustakaan Nasional untuk penelusuran literatur dan referensi ilmiah.',
-        href: 'https://satudata.perpusnas.go.id/'
-      },
-      {
         title: 'Ejurnal',
         description: 'Akses pendukung jurnal dan artikel ilmiah untuk kebutuhan riset dan penulisan akademik.',
         href: '/sarana-prasarana/ejurnal'
