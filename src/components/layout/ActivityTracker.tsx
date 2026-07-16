@@ -8,6 +8,12 @@ export function ActivityTracker() {
   const pathname = usePathname()
 
   useEffect(() => {
+    // Dispatch saved visitor number on mount if exists
+    const cachedNum = sessionStorage.getItem('sespim_visitor_num')
+    if (cachedNum) {
+      window.dispatchEvent(new CustomEvent('sespim_visitor_number', { detail: Number(cachedNum) }))
+    }
+
     if (!pathname) return
 
     const timer = setTimeout(() => {
@@ -39,7 +45,15 @@ export function ActivityTracker() {
       apiFetch('/api/activity/log', {
         method: 'POST',
         body: JSON.stringify(payload)
-      }).catch((err) => {
+      })
+      .then(res => res.json())
+      .then((json: { visitorNumber?: number }) => {
+        if (json.visitorNumber) {
+          sessionStorage.setItem('sespim_visitor_num', String(json.visitorNumber))
+          window.dispatchEvent(new CustomEvent('sespim_visitor_number', { detail: json.visitorNumber }))
+        }
+      })
+      .catch((err) => {
         console.warn('Failed to log page visit activity:', err)
       })
     }, 800)
