@@ -386,6 +386,12 @@ export const pageFeaturePanels: Record<string, PageFeaturePanel> = {
         href: '/sarana-prasarana/elibrary'
       },
       {
+        title: 'Perpusnas',
+        description: 'Akses pendukung ke layanan Perpustakaan Nasional untuk penelusuran literatur dan referensi ilmiah.',
+        meta: 'Literasi',
+        href: '/sarana-prasarana/perpusnas'
+      },
+      {
         title: 'Ejurnal',
         description: 'Akses pendukung jurnal dan artikel ilmiah untuk kebutuhan riset dan penulisan akademik.',
         meta: 'Referensi',

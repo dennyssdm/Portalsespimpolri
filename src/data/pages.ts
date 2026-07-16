@@ -1964,6 +1964,37 @@ export const pages: Record<string, PageContent> = {
       }
     ]
   },
+  '/sarana-prasarana/perpusnas': {
+    title: "Perpusnas",
+    eyebrow: "Portal Pendukung",
+    description: "Pusat referensi dan karya akademik peserta didik Sespim",
+    externalLink: {
+      label: 'Buka Satu Data Perpusnas',
+      href: 'https://satudata.perpusnas.go.id/',
+      description: 'Akses resmi Satu Data Perpusnas untuk mendukung penelusuran data, literatur, dan referensi nasional.'
+    },
+    sections: [
+      {
+        title: 'Layanan Perpustakaan Nasional RI',
+        body: "Perpustakaan Nasional Republik Indonesia menyediakan jutaan koleksi literatur, buku digital, jurnal ilmiah internasional, dan manuskrip sejarah. Anggota Sespim Lemdiklat Polri dapat memanfaatkan akses ini secara luas untuk penulisan karya perorangan (NKP) dan kajian strategis.",
+        items: [
+          'E-Resources Perpusnas: Akses gratis ke berbagai jurnal ilmiah internasional terkemuka.',
+          'Satu Data Perpusnas: Portal data terintegrasi perpustakaan se-Indonesia.',
+          'IPUSNAS: Aplikasi perpustakaan digital berbasis sosial untuk membaca buku di perangkat mobile.'
+        ]
+      },
+      {
+        title: 'Cara Menjadi Anggota Perpusnas',
+        body: 'Untuk menikmati seluruh layanan e-resources dan mengunduh jurnal ilmiah internasional secara gratis, Anda harus terdaftar sebagai anggota resmi Perpustakaan Nasional RI.',
+        items: [
+          'Registrasi Online: Buka website resmi pendaftaran anggota Perpusnas di https://keanggotaan.perpusnas.go.id/.',
+          'Isi Data Diri: Masukkan data diri lengkap beserta nomor identitas (KTP/KTA).',
+          'Autentikasi Akun: Setelah sukses, Anda akan menerima Nomor Anggota resmi.',
+          'Gunakan Akses E-Resources: Login ke portal https://e-resources.perpusnas.go.id/ menggunakan Nomor Anggota dan password Anda.'
+        ]
+      }
+    ]
+  },
   '/sarana-prasarana/ejurnal': {
     title: "Ejurnal",
     eyebrow: "",
