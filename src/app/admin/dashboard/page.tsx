@@ -473,6 +473,8 @@ function DashboardContent() {
 
   // Load Serdik bimbingan data dynamically for real time activity in analitik
   const [ssoSerdikList, setSsoSerdikList] = useState<any[]>([])
+  const [visitorStats, setVisitorStats] = useState<any>(null)
+  const [visitorRanking, setVisitorRanking] = useState<any[]>([])
 
   useEffect(() => {
     if (currentModule === 'Analitik Kasespim') {
@@ -484,6 +486,26 @@ function DashboardContent() {
           }
         })
         .catch(err => console.error('Failed to fetch analitik bimbingan data:', err))
+
+      // Fetch visitor stats
+      apiFetch('/api/activity/stats')
+        .then(res => res.json())
+        .then(json => {
+          if (json.status === 'success') {
+            setVisitorStats(json.data)
+          }
+        })
+        .catch(err => console.error('Failed to fetch visitor stats:', err))
+
+      // Fetch user rankings
+      apiFetch('/api/activity/users-ranking')
+        .then(res => res.json())
+        .then(json => {
+          if (json.status === 'success') {
+            setVisitorRanking(json.data.ranking)
+          }
+        })
+        .catch(err => console.error('Failed to fetch visitor ranking:', err))
     }
   }, [currentModule])
  
@@ -868,6 +890,28 @@ function DashboardContent() {
           </div>
         </div>
 
+        {/* Statistik Aktivitas Portal (Real-time) */}
+        <div>
+          <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-3">Statistik Aktivitas Portal (Real-time)</h4>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div className="bg-neutral-950 p-5 rounded-2xl border border-neutral-800">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">Total Kunjungan Portal</p>
+              <p className="mt-2 text-2xl font-black text-white">{visitorStats?.totalLogs || 0} Akses</p>
+              <p className="mt-2 text-[10px] text-emerald-400 font-bold">● Terhitung secara otomatis</p>
+            </div>
+            <div className="bg-neutral-950 p-5 rounded-2xl border border-neutral-800">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">Pengunjung Unik (IP)</p>
+              <p className="mt-2 text-2xl font-black text-polri-goldSoft">{visitorStats?.uniqueIps || 0} Perangkat</p>
+              <p className="mt-2 text-[10px] text-neutral-400 font-semibold">Berdasarkan alamat IP client</p>
+            </div>
+            <div className="bg-neutral-950 p-5 rounded-2xl border border-neutral-800">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">User Teridentifikasi</p>
+              <p className="mt-2 text-2xl font-black text-white">{visitorStats?.uniqueUsers || 0} Akun</p>
+              <p className="mt-2 text-[10px] text-polri-goldSoft font-semibold">Serdik & Widyaiswara login</p>
+            </div>
+          </div>
+        </div>
+
         {/* Visual Charts / Stats Grid */}
         <div className="grid gap-6 lg:grid-cols-2">
           
@@ -1038,6 +1082,66 @@ function DashboardContent() {
                     </tr>
                   )
                 })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Peringkat Keaktifan Pengunjung (Serdik & Widyaiswara) */}
+        <div className="bg-neutral-950 p-6 rounded-2xl border border-neutral-800 space-y-4">
+          <div className="flex justify-between items-center">
+            <div>
+              <h4 className="text-sm font-black uppercase text-polri-goldSoft tracking-wider">Peringkat Keaktifan Pengunjung (Serdik & Widyaiswara)</h4>
+              <p className="text-xs text-neutral-400 mt-1">Daftar pengguna (Serdik & Widyaiswara) yang paling sering mengakses portal untuk bahan penilaian Kasespim.</p>
+            </div>
+            <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-polri-gold text-polri-brownDark font-black">Nilai Keaktifan</span>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse text-xs text-neutral-300">
+              <thead>
+                <tr className="border-b border-neutral-800 text-[10px] font-bold uppercase tracking-wider text-neutral-500">
+                  <th className="pb-3 pr-4">Peringkat</th>
+                  <th className="pb-3 px-4">Nama Pengguna</th>
+                  <th className="pb-3 px-4">NRP / NIP</th>
+                  <th className="pb-3 px-4">Peran (Role)</th>
+                  <th className="pb-3 px-4 text-center">Frekuensi Akses</th>
+                  <th className="pb-3 pl-4">Aktivitas Terakhir</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-neutral-800/50">
+                {visitorRanking.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="py-8 text-center text-neutral-500 font-semibold">
+                      Belum ada aktivitas login dari Serdik atau Widyaiswara yang tercatat di database.
+                    </td>
+                  </tr>
+                ) : (
+                  visitorRanking.map((visitor, idx) => (
+                    <tr key={visitor.user_id} className="hover:bg-neutral-900/30 transition">
+                      <td className="py-4 pr-4 font-bold text-neutral-500 text-center">{idx + 1}</td>
+                      <td className="py-4 px-4 font-black text-white">{visitor.name}</td>
+                      <td className="py-4 px-4 font-mono text-neutral-400">{visitor.nrp_nip}</td>
+                      <td className="py-4 px-4 text-neutral-400 font-semibold">
+                        <span className="capitalize">
+                          {visitor.role === 'serdik' 
+                            ? 'Serdik (Peserta Didik)' 
+                            : visitor.role === 'widyaiswara' 
+                              ? 'Widyaiswara' 
+                              : visitor.role}
+                        </span>
+                      </td>
+                      <td className="py-4 px-4 text-center">
+                        <span className="inline-block px-2.5 py-0.5 rounded text-[10px] font-black bg-emerald-950 text-emerald-400 border border-emerald-900/50">
+                          {visitor.total_visits} Kali Akses
+                        </span>
+                      </td>
+                      <td className="py-4 pl-4 text-neutral-400 font-medium">
+                        {new Date(visitor.last_active).toLocaleString('id-ID')}
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

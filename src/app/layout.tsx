@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { ActivityTracker } from '@/components/layout/ActivityTracker'
 
 export const metadata: Metadata = {
   title: 'Portal Resmi Sespim Lemdiklat Polri',
@@ -16,6 +17,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="id">
       <body>
+        <ActivityTracker />
         <a href="#main-content" className="skip-link">
           Lewati ke konten utama
         </a>
