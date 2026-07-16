@@ -75,11 +75,12 @@ export default function Page() {
   const displayedSerdikList = serdikList.filter(s => {
     if (!currentUser) return true // Show all if guest or admin/super_admin is viewing
     if (['super_admin', 'admin', 'stakeholder'].includes(currentUser.role)) return true
+    const userNrpNip = currentUser.nrpNip || currentUser.nrp_nip
     if (currentUser.role === 'widyaiswara') {
-      return s.widyaiswaraNip === currentUser.nrp_nip
+      return s.widyaiswaraNip === userNrpNip
     }
     if (currentUser.role === 'serdik') {
-      return s.serdikNrpNip === currentUser.nrp_nip
+      return s.serdikNrpNip === userNrpNip
     }
     return true
   })

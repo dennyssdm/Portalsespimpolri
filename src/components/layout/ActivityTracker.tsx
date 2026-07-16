@@ -35,7 +35,7 @@ export function ActivityTracker() {
       const payload = {
         userId: user?.id || null,
         name: user?.name || null,
-        nrp_nip: user?.nrp_nip || null,
+        nrp_nip: user?.nrpNip || user?.nrp_nip || null,
         role: user?.role || null,
         action: user 
           ? `Mengakses halaman ${pathname}` 
