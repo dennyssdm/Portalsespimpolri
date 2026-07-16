@@ -12,7 +12,11 @@
       "Strategi Pengamanan Pilkada Serentak Berbasis Kemitraan Komunitas Lokal di Daerah Rawan Konflik"
     ],
     "comments": [
-      { "sender": "Serdik", "text": "Mohon petunjuk Jenderal/Bapak Widyaiswara mengenai 3 judul naskap yang saya ajukan ini.", "date": "12 Jul 2026, 08:30" }
+      {
+        "sender": "Serdik",
+        "text": "Mohon petunjuk Jenderal/Bapak Widyaiswara mengenai 3 judul naskap yang saya ajukan ini.",
+        "date": "12 Jul 2026, 08:30"
+      }
     ],
     "email": "budi.santoso@sespim.polri.go.id",
     "phone": "6281234567891",
@@ -32,9 +36,21 @@
     "activeTitle": "Transformasi Digital Sistem Pelayanan Surat Izin Mengemudi (SIM) Online Guna Mewujudkan Pelayanan Publik yang Presisi",
     "currentChapter": "Bab II: Tinjauan Pustaka & Analisis Data",
     "comments": [
-      { "sender": "Serdik", "text": "Saya sudah merevisi draf Bab I dan mengunggah draf Bab II untuk dianalisis lebih lanjut.", "date": "11 Jul 2026, 14:15" },
-      { "sender": "Widyaiswara", "text": "Revisi Bab I sudah bagus. Untuk Bab II, tolong sertakan data statistik pelayanan SIM 3 tahun terakhir agar argumen lebih kuat.", "date": "11 Jul 2026, 16:30" },
-      { "sender": "Serdik", "text": "Siap, data statistik sudah saya sisipkan di halaman 14. Mohon arahannya kembali.", "date": "12 Jul 2026, 07:45" }
+      {
+        "sender": "Serdik",
+        "text": "Saya sudah merevisi draf Bab I dan mengunggah draf Bab II untuk dianalisis lebih lanjut.",
+        "date": "11 Jul 2026, 14:15"
+      },
+      {
+        "sender": "Widyaiswara",
+        "text": "Revisi Bab I sudah bagus. Untuk Bab II, tolong sertakan data statistik pelayanan SIM 3 tahun terakhir agar argumen lebih kuat.",
+        "date": "11 Jul 2026, 16:30"
+      },
+      {
+        "sender": "Serdik",
+        "text": "Siap, data statistik sudah saya sisipkan di halaman 14. Mohon arahannya kembali.",
+        "date": "12 Jul 2026, 07:45"
+      }
     ],
     "email": "hendra.wijaya@sespim.polri.go.id",
     "phone": "6281234567892",
@@ -53,8 +69,16 @@
     "status": "Selesai",
     "activeTitle": "Model Kepemimpinan Melayani (Servant Leadership) Kombes Pol Sebagai Role Model Penguatan Integritas Anggota di Tingkat Polres",
     "comments": [
-      { "sender": "Widyaiswara", "text": "Naskah akademik Anda secara keseluruhan dinyatakan lulus bimbingan dan siap diujikan di sidang pleno.", "date": "10 Jul 2026, 10:00" },
-      { "sender": "Serdik", "text": "Terima kasih banyak atas bimbingan dan arahan yang sangat berharga selama proses pengerjaan naskah ini.", "date": "10 Jul 2026, 11:20" }
+      {
+        "sender": "Widyaiswara",
+        "text": "Naskah akademik Anda secara keseluruhan dinyatakan lulus bimbingan dan siap diujikan di sidang pleno.",
+        "date": "10 Jul 2026, 10:00"
+      },
+      {
+        "sender": "Serdik",
+        "text": "Terima kasih banyak atas bimbingan dan arahan yang sangat berharga selama proses pengerjaan naskah ini.",
+        "date": "10 Jul 2026, 11:20"
+      }
     ],
     "email": "sri.wahyuni@sespim.polri.go.id",
     "phone": "6281234567893",
@@ -96,6 +120,7 @@
     "serdikNrpNip": "84081234",
     "widyaiswaraName": "KOMBES POL HENDRA GUNAWAN, S.I.K., M.T.",
     "widyaiswaraNip": "80061174",
-    "scheduleText": "Setiap Hari Kamis, Pukul 19:00 WIB"
+    "scheduleText": "Setiap Hari Kamis, Pukul 16:00 WIB",
+    "proposedTitles": []
   }
 ]
