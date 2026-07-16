@@ -51,5 +51,35 @@
     "email": "sri.wahyuni@sespim.polri.go.id",
     "phone": "6281234567893",
     "meetingUrl": "https://meet.google.com/qwe-rtyu-iop"
+  },
+  {
+    "id": "s-4",
+    "name": "AKBP Deny Haryanto, S.I.K., M.Si.",
+    "rank": "Ajun Komisaris Besar Polisi",
+    "classGroup": "Sespimti Polri Dikreg Ke-35",
+    "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    "status": "Bimbingan Draf",
+    "activeTitle": "Kebijakan Pengamanan Perbatasan Berbasis Kemitraan Komunitas Lokal Guna Mencegah Penyelundupan Barang Ilegal",
+    "currentChapter": "Bab II: Kajian Pustaka & Analisis Teori",
+    "comments": [
+      {
+        "sender": "Serdik",
+        "text": "Mohon petunjuk Kombes Pol Hendra Gunawan, draf Bab II mengenai tinjauan pustaka dan metode analisis data telah saya upload. Mohon arahan koreksinya.",
+        "date": "16 Jul 2026, 19:15"
+      },
+      {
+        "sender": "Widyaiswara",
+        "text": "Revisi Bab I sudah baik. Untuk Bab II, silakan kaitkan dengan konsep Border Security Management dan Teori Kemitraan Strategis agar rekomendasi kebijakan di Bab III lebih solid.",
+        "date": "16 Jul 2026, 19:30"
+      },
+      {
+        "sender": "Serdik",
+        "text": "Siap petunjuk dilaksanakan Jenderal/Bapak Widyaiswara. Teori Border Security sudah saya jabarkan di sub-bab 2.3. Draf Bab II hasil revisi telah saya unggah kembali.",
+        "date": "16 Jul 2026, 19:40"
+      }
+    ],
+    "email": "deny.haryanto@sespim.polri.go.id",
+    "phone": "6281973001974",
+    "meetingUrl": "https://meet.google.com/dny-hdgw-tnt"
   }
 ]
