@@ -1927,7 +1927,7 @@ export const pages: Record<string, PageContent> = {
   '/sarana-prasarana/elibrary': {
     title: "eLibrary Perpustakaan Sespim",
     eyebrow: "Portal Pendukung",
-    description: "Layanan perpustakaan digital resmi Sespim Lemdiklat Polri berbasis SLiMS (Senayan Library Management System) untuk mempermudah pencarian katalog referensi, buku, dan karya akademis secara terintegrasi.",
+    description: "Pusat referensi dan karya akademik peserta didik Sespim",
     externalLink: {
       label: 'Buka eLibrary Sespim (SLiMS)',
       href: 'https://e-library.siapsespimpolri.id/index.php',

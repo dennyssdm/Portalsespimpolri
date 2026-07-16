@@ -610,6 +610,18 @@ export function ContentPage({ content, path }: ContentPageProps) {
         imageSrc={content.heroImage}
         imageAlt={content.heroImageAlt}
       >
+        {path === '/sarana-prasarana/elibrary' && content.externalLink && (
+          <div className="mt-8">
+            <a
+              href={content.externalLink.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-xl bg-polri-gold px-6 py-3.5 text-center font-black text-polri-brownDark hover:bg-polri-goldSoft transition shadow-lg transform hover:scale-[1.02] duration-200"
+            >
+              📖 {content.externalLink.label} &rarr;
+            </a>
+          </div>
+        )}
         {path === '/profil' && (
           <div className="mt-8 max-w-md">
             <div className="overflow-hidden rounded-3xl border-2 border-polri-gold/50 bg-neutral-950 p-4 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] transition transform hover:scale-[1.02] duration-300">
@@ -1506,7 +1518,7 @@ export function ContentPage({ content, path }: ContentPageProps) {
                     <p className="mt-3 text-sm leading-7 text-neutral-700">{note.body}</p>
                   </div>
                 ))}
-                {content.externalLink ? (
+                {content.externalLink && path !== '/sarana-prasarana/elibrary' ? (
                   <div className="rounded-lg border border-polri-gold/25 bg-polri-cream p-6">
                     <h3 className="font-black text-polri-brownDark">Akses Layanan</h3>
                     {content.externalLink.description ? (
@@ -1546,7 +1558,7 @@ export function ContentPage({ content, path }: ContentPageProps) {
       </section>
       {movePrioritySectionBelow ? prioritySection : null}
       {moveDiscoverySectionsBelow || moveSupportSectionsBelow ? discoverySections : null}
-      {path !== '/profil/sejarah' && path !== '/profil/visi-misi' && path !== '/profil/tugas-fungsi' && path !== '/profil/struktur-organisasi' && path !== '/profil/pejabat' && path !== '/profil/fasilitas' && path !== '/profil/kontak/contact' && path !== '/profil/kontak/susunan-redaksi' && path !== '/kontak' && path !== '/kelembagaan-internal' && (
+      {path !== '/profil/sejarah' && path !== '/profil/visi-misi' && path !== '/profil/tugas-fungsi' && path !== '/profil/struktur-organisasi' && path !== '/profil/pejabat' && path !== '/profil/fasilitas' && path !== '/profil/kontak/contact' && path !== '/profil/kontak/susunan-redaksi' && path !== '/kontak' && path !== '/kelembagaan-internal' && path !== '/sarana-prasarana/elibrary' && (
         <section className="bg-polri-cream py-14">
           <Container>
             <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
