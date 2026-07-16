@@ -17,8 +17,8 @@ export default function WidyaiswaraLayout({
       router.push('/login?message=unauthorized&redirect=/widyaiswara')
     } else {
       const user = JSON.parse(userJson)
-      // Widyaiswara is restricted to internal roles: admin, super_admin, widyaiswara, stakeholder
-      if (['admin', 'super_admin', 'widyaiswara', 'stakeholder'].includes(user.role)) {
+      // Widyaiswara and Serdik are allowed to access these pages (individual page filters apply)
+      if (['admin', 'super_admin', 'widyaiswara', 'stakeholder', 'serdik'].includes(user.role)) {
         setAuthorized(true)
       } else {
         router.push('/login?message=forbidden')
