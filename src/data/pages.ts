@@ -1969,9 +1969,9 @@ export const pages: Record<string, PageContent> = {
     eyebrow: "Portal Pendukung",
     description: "Pusat referensi dan karya akademik peserta didik Sespim",
     externalLink: {
-      label: 'Buka Satu Data Perpusnas',
-      href: 'https://satudata.perpusnas.go.id/',
-      description: 'Akses resmi Satu Data Perpusnas untuk mendukung penelusuran data, literatur, dan referensi nasional.'
+      label: 'Buka Portal Perpusnas',
+      href: 'https://perpusnas.go.id/',
+      description: 'Akses resmi portal Perpustakaan Nasional RI untuk mendukung penelusuran data, literatur, dan referensi nasional.'
     },
     sections: [
       {
