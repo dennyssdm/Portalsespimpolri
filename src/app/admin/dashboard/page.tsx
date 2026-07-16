@@ -142,6 +142,7 @@ const ADMIN_SIDEBAR_ITEMS: CMSSidebarItem[] = [
   { label: 'Galeri & Unduhan', type: 'module', moduleName: 'Galeri & Unduhan' },
   { label: 'Kontak', type: 'module', moduleName: 'Kontak' },
   { label: 'Sarana Prasarana', type: 'module', moduleName: 'Sarana Prasarana' },
+  { label: 'Pembimbingan Naskap', type: 'module', moduleName: 'Pembimbingan Naskap' },
   { label: 'Laporan Sertifikasi', type: 'module', moduleName: 'Laporan Sertifikasi' }
 ]
 
@@ -470,6 +471,163 @@ function DashboardContent() {
       fetchClaimsList()
     }
   }, [currentModule])
+
+  // Pembimbingan Naskap CMS CRUD state
+  const [bimbinganList, setBimbinganList] = useState<any[]>([])
+  const [bimbinganLoading, setBimbinganLoading] = useState(false)
+
+  const fetchBimbinganList = async () => {
+    setBimbinganLoading(true)
+    try {
+      const res = await fetch('/api/naskap')
+      const data = await res.json()
+      if (Array.isArray(data)) {
+        setBimbinganList(data)
+      }
+    } catch (err) {
+      console.error('Failed to fetch bimbingan list:', err)
+    } finally {
+      setBimbinganLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (currentModule === 'Pembimbingan Naskap') {
+      fetchBimbinganList()
+    }
+  }, [currentModule])
+
+  // Pembimbingan Naskap CMS CRUD Modals & Form States
+  const [isNaskapCreateOpen, setIsNaskapCreateOpen] = useState(false)
+  const [isNaskapEditOpen, setIsNaskapEditOpen] = useState(false)
+  const [isNaskapDeleteOpen, setIsNaskapDeleteOpen] = useState(false)
+  
+  const [naskapId, setNaskapId] = useState('')
+  const [naskapName, setNaskapName] = useState('')
+  const [naskapRank, setNaskapRank] = useState('Ajun Komisaris Besar Polisi')
+  const [naskapClassGroup, setNaskapClassGroup] = useState('Sespimmen Polri Dikreg Ke-64')
+  const [naskapStatus, setNaskapStatus] = useState('Pengajuan Judul')
+  const [naskapActiveTitle, setNaskapActiveTitle] = useState('')
+  const [naskapCurrentChapter, setNaskapCurrentChapter] = useState('')
+  const [naskapEmail, setNaskapEmail] = useState('')
+  const [naskapPhone, setNaskapPhone] = useState('')
+  const [naskapMeetingUrl, setNaskapMeetingUrl] = useState('')
+  const [naskapProposedTitles, setNaskapProposedTitles] = useState('')
+  const [naskapError, setNaskapError] = useState<string | null>(null)
+  const [naskapLoading, setNaskapLoading] = useState(false)
+
+  const saveNewNaskap = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!naskapName.trim()) {
+      setNaskapError('Nama perwira siswa wajib diisi.')
+      return
+    }
+    setNaskapLoading(true)
+    setNaskapError(null)
+
+    try {
+      const res = await fetch('/api/naskap', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'create',
+          name: naskapName,
+          rank: naskapRank,
+          classGroup: naskapClassGroup,
+          email: naskapEmail,
+          phone: naskapPhone,
+          meetingUrl: naskapMeetingUrl,
+          proposedTitles: naskapProposedTitles.split('\n').map(t => t.trim()).filter(Boolean)
+        })
+      })
+      const json = await res.json()
+      if (res.ok) {
+        setIsNaskapCreateOpen(false)
+        fetchBimbinganList()
+        // Reset form
+        setNaskapName('')
+        setNaskapEmail('')
+        setNaskapPhone('')
+        setNaskapMeetingUrl('')
+        setNaskapProposedTitles('')
+      } else {
+        setNaskapError(json.error || 'Gagal menyimpan data.')
+      }
+    } catch (err: any) {
+      setNaskapError(err.message || 'Koneksi bermasalah.')
+    } finally {
+      setNaskapLoading(false)
+    }
+  }
+
+  const saveEditNaskap = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!naskapName.trim()) {
+      setNaskapError('Nama perwira siswa wajib diisi.')
+      return
+    }
+    setNaskapLoading(true)
+    setNaskapError(null)
+
+    try {
+      const res = await fetch('/api/naskap', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'update',
+          id: naskapId,
+          name: naskapName,
+          rank: naskapRank,
+          classGroup: naskapClassGroup,
+          status: naskapStatus,
+          activeTitle: naskapActiveTitle,
+          currentChapter: naskapCurrentChapter,
+          email: naskapEmail,
+          phone: naskapPhone,
+          meetingUrl: naskapMeetingUrl,
+          proposedTitles: naskapProposedTitles.split('\n').map(t => t.trim()).filter(Boolean)
+        })
+      })
+      const json = await res.json()
+      if (res.ok) {
+        setIsNaskapEditOpen(false)
+        fetchBimbinganList()
+      } else {
+        setNaskapError(json.error || 'Gagal memperbarui data.')
+      }
+    } catch (err: any) {
+      setNaskapError(err.message || 'Koneksi bermasalah.')
+    } finally {
+      setNaskapLoading(false)
+    }
+  }
+
+  const confirmDeleteNaskap = async () => {
+    setNaskapLoading(true)
+    setNaskapError(null)
+
+    try {
+      const res = await fetch('/api/naskap', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'delete',
+          id: naskapId
+        })
+      })
+      const json = await res.json()
+      if (res.ok) {
+        setIsNaskapDeleteOpen(false)
+        fetchBimbinganList()
+      } else {
+        setNaskapError(json.error || 'Gagal menghapus data.')
+      }
+    } catch (err: any) {
+      setNaskapError(err.message || 'Koneksi bermasalah.')
+    } finally {
+      setNaskapLoading(false)
+    }
+  }
 
   // Load Serdik bimbingan data dynamically for real time activity in analitik
   const [ssoSerdikList, setSsoSerdikList] = useState<any[]>([])
@@ -1207,6 +1365,509 @@ function DashboardContent() {
             </div>
           </div>
         </div>
+      </div>
+    )
+  }
+
+  const [naskapSearch, setNaskapSearch] = useState('')
+
+  const renderPembimbinganNaskapWorkspace = () => {
+    const filteredList = bimbinganList.filter(item => 
+      item.name.toLowerCase().includes(naskapSearch.toLowerCase()) ||
+      (item.activeTitle && item.activeTitle.toLowerCase().includes(naskapSearch.toLowerCase()))
+    )
+
+    const openEdit = (serdik: any) => {
+      setNaskapId(serdik.id)
+      setNaskapName(serdik.name)
+      setNaskapRank(serdik.rank)
+      setNaskapClassGroup(serdik.classGroup)
+      setNaskapStatus(serdik.status)
+      setNaskapActiveTitle(serdik.activeTitle || '')
+      setNaskapCurrentChapter(serdik.currentChapter || '')
+      setNaskapEmail(serdik.email || '')
+      setNaskapPhone(serdik.phone || '')
+      setNaskapMeetingUrl(serdik.meetingUrl || '')
+      setNaskapProposedTitles(serdik.proposedTitles ? serdik.proposedTitles.join('\n') : '')
+      setNaskapError(null)
+      setIsNaskapEditOpen(true)
+    }
+
+    const openCreate = () => {
+      setNaskapId('')
+      setNaskapName('')
+      setNaskapRank('Ajun Komisaris Besar Polisi')
+      setNaskapClassGroup('Sespimmen Polri Dikreg Ke-64')
+      setNaskapStatus('Pengajuan Judul')
+      setNaskapActiveTitle('')
+      setNaskapCurrentChapter('')
+      setNaskapEmail('')
+      setNaskapPhone('')
+      setNaskapMeetingUrl('')
+      setNaskapProposedTitles('')
+      setNaskapError(null)
+      setIsNaskapCreateOpen(true)
+    }
+
+    const openDelete = (serdik: any) => {
+      setNaskapId(serdik.id)
+      setNaskapName(serdik.name)
+      setNaskapError(null)
+      setIsNaskapDeleteOpen(true)
+    }
+
+    return (
+      <div className="space-y-6">
+        <div className="bg-neutral-950 p-6 rounded-2xl border border-neutral-800 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h4 className="text-sm font-black uppercase text-polri-goldSoft tracking-wider">Manajemen Pembimbingan Naskap</h4>
+              <p className="text-xs text-neutral-400 mt-1">Daftar perwira siswa (Serdik) yang sedang menempuh pembimbingan naskah akademik.</p>
+            </div>
+            {hasWriteAccess && (
+              <button
+                onClick={openCreate}
+                className="inline-flex items-center gap-2 bg-polri-maroon hover:bg-polri-brownDark text-white font-bold text-xs py-3 px-4 rounded-xl shadow-md transition"
+              >
+                + Tambah Pasangan Bimbingan
+              </button>
+            )}
+          </div>
+
+          <div className="flex items-center gap-3 bg-neutral-900 border border-neutral-800 rounded-xl px-3 py-2.5 max-w-md">
+            <svg className="h-4 w-4 text-neutral-500" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+              type="text"
+              placeholder="Cari Serdik atau judul naskap..."
+              value={naskapSearch}
+              onChange={(e) => setNaskapSearch(e.target.value)}
+              className="bg-transparent border-none text-xs text-white placeholder-neutral-500 focus:outline-none w-full"
+            />
+          </div>
+
+          <div className="bg-neutral-900 rounded-xl border border-neutral-800 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs text-neutral-300">
+                <thead className="bg-neutral-950 border-b border-neutral-800 text-neutral-400 font-bold uppercase tracking-wider text-[10px]">
+                  <tr>
+                    <th className="px-6 py-4">No</th>
+                    <th className="px-6 py-4">Nama Serdik</th>
+                    <th className="px-6 py-4">Program</th>
+                    <th className="px-6 py-4">Judul Aktif</th>
+                    <th className="px-6 py-4 text-center">Status</th>
+                    <th className="px-6 py-4">Link Meet</th>
+                    <th className="px-6 py-4 text-center">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-neutral-800/60 font-semibold">
+                  {bimbinganLoading ? (
+                    <tr>
+                      <td colSpan={7} className="px-6 py-10 text-center text-neutral-500">
+                        Memuat data pembimbingan...
+                      </td>
+                    </tr>
+                  ) : filteredList.length > 0 ? (
+                    filteredList.map((item, index) => (
+                      <tr key={item.id} className="hover:bg-neutral-950/40 transition">
+                        <td className="px-6 py-4">{index + 1}</td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            {item.avatar && (
+                              <img src={item.avatar} alt={item.name} className="w-8 h-8 rounded-full border border-neutral-700 object-cover" />
+                            )}
+                            <div>
+                              <p className="text-white font-bold">{item.name}</p>
+                              <p className="text-[10px] text-neutral-400 font-medium">{item.rank}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-neutral-400">{item.classGroup}</td>
+                        <td className="px-6 py-4 max-w-[240px] truncate">
+                          {item.activeTitle || (item.proposedTitles && item.proposedTitles[0]) || '-'}
+                        </td>
+                        <td className="px-6 py-4 text-center">
+                          <span className={`inline-block px-2.5 py-0.5 rounded text-[10px] font-bold ${
+                            item.status === 'Selesai' 
+                              ? 'bg-emerald-950 text-emerald-400 border border-emerald-900/50' 
+                              : item.status === 'Bimbingan Draf'
+                                ? 'bg-blue-950 text-blue-400 border border-blue-900/50'
+                                : 'bg-amber-950 text-amber-400 border border-amber-900/50'
+                          }`}>
+                            {item.status}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 font-mono text-[10px]">
+                          {item.meetingUrl ? (
+                            <a href={item.meetingUrl} target="_blank" rel="noopener noreferrer" className="text-polri-goldSoft hover:underline truncate max-w-[120px] inline-block">
+                              Google Meet
+                            </a>
+                          ) : (
+                            <span className="text-neutral-500">Belum diset</span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 text-center">
+                          <div className="flex items-center justify-center gap-2">
+                            <button
+                              onClick={() => openEdit(item)}
+                              className="bg-neutral-800 hover:bg-neutral-750 text-white py-1.5 px-3 rounded font-bold transition text-[10px]"
+                            >
+                              Edit
+                            </button>
+                            {hasDeleteAccess && (
+                              <button
+                                onClick={() => openDelete(item)}
+                                className="bg-polri-maroon/20 hover:bg-polri-maroon/40 text-polri-maroonLight py-1.5 px-3 rounded font-bold transition text-[10px]"
+                              >
+                                Hapus
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={7} className="px-6 py-10 text-center text-neutral-500">
+                        Tidak ada data pembimbingan ditemukan.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        {/* MODAL: TAMBAH PASANGAN BIMBINGAN */}
+        {isNaskapCreateOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
+            <div className="bg-neutral-900 border border-neutral-800 rounded-3xl w-full max-w-lg shadow-2xl flex flex-col max-h-[90vh]">
+              <div className="px-6 py-5 border-b border-neutral-800 flex justify-between items-center bg-neutral-950 rounded-t-3xl">
+                <h3 className="text-sm font-black uppercase text-polri-goldSoft tracking-wider">Tambah Pasangan Bimbingan</h3>
+                <button onClick={() => setIsNaskapCreateOpen(false)} className="text-neutral-400 hover:text-white">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <form onSubmit={saveNewNaskap} className="p-6 overflow-y-auto space-y-4 text-xs">
+                {naskapError && (
+                  <div className="p-3 bg-red-950/40 border border-red-900/50 rounded-xl text-red-400 font-bold">
+                    {naskapError}
+                  </div>
+                )}
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Nama Perwira Siswa *</label>
+                  <input
+                    type="text"
+                    required
+                    value={naskapName}
+                    onChange={(e) => setNaskapName(e.target.value)}
+                    placeholder="Nama Lengkap beserta gelar..."
+                    className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Pangkat</label>
+                    <select
+                      value={naskapRank}
+                      onChange={(e) => setNaskapRank(e.target.value)}
+                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
+                    >
+                      <option value="Ajun Komisaris Besar Polisi">AKBP</option>
+                      <option value="Komisaris Polisi">Kompol</option>
+                      <option value="Kombes Pol">Kombes Pol</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Program Pendidikan</label>
+                    <select
+                      value={naskapClassGroup}
+                      onChange={(e) => setNaskapClassGroup(e.target.value)}
+                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
+                    >
+                      <option value="Sespimmen Polri Dikreg Ke-64">Sespimmen Polri</option>
+                      <option value="Sespimti Polri Dikreg Ke-35">Sespimti Polri</option>
+                      <option value="Sespimma Polri Dikreg Ke-72">Sespimma Polri</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Email Serdik</label>
+                    <input
+                      type="email"
+                      value={naskapEmail}
+                      onChange={(e) => setNaskapEmail(e.target.value)}
+                      placeholder="email@sespim.polri.go.id"
+                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">No. Telepon (WhatsApp)</label>
+                    <input
+                      type="text"
+                      value={naskapPhone}
+                      onChange={(e) => setNaskapPhone(e.target.value)}
+                      placeholder="62812345678"
+                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Tautan Google Meet Bimbingan</label>
+                  <input
+                    type="text"
+                    value={naskapMeetingUrl}
+                    onChange={(e) => setNaskapMeetingUrl(e.target.value)}
+                    placeholder="https://meet.google.com/..."
+                    className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Usulan Judul Naskap (Satu per baris)</label>
+                  <textarea
+                    rows={3}
+                    value={naskapProposedTitles}
+                    onChange={(e) => setNaskapProposedTitles(e.target.value)}
+                    placeholder="Judul Usulan 1&#10;Judul Usulan 2&#10;Judul Usulan 3"
+                    className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold font-sans"
+                  />
+                </div>
+
+                <div className="pt-4 border-t border-neutral-800 flex justify-end gap-3 bg-neutral-900 rounded-b-3xl">
+                  <button
+                    type="button"
+                    onClick={() => setIsNaskapCreateOpen(false)}
+                    className="bg-neutral-800 hover:bg-neutral-750 text-white font-bold py-3 px-5 rounded-xl transition"
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={naskapLoading}
+                    className="bg-polri-maroon hover:bg-polri-brownDark text-white font-bold py-3 px-5 rounded-xl shadow-md transition disabled:opacity-50"
+                  >
+                    {naskapLoading ? 'Menyimpan...' : 'Simpan Pasangan'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* MODAL: EDIT DETAIL BIMBINGAN */}
+        {isNaskapEditOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
+            <div className="bg-neutral-900 border border-neutral-800 rounded-3xl w-full max-w-lg shadow-2xl flex flex-col max-h-[90vh]">
+              <div className="px-6 py-5 border-b border-neutral-800 flex justify-between items-center bg-neutral-950 rounded-t-3xl">
+                <h3 className="text-sm font-black uppercase text-polri-goldSoft tracking-wider">Edit Detail Bimbingan</h3>
+                <button onClick={() => setIsNaskapEditOpen(false)} className="text-neutral-400 hover:text-white">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <form onSubmit={saveEditNaskap} className="p-6 overflow-y-auto space-y-4 text-xs">
+                {naskapError && (
+                  <div className="p-3 bg-red-950/40 border border-red-900/50 rounded-xl text-red-400 font-bold">
+                    {naskapError}
+                  </div>
+                )}
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Nama Perwira Siswa *</label>
+                  <input
+                    type="text"
+                    required
+                    value={naskapName}
+                    onChange={(e) => setNaskapName(e.target.value)}
+                    className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Pangkat</label>
+                    <select
+                      value={naskapRank}
+                      onChange={(e) => setNaskapRank(e.target.value)}
+                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
+                    >
+                      <option value="Ajun Komisaris Besar Polisi">AKBP</option>
+                      <option value="Komisaris Polisi">Kompol</option>
+                      <option value="Kombes Pol">Kombes Pol</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Program Pendidikan</label>
+                    <select
+                      value={naskapClassGroup}
+                      onChange={(e) => setNaskapClassGroup(e.target.value)}
+                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
+                    >
+                      <option value="Sespimmen Polri Dikreg Ke-64">Sespimmen Polri</option>
+                      <option value="Sespimti Polri Dikreg Ke-35">Sespimti Polri</option>
+                      <option value="Sespimma Polri Dikreg Ke-72">Sespimma Polri</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Status Pembimbingan</label>
+                    <select
+                      value={naskapStatus}
+                      onChange={(e) => setNaskapStatus(e.target.value)}
+                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
+                    >
+                      <option value="Pengajuan Judul">Pengajuan Judul</option>
+                      <option value="Bimbingan Draf">Bimbingan Draf</option>
+                      <option value="Selesai">Selesai (ACC)</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Bab Aktif</label>
+                    <input
+                      type="text"
+                      value={naskapCurrentChapter}
+                      onChange={(e) => setNaskapCurrentChapter(e.target.value)}
+                      placeholder="Contoh: Bab I: Pendahuluan"
+                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Judul Aktif Terpilih</label>
+                  <input
+                    type="text"
+                    value={naskapActiveTitle}
+                    onChange={(e) => setNaskapActiveTitle(e.target.value)}
+                    placeholder="Judul naskap yang disetujui..."
+                    className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Email Serdik</label>
+                    <input
+                      type="email"
+                      value={naskapEmail}
+                      onChange={(e) => setNaskapEmail(e.target.value)}
+                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">No. Telepon</label>
+                    <input
+                      type="text"
+                      value={naskapPhone}
+                      onChange={(e) => setNaskapPhone(e.target.value)}
+                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Tautan Google Meet Bimbingan</label>
+                  <input
+                    type="text"
+                    value={naskapMeetingUrl}
+                    onChange={(e) => setNaskapMeetingUrl(e.target.value)}
+                    className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Usulan Judul Naskap (Satu per baris)</label>
+                  <textarea
+                    rows={3}
+                    value={naskapProposedTitles}
+                    onChange={(e) => setNaskapProposedTitles(e.target.value)}
+                    className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold font-sans"
+                  />
+                </div>
+
+                <div className="pt-4 border-t border-neutral-800 flex justify-end gap-3 bg-neutral-900 rounded-b-3xl">
+                  <button
+                    type="button"
+                    onClick={() => setIsNaskapEditOpen(false)}
+                    className="bg-neutral-800 hover:bg-neutral-750 text-white font-bold py-3 px-5 rounded-xl transition"
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={naskapLoading}
+                    className="bg-polri-maroon hover:bg-polri-brownDark text-white font-bold py-3 px-5 rounded-xl shadow-md transition disabled:opacity-50"
+                  >
+                    {naskapLoading ? 'Menyimpan...' : 'Simpan Perubahan'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* MODAL: HAPUS BIMBINGAN */}
+        {isNaskapDeleteOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+            <div className="bg-neutral-900 border border-neutral-800 rounded-3xl w-full max-w-sm shadow-2xl flex flex-col">
+              <div className="px-6 py-5 border-b border-neutral-800 flex justify-between items-center bg-neutral-950 rounded-t-3xl">
+                <h3 className="text-sm font-black uppercase text-polri-maroonLight tracking-wider">Hapus Pasangan Bimbingan</h3>
+                <button onClick={() => setIsNaskapDeleteOpen(false)} className="text-neutral-400 hover:text-white">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <div className="p-6 space-y-4 text-xs text-neutral-300">
+                <p>
+                  Apakah Anda yakin ingin menghapus data pembimbingan naskah akademik untuk <strong className="text-white">{naskapName}</strong>?
+                </p>
+                <p className="text-red-400 font-semibold bg-red-950/20 p-3 rounded-lg border border-red-900/30">
+                  Tindakan ini akan menghapus seluruh data usulan judul, histori komentar bimbingan, dan rekam jejak aktivitas secara permanen.
+                </p>
+
+                <div className="pt-4 border-t border-neutral-800 flex justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setIsNaskapDeleteOpen(false)}
+                    className="bg-neutral-800 hover:bg-neutral-750 text-white font-bold py-2.5 px-4 rounded-lg transition"
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="button"
+                    onClick={confirmDeleteNaskap}
+                    disabled={naskapLoading}
+                    className="bg-polri-maroon hover:bg-polri-brownDark text-white font-bold py-2.5 px-4 rounded-lg transition disabled:opacity-50"
+                  >
+                    {naskapLoading ? 'Menghapus...' : 'Ya, Hapus Permanen'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     )
   }
@@ -2910,6 +3571,8 @@ function DashboardContent() {
             renderMyProfileWorkspace()
           ) : currentModule === 'Laporan Sertifikasi' ? (
             renderClaimsReportWorkspace()
+          ) : currentModule === 'Pembimbingan Naskap' ? (
+            renderPembimbinganNaskapWorkspace()
           ) : currentModule === 'Analitik Kasespim' ? (
             renderAnalitikKasespimWorkspace()
           ) : (
