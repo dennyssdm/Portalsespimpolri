@@ -33,16 +33,30 @@ interface Serdik {
   email: string
   phone: string
   meetingUrl: string
+  serdikNrpNip?: string
+  widyaiswaraName?: string
+  widyaiswaraNip?: string
+  scheduleText?: string
 }
 
 export default function Page() {
   const [serdikList, setSerdikList] = useState<Serdik[]>([])
   const [loading, setLoading] = useState<boolean>(true)
-  const [selectedId, setSelectedId] = useState<string>('s-1')
+  const [selectedId, setSelectedId] = useState<string>('')
   const [commentInput, setCommentInput] = useState<string>('')
   const [activeTab, setActiveTab] = useState<'workspace' | 'communications'>('workspace')
+  const [currentUser, setCurrentUser] = useState<any>(null)
 
   useEffect(() => {
+    try {
+      const userJson = sessionStorage.getItem('sespim_user')
+      if (userJson) {
+        setCurrentUser(JSON.parse(userJson))
+      }
+    } catch (e) {
+      console.warn('Failed to parse user session:', e)
+    }
+
     fetch('/api/naskap')
       .then(res => res.json())
       .then(data => {
@@ -57,7 +71,29 @@ export default function Page() {
       })
   }, [])
 
-  const currentSerdik = serdikList.find(s => s.id === selectedId)
+  // Filter serdikList based on role
+  const displayedSerdikList = serdikList.filter(s => {
+    if (!currentUser) return true // Show all if guest or admin/super_admin is viewing
+    if (['super_admin', 'admin', 'stakeholder'].includes(currentUser.role)) return true
+    if (currentUser.role === 'widyaiswara') {
+      return s.widyaiswaraNip === currentUser.nrp_nip
+    }
+    if (currentUser.role === 'serdik') {
+      return s.serdikNrpNip === currentUser.nrp_nip
+    }
+    return true
+  })
+
+  // Auto select first Serdik on load
+  useEffect(() => {
+    if (displayedSerdikList.length > 0) {
+      if (!selectedId || !displayedSerdikList.some(s => s.id === selectedId)) {
+        setSelectedId(displayedSerdikList[0].id)
+      }
+    }
+  }, [displayedSerdikList, selectedId])
+
+  const currentSerdik = displayedSerdikList.find(s => s.id === selectedId)
 
   const handleSelectTitle = async (title: string) => {
     try {
@@ -126,9 +162,19 @@ export default function Page() {
 
   if (!currentSerdik) {
     return (
-      <main className="bg-neutral-50 min-h-screen py-14 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-sm font-semibold text-neutral-500">Data bimbingan tidak tersedia.</p>
+      <main className="bg-neutral-50 min-h-screen py-24 flex items-center justify-center">
+        <div className="text-center max-w-md px-6">
+          <AcademicCapIcon className="h-12 w-12 text-polri-gold mx-auto mb-4" />
+          <h2 className="text-lg font-black text-polri-brownDark">Jadwal Pembimbingan Tidak Ditemukan</h2>
+          <p className="mt-2 text-xs text-neutral-500 font-semibold leading-relaxed">
+            Akun Anda belum memiliki pasangan pembimbingan atau jadwal asistensi aktif yang terdaftar di database.
+          </p>
+          <p className="mt-2 text-xs text-polri-maroon font-bold">
+            Silakan hubungi Administrator Sekolah untuk mengatur jadwal bimbingan Anda.
+          </p>
+          <Link href="/" className="mt-6 inline-flex items-center justify-center px-4 py-2 text-xs font-black bg-neutral-800 text-white rounded-lg hover:bg-neutral-900 transition">
+            Kembali ke Beranda
+          </Link>
         </div>
       </main>
     )
@@ -170,12 +216,12 @@ export default function Page() {
               <h2 className="text-lg font-black text-polri-brownDark border-b border-neutral-100 pb-3 flex items-center justify-between">
                 <span>Daftar Serdik Bimbingan</span>
                 <span className="bg-polri-maroon text-white text-xs px-2 py-0.5 rounded-full font-black">
-                  {serdikList.length} Serdik
+                  {displayedSerdikList.length} Serdik
                 </span>
               </h2>
               
               <div className="mt-4 space-y-3">
-                {serdikList.map(serdik => {
+                {displayedSerdikList.map(serdik => {
                   const isSelected = serdik.id === selectedId
                   return (
                     <button
@@ -253,6 +299,24 @@ export default function Page() {
                   >
                     Hubungi Serdik
                   </button>
+                </div>
+              </div>
+
+              {/* Informasi Pembimbing & Jadwal Asistensi (Ditentukan oleh Admin Sekolah) */}
+              <div className="bg-polri-cream/10 border border-polri-gold/20 rounded-xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div>
+                  <p className="text-[10px] font-black uppercase text-polri-gold tracking-wider">Dosen Pembimbing (Widyaiswara)</p>
+                  <p className="text-sm font-black text-polri-brownDark mt-0.5">{currentSerdik.widyaiswaraName || 'Belum ditentukan oleh Admin'}</p>
+                  {currentSerdik.widyaiswaraNip && (
+                    <p className="text-[10px] text-neutral-500 font-mono">NIP: {currentSerdik.widyaiswaraNip}</p>
+                  )}
+                </div>
+                <div className="sm:text-right">
+                  <p className="text-[10px] font-black uppercase text-polri-gold tracking-wider">Jadwal Bimbingan Mingguan</p>
+                  <div className="flex items-center gap-1.5 text-xs font-black text-polri-brownDark mt-0.5 sm:justify-end">
+                    <ClockIcon className="h-4 w-4 text-polri-maroon shrink-0" />
+                    <span>{currentSerdik.scheduleText || 'Belum dijadwalkan'}</span>
+                  </div>
                 </div>
               </div>
 

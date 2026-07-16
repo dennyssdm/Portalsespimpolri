@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     const data = await readDb()
 
     if (action === 'create') {
-      const { name, rank, classGroup, email, phone, meetingUrl, proposedTitles } = body
+      const { name, rank, classGroup, email, phone, meetingUrl, proposedTitles, serdikNrpNip, widyaiswaraName, widyaiswaraNip, scheduleText } = body
       if (!name) {
         return Response.json({ error: 'Missing Serdik Name' }, { status: 400 })
       }
@@ -61,7 +61,11 @@ export async function POST(req: Request) {
         ],
         email: email || '',
         phone: phone || '',
-        meetingUrl: meetingUrl || ''
+        meetingUrl: meetingUrl || '',
+        serdikNrpNip: serdikNrpNip || '',
+        widyaiswaraName: widyaiswaraName || '',
+        widyaiswaraNip: widyaiswaraNip || '',
+        scheduleText: scheduleText || ''
       }
       
       data.push(newSerdik)
@@ -87,7 +91,7 @@ export async function POST(req: Request) {
     }
 
     if (action === 'update') {
-      const { name, rank, classGroup, status, activeTitle, currentChapter, email, phone, meetingUrl, proposedTitles } = body
+      const { name, rank, classGroup, status, activeTitle, currentChapter, email, phone, meetingUrl, proposedTitles, serdikNrpNip, widyaiswaraName, widyaiswaraNip, scheduleText } = body
       
       if (name) serdik.name = name
       if (rank) serdik.rank = rank
@@ -98,6 +102,10 @@ export async function POST(req: Request) {
       if (email !== undefined) serdik.email = email
       if (phone !== undefined) serdik.phone = phone
       if (meetingUrl !== undefined) serdik.meetingUrl = meetingUrl
+      if (serdikNrpNip !== undefined) serdik.serdikNrpNip = serdikNrpNip
+      if (widyaiswaraName !== undefined) serdik.widyaiswaraName = widyaiswaraName
+      if (widyaiswaraNip !== undefined) serdik.widyaiswaraNip = widyaiswaraNip
+      if (scheduleText !== undefined) serdik.scheduleText = scheduleText
       
       if (proposedTitles !== undefined) {
         serdik.proposedTitles = Array.isArray(proposedTitles) 

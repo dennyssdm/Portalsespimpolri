@@ -16,7 +16,11 @@
     ],
     "email": "budi.santoso@sespim.polri.go.id",
     "phone": "6281234567891",
-    "meetingUrl": "https://meet.google.com/abc-defg-hij"
+    "meetingUrl": "https://meet.google.com/abc-defg-hij",
+    "serdikNrpNip": "88011234",
+    "widyaiswaraName": "Abioso Seno Aji, S.I.K., M.H.",
+    "widyaiswaraNip": "75123456",
+    "scheduleText": "Setiap Hari Senin, Pukul 10:00 WIB"
   },
   {
     "id": "s-2",
@@ -34,7 +38,11 @@
     ],
     "email": "hendra.wijaya@sespim.polri.go.id",
     "phone": "6281234567892",
-    "meetingUrl": "https://meet.google.com/xyz-pdqr-lmn"
+    "meetingUrl": "https://meet.google.com/xyz-pdqr-lmn",
+    "serdikNrpNip": "86051234",
+    "widyaiswaraName": "Chuzaini Patoppoi, S.St.Mk., S.H.",
+    "widyaiswaraNip": "72123456",
+    "scheduleText": "Setiap Hari Rabu, Pukul 14:00 WIB"
   },
   {
     "id": "s-3",
@@ -50,7 +58,11 @@
     ],
     "email": "sri.wahyuni@sespim.polri.go.id",
     "phone": "6281234567893",
-    "meetingUrl": "https://meet.google.com/qwe-rtyu-iop"
+    "meetingUrl": "https://meet.google.com/qwe-rtyu-iop",
+    "serdikNrpNip": "82071234",
+    "widyaiswaraName": "Drs. Jawari, S.H., M.H.",
+    "widyaiswaraNip": "69123456",
+    "scheduleText": "Setiap Hari Jumat, Pukul 09:00 WIB"
   },
   {
     "id": "s-4",
@@ -80,6 +92,10 @@
     ],
     "email": "deny.haryanto@sespim.polri.go.id",
     "phone": "6281973001974",
-    "meetingUrl": "https://meet.google.com/dny-hdgw-tnt"
+    "meetingUrl": "https://meet.google.com/dny-hdgw-tnt",
+    "serdikNrpNip": "84081234",
+    "widyaiswaraName": "KOMBES POL HENDRA GUNAWAN, S.I.K., M.T.",
+    "widyaiswaraNip": "80061174",
+    "scheduleText": "Setiap Hari Kamis, Pukul 19:00 WIB"
   }
 ]

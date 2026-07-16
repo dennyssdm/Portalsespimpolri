@@ -513,6 +513,10 @@ function DashboardContent() {
   const [naskapPhone, setNaskapPhone] = useState('')
   const [naskapMeetingUrl, setNaskapMeetingUrl] = useState('')
   const [naskapProposedTitles, setNaskapProposedTitles] = useState('')
+  const [naskapSerdikNrpNip, setNaskapSerdikNrpNip] = useState('')
+  const [naskapWidyaiswaraName, setNaskapWidyaiswaraName] = useState('')
+  const [naskapWidyaiswaraNip, setNaskapWidyaiswaraNip] = useState('')
+  const [naskapScheduleText, setNaskapScheduleText] = useState('')
   const [naskapError, setNaskapError] = useState<string | null>(null)
   const [naskapLoading, setNaskapLoading] = useState(false)
 
@@ -537,7 +541,11 @@ function DashboardContent() {
           email: naskapEmail,
           phone: naskapPhone,
           meetingUrl: naskapMeetingUrl,
-          proposedTitles: naskapProposedTitles.split('\n').map(t => t.trim()).filter(Boolean)
+          proposedTitles: naskapProposedTitles.split('\n').map(t => t.trim()).filter(Boolean),
+          serdikNrpNip: naskapSerdikNrpNip,
+          widyaiswaraName: naskapWidyaiswaraName,
+          widyaiswaraNip: naskapWidyaiswaraNip,
+          scheduleText: naskapScheduleText
         })
       })
       const json = await res.json()
@@ -550,6 +558,10 @@ function DashboardContent() {
         setNaskapPhone('')
         setNaskapMeetingUrl('')
         setNaskapProposedTitles('')
+        setNaskapSerdikNrpNip('')
+        setNaskapWidyaiswaraName('')
+        setNaskapWidyaiswaraNip('')
+        setNaskapScheduleText('')
       } else {
         setNaskapError(json.error || 'Gagal menyimpan data.')
       }
@@ -585,7 +597,11 @@ function DashboardContent() {
           email: naskapEmail,
           phone: naskapPhone,
           meetingUrl: naskapMeetingUrl,
-          proposedTitles: naskapProposedTitles.split('\n').map(t => t.trim()).filter(Boolean)
+          proposedTitles: naskapProposedTitles.split('\n').map(t => t.trim()).filter(Boolean),
+          serdikNrpNip: naskapSerdikNrpNip,
+          widyaiswaraName: naskapWidyaiswaraName,
+          widyaiswaraNip: naskapWidyaiswaraNip,
+          scheduleText: naskapScheduleText
         })
       })
       const json = await res.json()
@@ -1389,6 +1405,10 @@ function DashboardContent() {
       setNaskapPhone(serdik.phone || '')
       setNaskapMeetingUrl(serdik.meetingUrl || '')
       setNaskapProposedTitles(serdik.proposedTitles ? serdik.proposedTitles.join('\n') : '')
+      setNaskapSerdikNrpNip(serdik.serdikNrpNip || '')
+      setNaskapWidyaiswaraName(serdik.widyaiswaraName || '')
+      setNaskapWidyaiswaraNip(serdik.widyaiswaraNip || '')
+      setNaskapScheduleText(serdik.scheduleText || '')
       setNaskapError(null)
       setIsNaskapEditOpen(true)
     }
@@ -1405,6 +1425,10 @@ function DashboardContent() {
       setNaskapPhone('')
       setNaskapMeetingUrl('')
       setNaskapProposedTitles('')
+      setNaskapSerdikNrpNip('')
+      setNaskapWidyaiswaraName('')
+      setNaskapWidyaiswaraNip('')
+      setNaskapScheduleText('')
       setNaskapError(null)
       setIsNaskapCreateOpen(true)
     }
@@ -1455,6 +1479,8 @@ function DashboardContent() {
                     <th className="px-6 py-4">No</th>
                     <th className="px-6 py-4">Nama Serdik</th>
                     <th className="px-6 py-4">Program</th>
+                    <th className="px-6 py-4">Widyaiswara Pembimbing</th>
+                    <th className="px-6 py-4">Jadwal</th>
                     <th className="px-6 py-4">Judul Aktif</th>
                     <th className="px-6 py-4 text-center">Status</th>
                     <th className="px-6 py-4">Link Meet</th>
@@ -1464,7 +1490,7 @@ function DashboardContent() {
                 <tbody className="divide-y divide-neutral-800/60 font-semibold">
                   {bimbinganLoading ? (
                     <tr>
-                      <td colSpan={7} className="px-6 py-10 text-center text-neutral-500">
+                      <td colSpan={9} className="px-6 py-10 text-center text-neutral-500">
                         Memuat data pembimbingan...
                       </td>
                     </tr>
@@ -1479,12 +1505,19 @@ function DashboardContent() {
                             )}
                             <div>
                               <p className="text-white font-bold">{item.name}</p>
-                              <p className="text-[10px] text-neutral-400 font-medium">{item.rank}</p>
+                              <p className="text-[10px] text-neutral-400 font-medium">NRP: {item.serdikNrpNip || '-'} ({item.rank})</p>
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4 text-neutral-400">{item.classGroup}</td>
-                        <td className="px-6 py-4 max-w-[240px] truncate">
+                        <td className="px-6 py-4 text-white">
+                          <p className="font-bold">{item.widyaiswaraName || 'Belum diatur'}</p>
+                          {item.widyaiswaraNip && (
+                            <p className="text-[9px] text-neutral-400 font-mono">NIP: {item.widyaiswaraNip}</p>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 text-neutral-400">{item.scheduleText || 'Belum diatur'}</td>
+                        <td className="px-6 py-4 max-w-[200px] truncate">
                           {item.activeTitle || (item.proposedTitles && item.proposedTitles[0]) || '-'}
                         </td>
                         <td className="px-6 py-4 text-center">
@@ -1529,7 +1562,7 @@ function DashboardContent() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={7} className="px-6 py-10 text-center text-neutral-500">
+                      <td colSpan={9} className="px-6 py-10 text-center text-neutral-500">
                         Tidak ada data pembimbingan ditemukan.
                       </td>
                     </tr>
@@ -1619,6 +1652,54 @@ function DashboardContent() {
                       value={naskapPhone}
                       onChange={(e) => setNaskapPhone(e.target.value)}
                       placeholder="62812345678"
+                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">NRP / NIP Serdik</label>
+                    <input
+                      type="text"
+                      value={naskapSerdikNrpNip}
+                      onChange={(e) => setNaskapSerdikNrpNip(e.target.value)}
+                      placeholder="Contoh: 84081234"
+                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Jadwal Bimbingan</label>
+                    <input
+                      type="text"
+                      value={naskapScheduleText}
+                      onChange={(e) => setNaskapScheduleText(e.target.value)}
+                      placeholder="Contoh: Kamis, 19:00 WIB"
+                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Widyaiswara Pembimbing</label>
+                    <input
+                      type="text"
+                      value={naskapWidyaiswaraName}
+                      onChange={(e) => setNaskapWidyaiswaraName(e.target.value)}
+                      placeholder="Nama Lengkap Widyaiswara..."
+                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">NIP Widyaiswara</label>
+                    <input
+                      type="text"
+                      value={naskapWidyaiswaraNip}
+                      onChange={(e) => setNaskapWidyaiswaraNip(e.target.value)}
+                      placeholder="Contoh: 80061174"
                       className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
                     />
                   </div>
@@ -1780,6 +1861,54 @@ function DashboardContent() {
                       type="text"
                       value={naskapPhone}
                       onChange={(e) => setNaskapPhone(e.target.value)}
+                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">NRP / NIP Serdik</label>
+                    <input
+                      type="text"
+                      value={naskapSerdikNrpNip}
+                      onChange={(e) => setNaskapSerdikNrpNip(e.target.value)}
+                      placeholder="Contoh: 84081234"
+                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Jadwal Bimbingan</label>
+                    <input
+                      type="text"
+                      value={naskapScheduleText}
+                      onChange={(e) => setNaskapScheduleText(e.target.value)}
+                      placeholder="Contoh: Kamis, 19:00 WIB"
+                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Widyaiswara Pembimbing</label>
+                    <input
+                      type="text"
+                      value={naskapWidyaiswaraName}
+                      onChange={(e) => setNaskapWidyaiswaraName(e.target.value)}
+                      placeholder="Nama Lengkap Widyaiswara..."
+                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">NIP Widyaiswara</label>
+                    <input
+                      type="text"
+                      value={naskapWidyaiswaraNip}
+                      onChange={(e) => setNaskapWidyaiswaraNip(e.target.value)}
+                      placeholder="Contoh: 80061174"
                       className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-polri-gold"
                     />
                   </div>
