@@ -1927,33 +1927,39 @@ export const pages: Record<string, PageContent> = {
   '/sarana-prasarana/elibrary': {
     title: "eLibrary Perpustakaan Sespim",
     eyebrow: "Portal Pendukung",
-    description: "Perpustakaan Sespim Polri menyediakan buku referensi, naskah karya serdik terdahulu, dan dokumen akademik yang dapat ditelusuri melalui koleksi hardcopy maupun akses online.",
+    description: "Layanan perpustakaan digital resmi Sespim Lemdiklat Polri berbasis SLiMS (Senayan Library Management System) untuk mempermudah pencarian katalog referensi, buku, dan karya akademis secara terintegrasi.",
+    externalLink: {
+      label: 'Buka eLibrary Sespim (SLiMS)',
+      href: 'https://e-library.siapsespimpolri.id/index.php',
+      description: 'Akses sistem OPAC (Online Public Access Catalog) Perpustakaan Sespim Lemdiklat Polri.'
+    },
     sections: [
       {
-        title: 'Koleksi Perpustakaan Sespim',
-        body: "eLibrary Perpustakaan Sespim Polri menjadi ruang akses literasi akademik untuk buku referensi, naskah karya peserta didik terdahulu, dan dokumen kajian yang mendukung pendidikan kepemimpinan Polri.",
+        title: 'Mengenal Sistem SLiMS Perpustakaan',
+        body: "eLibrary Sespim menggunakan SLiMS (Senayan Library Management System), yaitu perangkat lunak manajemen perpustakaan sumber terbuka (open source) berbasis web yang handal. Aplikasi ini awalnya dikembangkan oleh tim dari Kementerian Pendidikan Nasional Republik Indonesia dengan menggunakan PHP dan MySQL untuk mendukung digitalisasi katalog dan administrasi perpustakaan modern.",
         items: [
-          'Buku referensi untuk pembelajaran dan penulisan akademik.',
-          'Naskah karya serdik terdahulu sebagai rujukan dan pembanding.',
-          'Koleksi tersedia dalam bentuk hardcopy dan dapat dikembangkan untuk akses online.'
+          'Katalog Publik Online (OPAC) untuk pencarian koleksi buku secara instan.',
+          'Manajemen keanggotaan dan sirkulasi peminjaman digital.',
+          'Sistem pencatatan terkomputerisasi yang cepat dan efisien.'
         ]
       },
       {
-        title: 'Jenis Dokumen Akademik',
-        body: 'Koleksi karya akademik dapat mencakup NKP, Policy Brief, NASKAP, TASKAP, dan NASTRAP untuk mendukung riset, kajian, dan penyusunan karya peserta didik.',
+        title: 'Cara Menjadi Anggota eLibrary Sespim Lemdiklat Polri',
+        body: 'Seluruh Peserta Didik (Serdik), Widyaiswara, dan Staf personel di lingkungan Sespim Lemdiklat Polri wajib mendaftarkan diri sebagai anggota untuk dapat memanfaatkan fasilitas peminjaman buku referensi dan akses dokumen digital.',
         items: [
-          'NKP dan NASKAP sebagai referensi naskah akademik peserta didik.',
-          'Policy Brief sebagai rujukan ringkasan kebijakan dan rekomendasi strategis.',
-          'TASKAP dan NASTRAP sebagai bahan pembelajaran penulisan strategis.'
+          'Kunjungi Layanan Perpustakaan: Silakan datang langsung ke gedung Perpustakaan Sespim Lemdiklat Polri.',
+          'Bawa Identitas Diri: Tunjukkan KTA Polri atau Kartu Tanda Peserta Didik yang aktif kepada petugas.',
+          'Pencatatan Data Anggota: Petugas akan mendaftarkan profil Anda ke database keanggotaan SLiMS.',
+          'Akses Akun Digital: Setelah terdaftar, Anda akan mendapatkan kartu anggota digital dan kredensial login untuk memesan koleksi secara online.'
         ]
       },
       {
-        title: 'Akses Hardcopy dan Online',
-        body: 'Perpustakaan dapat melayani penelusuran koleksi fisik sekaligus katalog digital melalui integrasi eLibrary/SLIMS untuk mempercepat pencarian referensi.',
+        title: 'Koleksi Dokumen & Karya Akademik',
+        body: 'Melalui eLibrary Sespim, Anda juga dapat menelusuri naskah karya akademik peserta didik angkatan terdahulu guna mendukung riset dan penulisan karya mandiri.',
         items: [
-          'Penelusuran koleksi fisik di perpustakaan.',
-          'Akses katalog online untuk pencarian cepat.',
-          'Pengembangan metadata judul, penulis, angkatan, kategori, tahun, dan format dokumen.'
+          'NKP (Naskah Karya Perorangan) & NASKAP (Naskah Akademik).',
+          'Policy Brief sebagai rekomendasi strategis kebijakan kepolisian.',
+          'TASKAP & NASTRAP sebagai materi rujukan penulisan kepemimpinan.'
         ]
       }
     ]
