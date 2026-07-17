@@ -26,6 +26,7 @@ export type EducatorProfile = {
   indexedPublications?: string[]
   professionalCertifications?: string[]
   href: string
+  photoUrl?: string
 }
 
 export type DownloadItem = {
@@ -193,7 +194,8 @@ export const educatorProfiles: EducatorProfile[] = [
     ],
     "publications": [],
     "indexedPublications": [],
-    "href": "/widyaiswara/profil/chuzaini-patoppoi-s-st-mk-s-h"
+    "href": "/widyaiswara/profil/chuzaini-patoppoi-s-st-mk-s-h",
+    "photoUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=256&h=256"
   },
   {
     "slug": "drs-jawari-s-h-m-h",
@@ -219,7 +221,8 @@ export const educatorProfiles: EducatorProfile[] = [
     ],
     "publications": [],
     "indexedPublications": [],
-    "href": "/widyaiswara/profil/drs-jawari-s-h-m-h"
+    "href": "/widyaiswara/profil/drs-jawari-s-h-m-h",
+    "photoUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=256&h=256"
   },
   {
     "slug": "abioso-seno-aji-s-i-k-m-h",
@@ -245,7 +248,8 @@ export const educatorProfiles: EducatorProfile[] = [
     ],
     "publications": [],
     "indexedPublications": [],
-    "href": "/widyaiswara/profil/abioso-seno-aji-s-i-k-m-h"
+    "href": "/widyaiswara/profil/abioso-seno-aji-s-i-k-m-h",
+    "photoUrl": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=256&h=256"
   },
   {
     "slug": "mohamad-agung-budijono-s-i-k-m-si",
@@ -2711,7 +2715,8 @@ export const educatorProfiles: EducatorProfile[] = [
     ],
     "publications": [],
     "indexedPublications": [],
-    "href": "/widyaiswara/profil/hendra-gunawan-s-i-k-m-t"
+    "href": "/widyaiswara/profil/hendra-gunawan-s-i-k-m-t",
+    "photoUrl": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=256&h=256"
   },
   {
     "slug": "eka-djunaedi-s-sos-s-i-k",

@@ -158,13 +158,23 @@ export function EducatorDirectoryPage({ items }: EducatorDirectoryPageProps) {
                       >
                         <div className="h-1 bg-polri-gold" aria-hidden="true" />
                         <div className="flex flex-1 flex-col p-4">
-                          <div className="flex items-start gap-3">
-                            <span className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-polri-cream text-polri-maroon">
-                              <AcademicCapIcon className="h-5 w-5" aria-hidden="true" />
-                            </span>
-                            <div className="min-w-0">
+                          <div className="flex items-start gap-4">
+                            {/* Photo Profile Box (Portrait Passphoto style) */}
+                            <div className="relative w-16 h-20 shrink-0 border border-polri-gold/30 rounded-lg overflow-hidden bg-neutral-100 flex items-center justify-center shadow-inner group-hover:border-polri-gold/60 transition">
+                              {item.photoUrl ? (
+                                <img src={item.photoUrl} alt={item.name} className="w-full h-full object-cover" />
+                              ) : (
+                                <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-b from-neutral-50 to-neutral-200">
+                                  <svg className="w-8 h-8 text-neutral-400" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                  </svg>
+                                </div>
+                              )}
+                            </div>
+
+                            <div className="min-w-0 flex-1">
                               <p className="text-xs font-black uppercase tracking-[0.16em] text-polri-maroon">{item.rank || 'Pangkat belum tersedia'}</p>
-                              <h2 className="text-lg font-black leading-6 text-polri-brownDark">{item.name}</h2>
+                              <h2 className="text-base font-black leading-tight text-polri-brownDark mt-0.5">{item.name}</h2>
                               {nrpNip && (
                                 <p className="text-[11px] font-bold text-neutral-500 mt-0.5">NRP/NIP: {nrpNip}</p>
                               )}
