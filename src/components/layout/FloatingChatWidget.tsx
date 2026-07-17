@@ -133,8 +133,8 @@ export function FloatingChatWidget() {
           {/* Header */}
           <div className="flex items-center justify-between bg-gradient-to-r from-polri-brownDark to-polri-maroon p-4 text-white">
             <div className="flex items-center gap-3">
-              <div className="h-9 w-9 rounded-full bg-white p-1 shadow-md border border-polri-gold/30">
-                <img src="/images/logo-sespim.png" alt="Sespim Logo" className="h-full w-full object-contain" />
+              <div className="h-9 w-9 rounded-full bg-white overflow-hidden shadow-md border border-polri-gold/30">
+                <img src="/images/wira-avatar.png" alt="Agen Wira" className="h-full w-full object-cover" />
               </div>
               <div>
                 <h4 className="text-sm font-black tracking-wide uppercase">Agen Wira</h4>
@@ -171,8 +171,8 @@ export function FloatingChatWidget() {
                 <div className={`flex gap-2 max-w-[85%] ${msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
                   {/* Avatar */}
                   {msg.sender === 'model' && (
-                    <div className="h-7 w-7 rounded-full bg-white p-0.5 border border-polri-gold/25 shadow-sm shrink-0 flex items-center justify-center">
-                      <img src="/images/logo-sespim.png" alt="Wira" className="h-full w-full object-contain" />
+                    <div className="h-7 w-7 rounded-full bg-white border border-polri-gold/25 shadow-sm shrink-0 flex items-center justify-center overflow-hidden">
+                      <img src="/images/wira-avatar.png" alt="Wira" className="h-full w-full object-cover" />
                     </div>
                   )}
 
@@ -200,8 +200,8 @@ export function FloatingChatWidget() {
             {isLoading && (
               <div className="flex justify-start">
                 <div className="flex gap-2 max-w-[85%]">
-                  <div className="h-7 w-7 rounded-full bg-white p-0.5 border border-polri-gold/25 shadow-sm shrink-0 flex items-center justify-center">
-                    <img src="/images/logo-sespim.png" alt="Wira" className="h-full w-full object-contain" />
+                  <div className="h-7 w-7 rounded-full bg-white border border-polri-gold/25 shadow-sm shrink-0 flex items-center justify-center overflow-hidden">
+                    <img src="/images/wira-avatar.png" alt="Wira" className="h-full w-full object-cover" />
                   </div>
                   <div className="bg-white border border-neutral-200/80 rounded-2xl rounded-tl-none px-4 py-3 flex items-center gap-1.5 shadow-sm">
                     <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 animate-bounce" />
