@@ -237,17 +237,18 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
             }
             .name-overlay {
               position: absolute;
-              top: 52%;
+              top: 53%;
               left: 50%;
               transform: translate(-50%, -50%);
               width: 90%;
               text-align: center;
               font-family: 'Georgia', 'Times New Roman', serif;
-              font-size: 28px;
+              font-size: 32px;
               font-weight: 900;
-              color: #1a120b;
-              letter-spacing: 1px;
-              text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
+              color: #dfb75c;
+              letter-spacing: 2px;
+              text-transform: uppercase;
+              text-shadow: 1px 1px 2px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8);
             }
             @media print {
               body {
@@ -461,11 +462,11 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
               {/* Dynamic Name Overlay */}
               {certificateName.trim().length >= 3 && (
                 <div 
-                  className="absolute top-[56%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center px-6 font-serif font-black select-none text-[12px] xs:text-[14px] sm:text-[16px] md:text-[20px] lg:text-[15px] xl:text-[18px] tracking-wide"
+                  className="absolute top-[53%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center px-6 font-serif font-black select-none text-[12px] xs:text-[14px] sm:text-[16px] md:text-[20px] lg:text-[15px] xl:text-[18px] tracking-wide"
                   style={{ 
                     fontFamily: 'Georgia, "Times New Roman", serif', 
-                    color: '#2a1a08',
-                    textShadow: '0.5px 0.5px 1px rgba(255,255,255,0.6), -0.5px -0.5px 1px rgba(0,0,0,0.1)'
+                    color: '#dfb75c',
+                    textShadow: '1px 1px 2px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8)'
                   }}
                 >
                   {certificateName.toUpperCase()}
