@@ -49,6 +49,13 @@ export function FloatingChatWidget() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, isLoading])
 
+  // Listen to external window events to open chatbot (e.g. from Contact Page card click)
+  useEffect(() => {
+    const handleOpen = () => setIsOpen(true)
+    window.addEventListener('open-wira-chat', handleOpen)
+    return () => window.removeEventListener('open-wira-chat', handleOpen)
+  }, [])
+
   const handleSendMessage = async (text: string) => {
     if (!text.trim() || isLoading) return
 

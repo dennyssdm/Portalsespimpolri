@@ -238,14 +238,13 @@ export function ContentPage({ content, path }: ContentPageProps) {
               <p className="mt-1 text-xs text-neutral-500">Asisten virtual {chatbotName}</p>
               <p className="mt-2 text-sm font-black text-emerald-950">Komunikasi Interaktif 24/7</p>
             </div>
-            <a
-              href={chatbotUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-4 block w-full rounded-lg bg-emerald-500 py-2 text-center text-xs font-black text-white hover:bg-emerald-600 transition"
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent('open-wira-chat'))}
+              className="mt-4 block w-full rounded-lg bg-emerald-500 py-2 text-center text-xs font-black text-white hover:bg-emerald-600 transition cursor-pointer"
             >
               Tanya {chatbotName}
-            </a>
+            </button>
           </div>
         </div>
 
