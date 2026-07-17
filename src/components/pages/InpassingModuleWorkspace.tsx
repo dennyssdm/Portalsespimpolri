@@ -451,7 +451,7 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
           {/* Certificate Live Preview Box */}
           <div className="rounded-xl border border-white/10 bg-neutral-900/60 p-4">
             <p className="text-xs font-black uppercase tracking-[0.24em] text-polri-goldSoft text-center mb-3">Pratinjau Sertifikat</p>
-            <div className="relative w-full aspect-square mx-auto rounded-lg overflow-hidden border border-polri-gold/30 shadow-md">
+            <div className="relative w-full aspect-[1123/794] mx-auto rounded-lg overflow-hidden border border-polri-gold/30 shadow-md">
               <img 
                 src="/images/certificate_template.png" 
                 alt="Sertifikat Widyaiswara" 
@@ -461,7 +461,7 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
               {/* Dynamic Name Overlay */}
               {certificateName.trim().length >= 3 && (
                 <div 
-                  className="absolute top-[52%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center px-6 font-serif font-black text-black select-none text-[11px] xs:text-[13px] sm:text-[15px] md:text-[18px] lg:text-[14px] xl:text-[16px] drop-shadow-sm tracking-wide"
+                  className="absolute top-[56%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center px-6 font-serif font-black text-black select-none text-[11px] xs:text-[13px] sm:text-[15px] md:text-[18px] lg:text-[14px] xl:text-[16px] drop-shadow-sm tracking-wide"
                   style={{ fontFamily: 'Georgia, serif', color: '#1a120b' }}
                 >
                   {certificateName}
