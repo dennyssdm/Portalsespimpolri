@@ -3,6 +3,7 @@ import './globals.css'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { ActivityTracker } from '@/components/layout/ActivityTracker'
+import { FloatingChatWidget } from '@/components/layout/FloatingChatWidget'
 
 export const metadata: Metadata = {
   title: 'Portal Resmi Sespim Lemdiklat Polri',
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <div id="main-content" tabIndex={-1}>
           {children}
         </div>
+        <FloatingChatWidget />
         <Footer />
       </body>
     </html>
