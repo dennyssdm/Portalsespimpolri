@@ -770,7 +770,7 @@ function DashboardContent() {
           email: profileEmail,
           foto: profileFoto,
           no_serdik: activeRole === 'serdik' ? profileNoSerdik : undefined,
-          instansi_polri: activeRole === 'serdik' ? profileInstansiPolri : undefined,
+          instansi_polri: profileInstansiPolri,
           kementerian_lembaga: activeRole === 'serdik' ? profileKementerianLembaga : undefined,
           negara_asal: activeRole === 'serdik' ? profileNegaraAsal : undefined,
           program: activeRole === 'serdik' ? profileProgram : undefined,
@@ -912,6 +912,19 @@ function DashboardContent() {
                   className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
                 />
               </div>
+
+              {activeRole !== 'serdik' && (
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Instansi Asal</label>
+                  <input
+                    type="text"
+                    value={profileInstansiPolri}
+                    onChange={(e) => setProfileInstansiPolri(e.target.value)}
+                    placeholder="Contoh: Lemdiklat Polri / Biro SDM Polda"
+                    className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
+                  />
+                </div>
+              )}
 
               <div className="col-span-2 space-y-2">
                 <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Unggah Foto Profil (Kompresi Otomatis)</label>
