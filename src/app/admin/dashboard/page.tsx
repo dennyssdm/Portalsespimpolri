@@ -437,6 +437,31 @@ function DashboardContent() {
     }
   }
 
+  const handleDeleteClaim = async (id: number, name: string) => {
+    if (!window.confirm(`Apakah Anda yakin ingin menghapus/mereset klaim sertifikat untuk ${name}?\n\nTindakan ini akan mengizinkan widyaiswara untuk melakukan klaim ulang.`)) {
+      return
+    }
+    try {
+      const response = await apiFetch(`/api/inpassing-claims/${id}`, {
+        method: 'DELETE'
+      })
+      if (response.ok) {
+        const json = await response.json()
+        if (json.status === 'success') {
+          alert('Klaim sertifikat berhasil di-reset.')
+          fetchClaimsList()
+        } else {
+          alert(json.message || 'Gagal mereset klaim sertifikat.')
+        }
+      } else {
+        alert('Gagal mereset klaim sertifikat.')
+      }
+    } catch (err) {
+      console.error('Failed to delete claim:', err)
+      alert('Terjadi kesalahan saat mereset klaim.')
+    }
+  }
+
   const downloadClaimsCSV = () => {
     if (claimsList.length === 0) return
     const headers = ['No', 'NRP/NIP', 'Nama Calon Widyaiswara', 'Kode Sertifikat', 'Tanggal Kelulusan']
@@ -1356,6 +1381,7 @@ function DashboardContent() {
                     <th className="px-6 py-4">Nama Calon Widyaiswara</th>
                     <th className="px-6 py-4">Kode Sertifikat</th>
                     <th className="px-6 py-4">Tanggal Kelulusan</th>
+                    <th className="px-6 py-4 text-center">Aksi</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-neutral-800/60 font-semibold">
@@ -1367,11 +1393,19 @@ function DashboardContent() {
                         <td className="px-6 py-4 text-white">{claim.name}</td>
                         <td className="px-6 py-4 text-polri-goldSoft font-mono">{claim.certificate_code}</td>
                         <td className="px-6 py-4">{new Date(claim.completed_at).toLocaleString('id-ID')}</td>
+                        <td className="px-6 py-4 text-center">
+                          <button
+                            onClick={() => handleDeleteClaim(claim.id, claim.name)}
+                            className="bg-rose-600/90 hover:bg-rose-700 text-white font-bold text-[10px] uppercase py-1.5 px-3 rounded-lg shadow-sm transition active:scale-95"
+                          >
+                            Reset / Hapus
+                          </button>
+                        </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={5} className="px-6 py-10 text-center text-neutral-500">
+                      <td colSpan={6} className="px-6 py-10 text-center text-neutral-500">
                         Belum ada laporan klaim sertifikat yang tercatat.
                       </td>
                     </tr>
