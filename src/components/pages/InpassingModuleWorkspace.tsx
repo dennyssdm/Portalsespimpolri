@@ -406,7 +406,7 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
       </section>
 
       <section className="rounded-lg border border-polri-gold/25 bg-polri-brownDark p-6 text-white shadow-soft">
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.8fr)] lg:items-center">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(340px,0.8fr)] lg:items-center">
           <div className="space-y-4">
             <div>
               <p className="text-sm font-bold uppercase tracking-[0.24em] text-polri-goldSoft">Klaim Sertifikat</p>
@@ -432,10 +432,10 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
                   type="button"
                   onClick={downloadCertificate}
                   disabled={!certificateReady}
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-polri-gold px-5 py-3 text-sm font-black text-polri-brownDark hover:bg-polri-goldSoft disabled:cursor-not-allowed disabled:bg-white/20 disabled:text-white/45"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-polri-gold via-polri-goldSoft to-polri-gold px-5 py-3 text-sm font-black text-polri-brownDark hover:from-polri-goldSoft hover:to-polri-gold transition duration-300 shadow-[0_4px_14px_rgba(212,175,55,0.2)] hover:shadow-[0_6px_20px_rgba(212,175,55,0.3)] disabled:cursor-not-allowed disabled:bg-none disabled:bg-white/20 disabled:text-white/45 disabled:shadow-none"
                 >
-                  <TrophyIcon className="h-5 w-5" aria-hidden="true" />
-                  Download Sertifikat PDF
+                  <TrophyIcon className="h-5 w-5 animate-bounce" aria-hidden="true" style={{ animationDuration: '3s' }} />
+                  Download Sertifikat PDF (A4)
                 </button>
                 <button
                   type="button"
@@ -449,9 +449,9 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
           </div>
 
           {/* Certificate Live Preview Box */}
-          <div className="rounded-xl border border-white/10 bg-neutral-900/60 p-4">
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-polri-goldSoft text-center mb-3">Pratinjau Sertifikat</p>
-            <div className="relative w-full aspect-[1123/794] mx-auto rounded-lg overflow-hidden border border-polri-gold/30 shadow-md">
+          <div className="rounded-xl border border-white/10 bg-neutral-900/60 p-4 transition duration-500 hover:border-polri-gold/30">
+            <p className="text-xs font-black uppercase tracking-[0.24em] text-polri-goldSoft text-center mb-3">Pratinjau Live Sertifikat</p>
+            <div className="relative w-full aspect-[1123/794] mx-auto rounded-lg overflow-hidden border border-polri-gold/30 shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition duration-500 hover:scale-[1.02] hover:border-polri-gold/50 group/cert">
               <img 
                 src="/images/certificate_template.png" 
                 alt="Sertifikat Widyaiswara" 
@@ -461,10 +461,14 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
               {/* Dynamic Name Overlay */}
               {certificateName.trim().length >= 3 && (
                 <div 
-                  className="absolute top-[56%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center px-6 font-serif font-black text-black select-none text-[11px] xs:text-[13px] sm:text-[15px] md:text-[18px] lg:text-[14px] xl:text-[16px] drop-shadow-sm tracking-wide"
-                  style={{ fontFamily: 'Georgia, serif', color: '#1a120b' }}
+                  className="absolute top-[56%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center px-6 font-serif font-black select-none text-[12px] xs:text-[14px] sm:text-[16px] md:text-[20px] lg:text-[15px] xl:text-[18px] tracking-wide"
+                  style={{ 
+                    fontFamily: 'Georgia, "Times New Roman", serif', 
+                    color: '#2a1a08',
+                    textShadow: '0.5px 0.5px 1px rgba(255,255,255,0.6), -0.5px -0.5px 1px rgba(0,0,0,0.1)'
+                  }}
                 >
-                  {certificateName}
+                  {certificateName.toUpperCase()}
                 </div>
               )}
               
