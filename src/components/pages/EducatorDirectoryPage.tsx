@@ -65,6 +65,7 @@ function findMatchingClaim(educatorName: string, claims: { name: string; certifi
 
 export function EducatorDirectoryPage({ items }: EducatorDirectoryPageProps) {
   const [claims, setClaims] = useState<{ name: string; certificate_code: string }[]>([])
+  const [dbWidyaiswaras, setDbWidyaiswaras] = useState<any[]>([])
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/inpassing-claims`)
@@ -75,6 +76,15 @@ export function EducatorDirectoryPage({ items }: EducatorDirectoryPageProps) {
         }
       })
       .catch(err => console.warn('Failed to fetch claims for profiles:', err))
+
+    fetch(`${API_BASE_URL}/api/users/public-list`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'success') {
+          setDbWidyaiswaras(data.data.widyaiswaras || [])
+        }
+      })
+      .catch(err => console.warn('Failed to fetch public widyaiswaras list:', err))
   }, [])
 
   // Group Widyaiswaras dynamically by position (kelompok)
@@ -136,6 +146,11 @@ export function EducatorDirectoryPage({ items }: EducatorDirectoryPageProps) {
                     const targetNorm = normName(item.name)
                     const nrpNip = EDUCATOR_NRP_MAP[targetNorm] || ''
 
+                    // Match database user override for dynamic photo, pangkat, etc.
+                    const dbUser = dbWidyaiswaras.find(u => normName(u.name) === targetNorm)
+                    const activePhotoUrl = dbUser?.foto || item.photoUrl
+                    const activeRank = dbUser?.pangkat || item.rank
+
                     // Dynamic enrichment based on certificate claims
                     const activeExpertise = matchingClaim 
                       ? [...(item.expertise || []), 'Inpassing Widyaiswara'] 
@@ -161,8 +176,8 @@ export function EducatorDirectoryPage({ items }: EducatorDirectoryPageProps) {
                           <div className="flex items-start gap-4">
                             {/* Photo Profile Box (Portrait Passphoto style) */}
                             <div className="relative w-16 h-20 shrink-0 border border-polri-gold/30 rounded-lg overflow-hidden bg-neutral-100 flex items-center justify-center shadow-inner group-hover:border-polri-gold/60 transition">
-                              {item.photoUrl ? (
-                                <img src={item.photoUrl} alt={item.name} className="w-full h-full object-cover" />
+                              {activePhotoUrl ? (
+                                <img src={activePhotoUrl} alt={item.name} className="w-full h-full object-cover" />
                               ) : (
                                 <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-b from-neutral-50 to-neutral-200">
                                   <svg className="w-8 h-8 text-neutral-400" fill="currentColor" viewBox="0 0 24 24">
@@ -173,7 +188,7 @@ export function EducatorDirectoryPage({ items }: EducatorDirectoryPageProps) {
                             </div>
 
                             <div className="min-w-0 flex-1">
-                              <p className="text-xs font-black uppercase tracking-[0.16em] text-polri-maroon">{item.rank || 'Pangkat belum tersedia'}</p>
+                              <p className="text-xs font-black uppercase tracking-[0.16em] text-polri-maroon">{activeRank || 'Pangkat belum tersedia'}</p>
                               <h2 className="text-base font-black leading-tight text-polri-brownDark mt-0.5">{item.name}</h2>
                               {nrpNip && (
                                 <p className="text-[11px] font-bold text-neutral-500 mt-0.5">NRP/NIP: {nrpNip}</p>

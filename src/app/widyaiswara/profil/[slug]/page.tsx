@@ -30,8 +30,9 @@ export default async function Page({ params }: PageProps) {
     notFound()
   }
 
-  // Fetch claimed certificates on the server
+  // Fetch claimed certificates and database profile updates on the server
   let matchingClaim: any = null
+  let dbWidyaiswaras: any[] = []
   try {
     const claimsRes = await serverFetch('/api/inpassing-claims')
     if (claimsRes.ok) {
@@ -41,9 +42,21 @@ export default async function Page({ params }: PageProps) {
       const targetNorm = norm(item.name)
       matchingClaim = claims.find((c: any) => norm(c.name) === targetNorm || norm(c.name).includes(targetNorm) || targetNorm.includes(norm(c.name)))
     }
+
+    const listRes = await serverFetch('/api/users/public-list')
+    if (listRes.ok) {
+      const json = await listRes.json()
+      dbWidyaiswaras = json.data.widyaiswaras || []
+    }
   } catch (err) {
-    console.warn('Failed to fetch claims for Widyaiswara profile details page:', err)
+    console.warn('Failed to fetch claims/profile details for Widyaiswara page:', err)
   }
+
+  const norm = (s: string) => s.toLowerCase().replace(/(irjen pol|akbp|kompol|ipda|drs\.|s\.i\.k\.|m\.si\.|s\.h\.|s\.t\.|s\.st\.mk\.|dr\.|s\.sos\.|m\.hum\.)/g, '').replace(/[^a-z]/g, '').trim()
+  const targetNorm = norm(item.name)
+  const dbUser = dbWidyaiswaras.find((u: any) => norm(u.name) === targetNorm)
+  const activePhotoUrl = dbUser?.foto || item.photoUrl
+  const activeRank = dbUser?.pangkat || item.rank
 
   const activeExpertise = matchingClaim 
     ? [...(item.expertise || []), 'Inpassing Widyaiswara'] 
@@ -57,7 +70,7 @@ export default async function Page({ params }: PageProps) {
 
   const body = [
     ...item.bio,
-    `Pangkat: ${item.rank}.`,
+    `Pangkat: ${activeRank || item.rank}.`,
     `Jabatan: ${item.position}.`,
     `Pendidikan umum: ${joinValues(item.generalEducation)}.`,
     `Pendidikan kedinasan: ${joinValues(item.serviceEducation)}.`,
@@ -83,7 +96,7 @@ export default async function Page({ params }: PageProps) {
     }))
 
   const meta = [
-    { label: 'Pangkat', value: item.rank },
+    { label: 'Pangkat', value: activeRank || item.rank },
     { label: 'Jabatan', value: item.position },
     { label: 'Kompetensi Utama', value: activeExpertise[0] ?? 'Belum tersedia' },
     { label: 'Sertifikasi Profesi', value: activeCertifications?.length ? `${activeCertifications.length} sertifikasi` : 'Belum tersedia' },
@@ -101,7 +114,7 @@ export default async function Page({ params }: PageProps) {
   return (
     <ContentDetailPage
       path={item.href}
-      eyebrow={item.rank}
+      eyebrow={activeRank || item.rank}
       title={displayName}
       description={item.summary}
       body={body}
@@ -111,7 +124,7 @@ export default async function Page({ params }: PageProps) {
       backLabel="Kembali ke Daftar Widyaiswara"
       related={related}
       action={{ label: 'Lihat Publikasi Widyaiswara', href: '/widyaiswara/publikasi' }}
-      photoUrl={item.photoUrl || 'placeholder'}
+      photoUrl={activePhotoUrl || 'placeholder'}
     />
   )
 }
