@@ -30,6 +30,7 @@ type ContentDetailPageProps = {
     href?: string
     disabled?: boolean
   }
+  photoUrl?: string
 }
 
 export function ContentDetailPage({
@@ -43,7 +44,8 @@ export function ContentDetailPage({
   backHref,
   backLabel,
   related,
-  action
+  action,
+  photoUrl
 }: ContentDetailPageProps) {
   return (
     <main>
@@ -59,20 +61,38 @@ export function ContentDetailPage({
         <Container>
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
             <article className="min-w-0 rounded-lg border border-polri-gold/25 bg-white p-6 shadow-soft sm:p-8">
-              <div className="flex flex-wrap gap-2">
-                {meta.slice(0, 3).map((item) => (
-                  <span key={`${item.label}-${item.value}`} className="rounded-lg bg-polri-cream px-3 py-2 text-xs font-bold text-polri-brownDark">
-                    {item.label}: {item.value}
-                  </span>
-                ))}
-              </div>
+              <div className="flex flex-col md:flex-row gap-6 items-start">
+                {photoUrl && (
+                  <div className="relative w-32 h-40 shrink-0 border border-polri-gold/30 rounded-lg overflow-hidden bg-neutral-100 flex items-center justify-center shadow-inner">
+                    {photoUrl.startsWith('http') || photoUrl.startsWith('/') ? (
+                      <img src={photoUrl} alt={title} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-b from-neutral-50 to-neutral-200">
+                        <svg className="w-12 h-12 text-neutral-400" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+                )}
+                
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap gap-2">
+                    {meta.slice(0, 3).map((item) => (
+                      <span key={`${item.label}-${item.value}`} className="rounded-lg bg-polri-cream px-3 py-2 text-xs font-bold text-polri-brownDark">
+                        {item.label}: {item.value}
+                      </span>
+                    ))}
+                  </div>
 
-              <div className="mt-8 space-y-5">
-                {body.map((paragraph) => (
-                  <p key={paragraph} className="text-base leading-8 text-neutral-700">
-                    {paragraph}
-                  </p>
-                ))}
+                  <div className="mt-6 space-y-5">
+                    {body.map((paragraph) => (
+                      <p key={paragraph} className="text-base leading-8 text-neutral-700">
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               {tags?.length ? (

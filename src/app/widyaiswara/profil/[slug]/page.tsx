@@ -111,6 +111,7 @@ export default async function Page({ params }: PageProps) {
       backLabel="Kembali ke Daftar Widyaiswara"
       related={related}
       action={{ label: 'Lihat Publikasi Widyaiswara', href: '/widyaiswara/publikasi' }}
+      photoUrl={item.photoUrl || 'placeholder'}
     />
   )
 }
