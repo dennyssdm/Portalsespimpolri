@@ -3344,7 +3344,7 @@ function DashboardContent() {
     return (
       <div className="space-y-4 max-h-[350px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3 text-neutral-200">
         <div className="flex justify-between items-center">
-          <p className="text-[10px] font-bold text-polri-goldSoft uppercase tracking-wider">Daftar Modul Inpassing (8 Modul)</p>
+          <p className="text-[10px] font-bold text-polri-goldSoft uppercase tracking-wider">Daftar Modul Inpassing (7 Modul)</p>
           <button
             type="button"
             onClick={() => setFormInpassingModules([...formInpassingModules, { id: `modul-${formInpassingModules.length + 1}`, order: formInpassingModules.length + 1, title: '', description: '', videoHref: '', pdfHref: '', pdfFileName: '' }])}

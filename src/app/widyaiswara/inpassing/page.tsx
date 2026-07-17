@@ -84,7 +84,7 @@ export default async function Page() {
         <Container>
           <SectionTitle
             eyebrow="Belajar Mandiri"
-            title="8 Modul Inpassing Widyaiswara"
+            title="7 Modul Inpassing Widyaiswara"
             description="Setiap modul disiapkan untuk menampung video pembelajaran, materi PDF, dan checklist penyelesaian peserta."
           />
 
