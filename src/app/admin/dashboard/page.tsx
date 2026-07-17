@@ -1277,38 +1277,65 @@ function DashboardContent() {
                 <>
                   <div>
                     <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
-                      <span>Polda Metro Jaya</span>
-                      <span>42 Serdik (23%)</span>
+                      <span>POLRI</span>
+                      <span>142 Serdik (77%)</span>
                     </div>
                     <div className="w-full bg-neutral-900 rounded-full h-2">
-                      <div className="bg-polri-goldSoft h-full rounded-full" style={{ width: '23%' }}></div>
+                      <div className="bg-polri-goldSoft h-full rounded-full" style={{ width: '77%' }}></div>
                     </div>
                   </div>
                   <div>
                     <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
-                      <span>Polda Jawa Barat</span>
-                      <span>35 Serdik (19%)</span>
-                    </div>
-                    <div className="w-full bg-neutral-900 rounded-full h-2">
-                      <div className="bg-polri-goldSoft h-full rounded-full" style={{ width: '19%' }}></div>
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
-                      <span>Mabes Polri (Satker)</span>
-                      <span>28 Serdik (15%)</span>
-                    </div>
-                    <div className="w-full bg-neutral-900 rounded-full h-2">
-                      <div className="bg-polri-goldSoft h-full rounded-full" style={{ width: '15%' }}></div>
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
-                      <span>Kementerian / Lembaga</span>
+                      <span>TNI AD</span>
                       <span>15 Serdik (8%)</span>
                     </div>
                     <div className="w-full bg-neutral-900 rounded-full h-2">
                       <div className="bg-polri-goldSoft h-full rounded-full" style={{ width: '8%' }}></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
+                      <span>TNI AL</span>
+                      <span>10 Serdik (5%)</span>
+                    </div>
+                    <div className="w-full bg-neutral-900 rounded-full h-2">
+                      <div className="bg-polri-goldSoft h-full rounded-full" style={{ width: '5%' }}></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
+                      <span>TNI AU</span>
+                      <span>8 Serdik (4%)</span>
+                    </div>
+                    <div className="w-full bg-neutral-900 rounded-full h-2">
+                      <div className="bg-polri-goldSoft h-full rounded-full" style={{ width: '4%' }}></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
+                      <span>KEJAKSAAN</span>
+                      <span>5 Serdik (3%)</span>
+                    </div>
+                    <div className="w-full bg-neutral-900 rounded-full h-2">
+                      <div className="bg-polri-goldSoft h-full rounded-full" style={{ width: '3%' }}></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
+                      <span>KEHAKIMAN</span>
+                      <span>2 Serdik (1%)</span>
+                    </div>
+                    <div className="w-full bg-neutral-900 rounded-full h-2">
+                      <div className="bg-polri-goldSoft h-full rounded-full" style={{ width: '1%' }}></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
+                      <span>DEPARTEMEN</span>
+                      <span>2 Serdik (1%)</span>
+                    </div>
+                    <div className="w-full bg-neutral-900 rounded-full h-2">
+                      <div className="bg-polri-goldSoft h-full rounded-full" style={{ width: '1%' }}></div>
                     </div>
                   </div>
                 </>
