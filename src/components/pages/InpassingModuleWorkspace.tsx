@@ -237,7 +237,7 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
             }
             .name-overlay {
               position: absolute;
-              top: 54.5%;
+              top: 49%;
               left: 50%;
               transform: translate(-50%, -50%);
               width: 90%;
@@ -462,7 +462,7 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
               {/* Dynamic Name Overlay */}
               {certificateName.trim().length >= 3 && (
                 <div 
-                  className="absolute top-[54.5%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center px-6 font-serif font-black select-none text-[12px] xs:text-[14px] sm:text-[16px] md:text-[20px] lg:text-[15px] xl:text-[18px] tracking-wide"
+                  className="absolute top-[49%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center px-6 font-serif font-black select-none text-[12px] xs:text-[14px] sm:text-[16px] md:text-[20px] lg:text-[15px] xl:text-[18px] tracking-wide"
                   style={{ 
                     fontFamily: 'Georgia, "Times New Roman", serif', 
                     color: '#dfb75c',
