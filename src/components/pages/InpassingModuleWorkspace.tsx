@@ -126,6 +126,8 @@ export function InpassingModuleWorkspace({ modules, certificateTemplateUrl }: In
     return ''
   })
 
+  const [isDownloading, setIsDownloading] = useState(false)
+
   const [openedVideos, setOpenedVideos] = useState<string[]>(() => {
     if (typeof window !== 'undefined') {
       const stored = window.localStorage.getItem('sespim-inpassing-videos-v1')
@@ -185,15 +187,17 @@ export function InpassingModuleWorkspace({ modules, certificateTemplateUrl }: In
   }
 
   function downloadCertificate() {
-    if (!certificateReady) return
+    if (!certificateReady || isDownloading) return
+    setIsDownloading(true)
 
-    // Save claim event to database
+    // Save claim event to database (data push to SDM and Kasespim)
     try {
       const userJson = sessionStorage.getItem('sespim_user')
       if (userJson) {
         const user = JSON.parse(userJson)
         apiFetch('/api/inpassing-claims', {
           method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             nrp_nip: user.nrpNip || 'guest',
             name: certificateName
@@ -204,83 +208,67 @@ export function InpassingModuleWorkspace({ modules, certificateTemplateUrl }: In
       console.warn('Failed to write claim log:', err)
     }
 
-    const printWindow = window.open('', '_blank')
-    if (!printWindow) return
+    // Generate PNG image using HTML5 Canvas
+    const image = new Image()
+    if (resolvedTemplateUrl.startsWith('http') || resolvedTemplateUrl.startsWith('/uploads/')) {
+      image.crossOrigin = 'anonymous'
+    }
+    image.src = resolvedTemplateUrl
 
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>Sertifikat - ${certificateName}</title>
-          <style>
-            @page {
-              size: A4 landscape;
-              margin: 0;
-            }
-            body {
-              margin: 0;
-              padding: 0;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              height: 100vh;
-              background-color: #0d0d0d;
-            }
-            .certificate-container {
-              position: relative;
-              width: 1123px; /* A4 landscape width in pixels at 96 DPI */
-              height: 794px; /* A4 landscape height in pixels at 96 DPI */
-              overflow: hidden;
-              box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            }
-            .bg-image {
-              width: 100%;
-              height: 100%;
-              object-fit: cover;
-            }
-            .name-overlay {
-              position: absolute;
-              top: 49%;
-              left: 50%;
-              transform: translate(-50%, -50%);
-              width: 90%;
-              text-align: center;
-              font-family: 'Georgia', 'Times New Roman', serif;
-              font-size: 32px;
-              font-weight: 900;
-              color: #dfb75c;
-              letter-spacing: 2px;
-              text-transform: uppercase;
-              text-shadow: 1px 1px 2px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8);
-            }
-            @media print {
-              body {
-                background-color: #ffffff;
-              }
-              .certificate-container {
-                width: 297mm;
-                height: 210mm;
-                box-shadow: none;
-              }
-            }
-          </style>
-        </head>
-        <body>
-          <div class="certificate-container">
-            <img src="${resolvedTemplateUrl}" class="bg-image" />
-            <div class="name-overlay">${certificateName}</div>
-          </div>
-          <script>
-            window.onload = function() {
-              setTimeout(function() {
-                window.print();
-                window.close();
-              }, 500);
-            };
-          </script>
-        </body>
-      </html>
-    `)
-    printWindow.document.close()
+    image.onload = () => {
+      try {
+        const canvas = document.createElement('canvas')
+        canvas.width = image.naturalWidth || 1024
+        canvas.height = image.naturalHeight || 683
+
+        const ctx = canvas.getContext('2d')
+        if (!ctx) {
+          setIsDownloading(false)
+          alert('Gagal mendownload sertifikat. Browser tidak mendukung Canvas 2D.')
+          return
+        }
+
+        // Draw the cropped landscape template background
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
+
+        // Configure typography styles to match CSS styles
+        // Font size scaled to fit canvas height dynamically (approx 5.2% of height)
+        const fontSize = Math.round(canvas.height * 0.052)
+        ctx.font = `900 ${fontSize}px Georgia, "Times New Roman", serif`
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        ctx.fillStyle = '#dfb75c' // Ornate gold text color
+
+        // Add dark outline text shadow for crisp legibility
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.8)'
+        ctx.shadowBlur = 4
+        ctx.shadowOffsetX = 2
+        ctx.shadowOffsetY = 2
+
+        // Write name at exactly 49% vertical offset
+        const nameY = canvas.height * 0.49
+        ctx.fillText(certificateName.toUpperCase(), canvas.width / 2, nameY)
+
+        // Convert canvas to data URL and trigger PNG download
+        const pngUrl = canvas.toDataURL('image/png')
+        const link = document.createElement('a')
+        link.download = `Sertifikat_Inpassing_${certificateName.toUpperCase().replace(/\s+/g, '_')}.png`
+        link.href = pngUrl
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      } catch (err) {
+        console.error('Canvas error:', err)
+        alert('Gagal memproses gambar sertifikat.')
+      } finally {
+        setIsDownloading(false)
+      }
+    }
+
+    image.onerror = () => {
+      setIsDownloading(false)
+      alert('Gagal memuat template gambar sertifikat.')
+    }
   }
 
   return (
