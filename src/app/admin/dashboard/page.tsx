@@ -671,6 +671,7 @@ function DashboardContent() {
   }
 
   // Load Serdik bimbingan data dynamically for real time activity in analitik
+  const [allUsers, setAllUsers] = useState<any[]>([])
   const [ssoSerdikList, setSsoSerdikList] = useState<any[]>([])
   const [visitorStats, setVisitorStats] = useState<any>(null)
   const [visitorRanking, setVisitorRanking] = useState<any[]>([])
@@ -705,6 +706,16 @@ function DashboardContent() {
           }
         })
         .catch(err => console.error('Failed to fetch visitor ranking:', err))
+
+      // Fetch all users for demographic analytics
+      apiFetch('/api/users')
+        .then(res => res.json())
+        .then(json => {
+          if (json.status === 'success') {
+            setAllUsers(json.data.users)
+          }
+        })
+        .catch(err => console.error('Failed to fetch users:', err))
     }
   }, [currentModule])
  
@@ -772,7 +783,7 @@ function DashboardContent() {
           no_serdik: activeRole === 'serdik' ? profileNoSerdik : undefined,
           instansi_polri: profileInstansiPolri,
           kementerian_lembaga: activeRole === 'serdik' ? profileKementerianLembaga : undefined,
-          negara_asal: activeRole === 'serdik' ? profileNegaraAsal : undefined,
+          negara_asal: profileNegaraAsal,
           program: activeRole === 'serdik' ? profileProgram : undefined,
           angkatan: activeRole === 'serdik' ? profileAngkatan : undefined,
           keahlian: activeRole === 'widyaiswara' ? profileKeahlian : undefined,
@@ -914,16 +925,28 @@ function DashboardContent() {
               </div>
 
               {activeRole !== 'serdik' && (
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Instansi Asal</label>
-                  <input
-                    type="text"
-                    value={profileInstansiPolri}
-                    onChange={(e) => setProfileInstansiPolri(e.target.value)}
-                    placeholder="Contoh: Lemdiklat Polri / Biro SDM Polda"
-                    className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
-                  />
-                </div>
+                <>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Instansi Asal</label>
+                    <input
+                      type="text"
+                      value={profileInstansiPolri}
+                      onChange={(e) => setProfileInstansiPolri(e.target.value)}
+                      placeholder="Contoh: Lemdiklat Polri / Biro SDM Polda"
+                      className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Negara Asal</label>
+                    <input
+                      type="text"
+                      value={profileNegaraAsal}
+                      onChange={(e) => setProfileNegaraAsal(e.target.value)}
+                      placeholder="Contoh: Indonesia / Timor Leste / Australia"
+                      className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
+                    />
+                  </div>
+                </>
               )}
 
               <div className="col-span-2 space-y-2">
@@ -1066,10 +1089,31 @@ function DashboardContent() {
   }
 
   const renderAnalitikKasespimWorkspace = () => {
-    const totalSerdik = 184
+    const activeSerdik = allUsers.filter(u => u.role === 'serdik')
+    const totalSerdik = activeSerdik.length || 184
     const countSelesai = 142
     const rateKemajuan = 77
-    const countWidyaiswara = 24
+    const countWidyaiswara = allUsers.filter(u => u.role === 'widyaiswara').length || 24
+
+    // 1. Instansi Demographics
+    const instansiCounts: Record<string, number> = {}
+    activeSerdik.forEach(u => {
+      const inst = u.instansi_polri || u.kementerian_lembaga || 'POLRI'
+      instansiCounts[inst] = (instansiCounts[inst] || 0) + 1
+    })
+    const sortedInstansi = Object.entries(instansiCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+
+    // 2. Negara Demographics
+    const negaraCounts: Record<string, number> = {}
+    activeSerdik.forEach(u => {
+      const neg = u.negara_asal || 'Indonesia'
+      negaraCounts[neg] = (negaraCounts[neg] || 0) + 1
+    })
+    const sortedNegara = Object.entries(negaraCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
 
     return (
       <div className="space-y-6">
@@ -1217,6 +1261,143 @@ function DashboardContent() {
             </div>
           </div>
 
+        </div>
+
+        {/* Demografi Peserta Didik (Instansi & Negara Asal) */}
+        <div className="grid gap-6 lg:grid-cols-2">
+          {/* Sebaran Instansi Asal */}
+          <div className="bg-neutral-950 p-6 rounded-2xl border border-neutral-800 space-y-4">
+            <div>
+              <h4 className="text-sm font-black uppercase text-polri-goldSoft tracking-wider">Demografi Instansi Asal Serdik</h4>
+              <p className="text-xs text-neutral-400 mt-1">Distribusi peserta didik aktif berdasarkan instansi asal / Polda pengirim.</p>
+            </div>
+            
+            <div className="space-y-3.5 pt-2">
+              {allUsers.length === 0 ? (
+                <>
+                  <div>
+                    <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
+                      <span>Polda Metro Jaya</span>
+                      <span>42 Serdik (23%)</span>
+                    </div>
+                    <div className="w-full bg-neutral-900 rounded-full h-2">
+                      <div className="bg-polri-goldSoft h-full rounded-full" style={{ width: '23%' }}></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
+                      <span>Polda Jawa Barat</span>
+                      <span>35 Serdik (19%)</span>
+                    </div>
+                    <div className="w-full bg-neutral-900 rounded-full h-2">
+                      <div className="bg-polri-goldSoft h-full rounded-full" style={{ width: '19%' }}></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
+                      <span>Mabes Polri (Satker)</span>
+                      <span>28 Serdik (15%)</span>
+                    </div>
+                    <div className="w-full bg-neutral-900 rounded-full h-2">
+                      <div className="bg-polri-goldSoft h-full rounded-full" style={{ width: '15%' }}></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
+                      <span>Kementerian / Lembaga</span>
+                      <span>15 Serdik (8%)</span>
+                    </div>
+                    <div className="w-full bg-neutral-900 rounded-full h-2">
+                      <div className="bg-polri-goldSoft h-full rounded-full" style={{ width: '8%' }}></div>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                sortedInstansi.map(([inst, count]) => {
+                  const total = activeSerdik.length || 1
+                  const pct = Math.round((count / total) * 100)
+                  return (
+                    <div key={inst}>
+                      <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
+                        <span className="capitalize">{inst}</span>
+                        <span>{count} Serdik ({pct}%)</span>
+                      </div>
+                      <div className="w-full bg-neutral-900 rounded-full h-2">
+                        <div className="bg-polri-goldSoft h-full rounded-full" style={{ width: `${pct}%` }}></div>
+                      </div>
+                    </div>
+                  )
+                })
+              )}
+            </div>
+          </div>
+
+          {/* Sebaran Negara Asal */}
+          <div className="bg-neutral-950 p-6 rounded-2xl border border-neutral-800 space-y-4">
+            <div>
+              <h4 className="text-sm font-black uppercase text-polri-goldSoft tracking-wider">Demografi Negara Asal Serdik</h4>
+              <p className="text-xs text-neutral-400 mt-1">Distribusi peserta didik aktif dari negara asal (Kerja Sama Internasional).</p>
+            </div>
+
+            <div className="space-y-3.5 pt-2">
+              {allUsers.length === 0 ? (
+                <>
+                  <div>
+                    <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
+                      <span>Indonesia</span>
+                      <span>176 Serdik (96%)</span>
+                    </div>
+                    <div className="w-full bg-neutral-900 rounded-full h-2">
+                      <div className="bg-emerald-500 h-full rounded-full" style={{ width: '96%' }}></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
+                      <span>Timor Leste</span>
+                      <span>4 Serdik (2%)</span>
+                    </div>
+                    <div className="w-full bg-neutral-900 rounded-full h-2">
+                      <div className="bg-emerald-500 h-full rounded-full" style={{ width: '2%' }}></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
+                      <span>Australia</span>
+                      <span>2 Serdik (1%)</span>
+                    </div>
+                    <div className="w-full bg-neutral-900 rounded-full h-2">
+                      <div className="bg-emerald-500 h-full rounded-full" style={{ width: '1%' }}></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
+                      <span>Malaysia</span>
+                      <span>2 Serdik (1%)</span>
+                    </div>
+                    <div className="w-full bg-neutral-900 rounded-full h-2">
+                      <div className="bg-emerald-500 h-full rounded-full" style={{ width: '1%' }}></div>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                sortedNegara.map(([negara, count]) => {
+                  const total = activeSerdik.length || 1
+                  const pct = Math.round((count / total) * 100)
+                  return (
+                    <div key={negara}>
+                      <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
+                        <span className="capitalize">{negara}</span>
+                        <span>{count} Serdik ({pct}%)</span>
+                      </div>
+                      <div className="w-full bg-neutral-900 rounded-full h-2">
+                        <div className="bg-emerald-500 h-full rounded-full" style={{ width: `${pct}%` }}></div>
+                      </div>
+                    </div>
+                  )
+                })
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Peta Keahlian Widyaiswara */}
