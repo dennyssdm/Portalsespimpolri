@@ -871,12 +871,12 @@ function DashboardContent() {
               )}
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Pangkat Militer / Polisi</label>
+                <label className="block text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">Pangkat / Golongan</label>
                 <input
                   type="text"
                   value={profilePangkat}
                   onChange={(e) => setProfilePangkat(e.target.value)}
-                  placeholder="Contoh: Irjen Pol / Kombes Pol"
+                  placeholder="Contoh: Kombes Pol / Pembina Tk.I IV/b"
                   className="mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-white outline-none focus:border-polri-gold/60"
                 />
               </div>
