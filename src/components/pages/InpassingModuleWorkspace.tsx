@@ -237,7 +237,7 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
             }
             .name-overlay {
               position: absolute;
-              top: 53%;
+              top: 54.5%;
               left: 50%;
               transform: translate(-50%, -50%);
               width: 90%;
@@ -452,7 +452,7 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
           {/* Certificate Live Preview Box */}
           <div className="rounded-xl border border-white/10 bg-neutral-900/60 p-4 transition duration-500 hover:border-polri-gold/30">
             <p className="text-xs font-black uppercase tracking-[0.24em] text-polri-goldSoft text-center mb-3">Pratinjau Live Sertifikat</p>
-            <div className="relative w-full aspect-[1123/794] mx-auto rounded-lg overflow-hidden border border-polri-gold/30 shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition duration-500 hover:scale-[1.02] hover:border-polri-gold/50 group/cert">
+            <div className="relative w-full aspect-[6/4] mx-auto rounded-lg overflow-hidden border border-polri-gold/30 shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition duration-500 hover:scale-[1.02] hover:border-polri-gold/50 group/cert">
               <img 
                 src="/images/certificate_template.png" 
                 alt="Sertifikat Widyaiswara" 
@@ -462,7 +462,7 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
               {/* Dynamic Name Overlay */}
               {certificateName.trim().length >= 3 && (
                 <div 
-                  className="absolute top-[53%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center px-6 font-serif font-black select-none text-[12px] xs:text-[14px] sm:text-[16px] md:text-[20px] lg:text-[15px] xl:text-[18px] tracking-wide"
+                  className="absolute top-[54.5%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center px-6 font-serif font-black select-none text-[12px] xs:text-[14px] sm:text-[16px] md:text-[20px] lg:text-[15px] xl:text-[18px] tracking-wide"
                   style={{ 
                     fontFamily: 'Georgia, "Times New Roman", serif', 
                     color: '#dfb75c',
