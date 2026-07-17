@@ -185,7 +185,7 @@ function DashboardContent() {
     : (user ? (user.role as RoleType) : 'admin')
 
   const hasWriteAccess = activeRole === 'super_admin' || activeRole === 'admin'
-  const hasDeleteAccess = activeRole === 'super_admin'
+  const hasDeleteAccess = activeRole === 'super_admin' || activeRole === 'admin'
   
   const sidebarItems: CMSSidebarItem[] = useMemo(() => {
     if (activeRole === 'serdik' || activeRole === 'widyaiswara') {
