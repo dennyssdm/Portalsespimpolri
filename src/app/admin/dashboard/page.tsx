@@ -1346,6 +1346,49 @@ function DashboardContent() {
           </div>
         </div>
 
+        {/* Monitoring Sertifikasi Calon Widyaiswara */}
+        <div className="bg-neutral-950 p-6 rounded-2xl border border-neutral-800 space-y-4">
+          <div>
+            <h4 className="text-sm font-black uppercase text-polri-goldSoft tracking-wider">Monitoring Sertifikasi Calon Widyaiswara</h4>
+            <p className="text-xs text-neutral-400 mt-1">Daftar Widyaiswara yang telah lulus inpassing dan mengklaim sertifikat digital.</p>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse text-xs text-neutral-300">
+              <thead>
+                <tr className="border-b border-neutral-800 text-[10px] font-bold uppercase tracking-wider text-neutral-500">
+                  <th className="pb-3 pr-4">No</th>
+                  <th className="pb-3 px-4">Nama Lengkap</th>
+                  <th className="pb-3 px-4">NIP / NRP</th>
+                  <th className="pb-3 px-4">Kode Sertifikat</th>
+                  <th className="pb-3 pl-4">Tanggal Kelulusan</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-neutral-800/50">
+                {claimsList.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="py-8 text-center text-neutral-500 font-semibold">
+                      Belum ada Calon Widyaiswara yang lulus inpassing/sertifikasi.
+                    </td>
+                  </tr>
+                ) : (
+                  claimsList.map((claim, idx) => (
+                    <tr key={claim.id} className="hover:bg-neutral-900/30 transition">
+                      <td className="py-4 pr-4 font-bold text-neutral-500">{idx + 1}</td>
+                      <td className="py-4 px-4 font-bold text-white">{claim.name}</td>
+                      <td className="py-4 px-4 font-mono text-neutral-400">{claim.nrp_nip}</td>
+                      <td className="py-4 px-4 font-mono text-polri-goldSoft">{claim.certificate_code}</td>
+                      <td className="py-4 pl-4 text-neutral-400">
+                        {new Date(claim.completed_at).toLocaleString('id-ID')}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
     )
   }
