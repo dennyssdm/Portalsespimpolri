@@ -332,42 +332,76 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
       </section>
 
       <section className="rounded-lg border border-polri-gold/25 bg-polri-brownDark p-6 text-white shadow-soft">
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(300px,0.7fr)] lg:items-end">
-          <div>
-            <p className="text-sm font-bold uppercase tracking-[0.24em] text-polri-goldSoft">Klaim Sertifikat</p>
-            <h2 className="mt-3 text-2xl font-black">Sertifikat Penyelesaian 8 Modul</h2>
-            <p className="mt-3 text-sm leading-7 text-white/72">
-              Sertifikat dapat diunduh setelah seluruh modul selesai dipelajari.
-            </p>
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.8fr)] lg:items-center">
+          <div className="space-y-4">
+            <div>
+              <p className="text-sm font-bold uppercase tracking-[0.24em] text-polri-goldSoft">Klaim Sertifikat</p>
+              <h2 className="mt-3 text-2xl font-black">Sertifikat Penyelesaian 8 Modul</h2>
+              <p className="mt-3 text-sm leading-7 text-white/72">
+                Sertifikat dapat diunduh setelah seluruh modul selesai dipelajari.
+              </p>
+            </div>
+
+            <div className="grid gap-3">
+              <label className="grid gap-2">
+                <span className="text-sm font-black text-polri-goldSoft">Nama peserta</span>
+                <input
+                  value={certificateName}
+                  onChange={(event) => setCertificateName(event.target.value)}
+                  type="text"
+                  placeholder="Masukkan nama lengkap"
+                  className="rounded-lg border border-polri-gold/40 bg-white px-4 py-3 text-sm font-bold text-polri-brownDark outline-none focus:border-polri-gold"
+                />
+              </label>
+              <div className="grid gap-2 sm:grid-cols-[1fr_auto]">
+                <button
+                  type="button"
+                  onClick={downloadCertificate}
+                  disabled={!certificateReady}
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-polri-gold px-5 py-3 text-sm font-black text-polri-brownDark hover:bg-polri-goldSoft disabled:cursor-not-allowed disabled:bg-white/20 disabled:text-white/45"
+                >
+                  <TrophyIcon className="h-5 w-5" aria-hidden="true" />
+                  Download Sertifikat PDF
+                </button>
+                <button
+                  type="button"
+                  onClick={resetProgress}
+                  className="rounded-lg border border-white/20 px-4 py-3 text-sm font-black text-white/82 hover:bg-white/10"
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
           </div>
-          <div className="grid gap-3">
-            <label className="grid gap-2">
-              <span className="text-sm font-black text-polri-goldSoft">Nama peserta</span>
-              <input
-                value={certificateName}
-                onChange={(event) => setCertificateName(event.target.value)}
-                type="text"
-                placeholder="Masukkan nama lengkap"
-                className="rounded-lg border border-polri-gold/40 bg-white px-4 py-3 text-sm font-bold text-polri-brownDark outline-none focus:border-polri-gold"
+
+          {/* Certificate Live Preview Box */}
+          <div className="rounded-xl border border-white/10 bg-neutral-900/60 p-4">
+            <p className="text-xs font-black uppercase tracking-[0.24em] text-polri-goldSoft text-center mb-3">Pratinjau Sertifikat</p>
+            <div className="relative w-full aspect-square mx-auto rounded-lg overflow-hidden border border-polri-gold/30 shadow-md">
+              <img 
+                src="/images/certificate_template.png" 
+                alt="Sertifikat Widyaiswara" 
+                className="w-full h-full object-cover" 
               />
-            </label>
-            <div className="grid gap-2 sm:grid-cols-[1fr_auto]">
-              <button
-                type="button"
-                onClick={downloadCertificate}
-                disabled={!certificateReady}
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-polri-gold px-5 py-3 text-sm font-black text-polri-brownDark hover:bg-polri-goldSoft disabled:cursor-not-allowed disabled:bg-white/20 disabled:text-white/45"
-              >
-                <TrophyIcon className="h-5 w-5" aria-hidden="true" />
-                Download Sertifikat PDF
-              </button>
-              <button
-                type="button"
-                onClick={resetProgress}
-                className="rounded-lg border border-white/20 px-4 py-3 text-sm font-black text-white/82 hover:bg-white/10"
-              >
-                Reset
-              </button>
+              
+              {/* Dynamic Name Overlay */}
+              {certificateName.trim().length >= 3 && (
+                <div 
+                  className="absolute top-[52%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center px-6 font-serif font-black text-black select-none text-[11px] xs:text-[13px] sm:text-[15px] md:text-[18px] lg:text-[14px] xl:text-[16px] drop-shadow-sm tracking-wide"
+                  style={{ fontFamily: 'Georgia, serif', color: '#1a120b' }}
+                >
+                  {certificateName}
+                </div>
+              )}
+              
+              {/* Lock Overlay if progress is not complete */}
+              {completedCount < modules.length && (
+                <div className="absolute inset-0 bg-black/75 backdrop-blur-[2px] flex flex-col items-center justify-center text-center p-4">
+                  <LockClosedIcon className="h-8 w-8 text-polri-gold mb-2 animate-pulse" />
+                  <p className="text-xs font-black text-white">Pratinjau Terkunci</p>
+                  <p className="text-[10px] text-neutral-400 mt-1 font-semibold leading-relaxed">Selesaikan {modules.length - completedCount} modul lagi untuk membuka sertifikat.</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
