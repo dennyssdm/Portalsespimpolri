@@ -1273,7 +1273,7 @@ function DashboardContent() {
             </div>
             
             <div className="space-y-3.5 pt-2">
-              {allUsers.length === 0 ? (
+              {sortedInstansi.length === 0 ? (
                 <>
                   <div>
                     <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
@@ -1367,7 +1367,7 @@ function DashboardContent() {
             </div>
 
             <div className="space-y-3.5 pt-2">
-              {allUsers.length === 0 ? (
+              {sortedNegara.length === 0 ? (
                 <>
                   <div>
                     <div className="flex justify-between text-xs font-bold text-neutral-300 mb-1">
