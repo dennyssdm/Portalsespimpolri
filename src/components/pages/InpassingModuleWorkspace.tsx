@@ -110,7 +110,16 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
 
   const [certificateName, setCertificateName] = useState<string>(() => {
     if (typeof window !== 'undefined') {
-      return window.localStorage.getItem(certificateNameStorageKey) || ''
+      const stored = window.localStorage.getItem(certificateNameStorageKey)
+      if (stored) return stored
+
+      const userJson = window.sessionStorage.getItem('sespim_user')
+      if (userJson) {
+        try {
+          const user = JSON.parse(userJson)
+          return user.name || ''
+        } catch {}
+      }
     }
     return ''
   })
@@ -193,17 +202,82 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
       console.warn('Failed to write claim log:', err)
     }
 
-    const pdf = createCertificatePdf(certificateName, modules.length)
-    const blob = new Blob([pdf], { type: 'application/pdf' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
+    const printWindow = window.open('', '_blank')
+    if (!printWindow) return
 
-    link.href = url
-    link.download = certificateFileName(certificateName)
-    document.body.appendChild(link)
-    link.click()
-    link.remove()
-    URL.revokeObjectURL(url)
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Sertifikat - ${certificateName}</title>
+          <style>
+            @page {
+              size: A4 landscape;
+              margin: 0;
+            }
+            body {
+              margin: 0;
+              padding: 0;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              height: 100vh;
+              background-color: #0d0d0d;
+            }
+            .certificate-container {
+              position: relative;
+              width: 1123px; /* A4 landscape width in pixels at 96 DPI */
+              height: 794px; /* A4 landscape height in pixels at 96 DPI */
+              overflow: hidden;
+              box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            }
+            .bg-image {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+            .name-overlay {
+              position: absolute;
+              top: 52%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              width: 90%;
+              text-align: center;
+              font-family: 'Georgia', 'Times New Roman', serif;
+              font-size: 28px;
+              font-weight: 900;
+              color: #1a120b;
+              letter-spacing: 1px;
+              text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
+            }
+            @media print {
+              body {
+                background-color: #ffffff;
+              }
+              .certificate-container {
+                width: 297mm;
+                height: 210mm;
+                box-shadow: none;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="certificate-container">
+            <img src="/images/certificate_template.png" class="bg-image" />
+            <div class="name-overlay">${certificateName}</div>
+          </div>
+          <script>
+            window.onload = function() {
+              setTimeout(function() {
+                window.print();
+                window.close();
+              }, 500);
+            };
+          </script>
+        </body>
+      </html>
+    `)
+    printWindow.document.close()
   }
 
   return (
