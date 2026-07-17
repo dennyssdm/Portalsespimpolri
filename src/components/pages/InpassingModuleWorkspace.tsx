@@ -3,10 +3,11 @@
 import { useEffect, useMemo, useState } from 'react'
 import { CheckCircleIcon, DocumentArrowDownIcon, LockClosedIcon, PlayCircleIcon, TrophyIcon } from '@heroicons/react/24/outline'
 import type { InpassingModule } from '@/data/inpassingModules'
-import { apiFetch } from '@/lib/api'
+import { apiFetch, getMediaUrl } from '@/lib/api'
 
 type InpassingModuleWorkspaceProps = {
   modules: InpassingModule[]
+  certificateTemplateUrl?: string
 }
 
 const progressStorageKey = 'sespim-inpassing-progress-v1'
@@ -97,7 +98,8 @@ function createCertificatePdf(name: string, moduleCount: number) {
   return `${header}${body}${xref}`
 }
 
-export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspaceProps) {
+export function InpassingModuleWorkspace({ modules, certificateTemplateUrl }: InpassingModuleWorkspaceProps) {
+  const resolvedTemplateUrl = certificateTemplateUrl ? getMediaUrl(certificateTemplateUrl) : '/images/certificate_template.png'
   const [completedModuleIds, setCompletedModuleIds] = useState<string[]>(() => {
     if (typeof window !== 'undefined') {
       const stored = window.localStorage.getItem(progressStorageKey)
@@ -264,7 +266,7 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
         </head>
         <body>
           <div class="certificate-container">
-            <img src="/images/certificate_template.png" class="bg-image" />
+            <img src="${resolvedTemplateUrl}" class="bg-image" />
             <div class="name-overlay">${certificateName}</div>
           </div>
           <script>
@@ -454,7 +456,7 @@ export function InpassingModuleWorkspace({ modules }: InpassingModuleWorkspacePr
             <p className="text-xs font-black uppercase tracking-[0.24em] text-polri-goldSoft text-center mb-3">Pratinjau Live Sertifikat</p>
             <div className="relative w-full aspect-[6/4] mx-auto rounded-lg overflow-hidden border border-polri-gold/30 shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition duration-500 hover:scale-[1.02] hover:border-polri-gold/50 group/cert">
               <img 
-                src="/images/certificate_template.png" 
+                src={resolvedTemplateUrl} 
                 alt="Sertifikat Widyaiswara" 
                 className="w-full h-full object-cover" 
               />

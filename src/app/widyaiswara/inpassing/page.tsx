@@ -89,7 +89,7 @@ export default async function Page() {
           />
 
           <div className="mt-8">
-            <InpassingModuleWorkspace modules={modulesList} />
+            <InpassingModuleWorkspace modules={modulesList} certificateTemplateUrl={dbContent?.image_url} />
           </div>
         </Container>
       </section>
