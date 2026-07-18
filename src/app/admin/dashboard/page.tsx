@@ -402,6 +402,7 @@ function DashboardContent() {
   const [formPejabatItems, setFormPejabatItems] = useState<{ group: string; name: string; pangkat: string; jabatan: string; foto: string }[]>([])
   const [formFasilitasItems, setFormFasilitasItems] = useState<{ group: string; name: string; keterangan: string; foto: string }[]>([])
   const [formMateriTerbukaItems, setFormMateriTerbukaItems] = useState<{ title: string; description: string; fileName: string; href: string; format: string; category: string }[]>([])
+  const [formPublikasiItems, setFormPublikasiItems] = useState<{ title: string; description: string; fileName: string; href: string; format: string; category: string; author: string; cohort: string; year: string; cover: string }[]>([])
 
   // States for Publikasi extra metadata
   const [formAuthor, setFormAuthor] = useState('')
@@ -2854,6 +2855,76 @@ function DashboardContent() {
     return contentStr.trim()
   }
 
+  // Parsing Publikasi string content into states
+  const parsePublikasiContent = (contentStr: string) => {
+    if (!contentStr) {
+      setFormPublikasiItems([])
+      return
+    }
+    const list: any[] = []
+    const rawEntries = contentStr.split(/\n\s*\n/)
+    for (const rawEntry of rawEntries) {
+      const lines = rawEntry.split('\n')
+      let item: any = { title: '', description: '', fileName: '', href: '', format: 'PDF', category: 'Artikel', author: '', cohort: 'Tahun 2026', year: '2026', cover: '' }
+      let hasName = false
+      for (const line of lines) {
+        const trimmed = line.trim()
+        if (!trimmed) continue
+        const colonIdx = trimmed.indexOf(':')
+        if (colonIdx === -1) continue
+        const key = trimmed.substring(0, colonIdx).trim().toUpperCase()
+        const val = trimmed.substring(colonIdx + 1).trim()
+        
+        if (key === 'NAMA') {
+          item.title = val
+          hasName = true
+        } else if (key === 'DESKRIPSI') {
+          item.description = val
+        } else if (key === 'FILE') {
+          item.fileName = val
+        } else if (key === 'URL') {
+          item.href = val
+        } else if (key === 'FORMAT') {
+          item.format = val
+        } else if (key === 'KATEGORI') {
+          item.category = val
+        } else if (key === 'PENULIS') {
+          item.author = val
+        } else if (key === 'ANGKATAN') {
+          item.cohort = val
+        } else if (key === 'TAHUN') {
+          item.year = val
+        } else if (key === 'COVER') {
+          item.cover = val
+        }
+      }
+      if (hasName) {
+        list.push(item)
+      }
+    }
+    setFormPublikasiItems(list)
+  }
+
+  // Building Publikasi content string from states
+  const buildPublikasiContent = (): string => {
+    let contentStr = ''
+    for (const item of formPublikasiItems) {
+      if (!item.title.trim()) continue
+      contentStr += `NAMA: ${item.title}\n`
+      if (item.description) contentStr += `DESKRIPSI: ${item.description}\n`
+      if (item.fileName) contentStr += `FILE: ${item.fileName}\n`
+      if (item.href) contentStr += `URL: ${item.href}\n`
+      if (item.format) contentStr += `FORMAT: ${item.format}\n`
+      if (item.category) contentStr += `KATEGORI: ${item.category}\n`
+      if (item.author) contentStr += `PENULIS: ${item.author}\n`
+      if (item.cohort) contentStr += `ANGKATAN: ${item.cohort}\n`
+      if (item.year) contentStr += `TAHUN: ${item.year}\n`
+      if (item.cover) contentStr += `COVER: ${item.cover}\n`
+      contentStr += `\n`
+    }
+    return contentStr.trim()
+  }
+
   // Parsing Inpassing modules string content into states
   const parseInpassingModules = (contentStr: string) => {
     const lines = contentStr.split(/\r?\n/)
@@ -4039,6 +4110,223 @@ function DashboardContent() {
     )
   }
 
+  const renderPublikasiStructuredFields = () => {
+    return (
+      <div className="space-y-4 max-h-[450px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3 text-neutral-200">
+        <div className="flex justify-between items-center">
+          <div>
+            <p className="text-[10px] font-bold text-polri-goldSoft uppercase tracking-wider">Daftar Publikasi / Karya</p>
+            <p className="text-[9px] text-neutral-400 mt-0.5">Edit, tambah, atau hapus item publikasi sekolah ini.</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setFormPublikasiItems([...formPublikasiItems, { title: '', description: '', fileName: '', href: '', format: 'PDF', category: 'Artikel', author: '', cohort: 'Tahun 2026', year: '2026', cover: '' }])}
+            className="px-2.5 py-1.5 rounded bg-polri-gold text-neutral-950 text-[9px] font-black uppercase hover:bg-yellow-500 transition"
+          >
+            + Tambah Karya
+          </button>
+        </div>
+        <div className="space-y-5">
+          {formPublikasiItems.map((item, idx) => (
+            <div key={idx} className="p-4 bg-neutral-950 rounded-xl border border-neutral-800 space-y-3 relative">
+              <button
+                type="button"
+                onClick={() => setFormPublikasiItems(formPublikasiItems.filter((_, i) => i !== idx))}
+                className="absolute right-3 top-3 text-red-500 hover:text-red-400 font-black text-[10px] uppercase tracking-wider"
+              >
+                Hapus
+              </button>
+              
+              {/* Preview block inside card */}
+              <div className="bg-neutral-900/60 p-2.5 rounded-lg border border-neutral-800/80 flex gap-4 items-center">
+                {/* Simulated Book Cover preview */}
+                <div className="relative w-12 h-16 shrink-0 rounded overflow-hidden bg-neutral-900 border border-polri-gold/20 flex items-center justify-center text-center p-1 select-none flex-col justify-between text-white">
+                  {item.cover ? (
+                    <img src={item.cover.startsWith('http') || item.cover.startsWith('/') ? item.cover : getMediaUrl(item.cover)} alt="" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex flex-col justify-between bg-gradient-to-b from-neutral-850 to-neutral-950 p-1">
+                      <span className="text-[3px] font-black tracking-widest text-polri-goldSoft uppercase">PREVIEW</span>
+                      <p className="text-[4px] font-black leading-tight line-clamp-3 text-neutral-200">{item.title || 'Tanpa Judul'}</p>
+                      <span className="text-[3px] text-polri-goldSoft font-bold block mt-0.5">{item.category}</span>
+                    </div>
+                  )}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] font-black text-white truncate">{item.title || 'Masukkan Judul Karya...'}</p>
+                  <p className="text-[8px] text-neutral-400 mt-1 truncate">{item.description || 'Masukkan Ringkasan/Deskripsi...'}</p>
+                  <div className="flex gap-2 mt-1.5 flex-wrap">
+                    <span className="bg-polri-maroon/20 text-polri-goldSoft text-[7px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">{item.category}</span>
+                    {item.author && <span className="bg-neutral-805 text-neutral-300 text-[7px] font-semibold px-1.5 py-0.5 rounded">{item.author}</span>}
+                    {item.cohort && <span className="bg-neutral-805 text-neutral-300 text-[7px] font-semibold px-1.5 py-0.5 rounded">{item.cohort}</span>}
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Judul Karya / Buku</label>
+                  <input
+                    type="text"
+                    value={item.title}
+                    onChange={(e) => {
+                      const updated = [...formPublikasiItems]
+                      updated[idx].title = e.target.value
+                      setFormPublikasiItems(updated)
+                    }}
+                    placeholder="Contoh: Pemolisian Presisi"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Kategori Publikasi</label>
+                  <select
+                    value={item.category}
+                    onChange={(e) => {
+                      const updated = [...formPublikasiItems]
+                      updated[idx].category = e.target.value
+                      setFormPublikasiItems(updated)
+                    }}
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                  >
+                    <option value="Artikel">Artikel & Opini</option>
+                    <option value="Policy Brief">Policy Brief</option>
+                    <option value="Kajian Strategis">Kajian Strategis</option>
+                    <option value="Naskah Akademik">Naskah Akademik Terbaik</option>
+                    <option value="Jurnal Ilmiah">Jurnal Ilmiah</option>
+                    <option value="Resensi Buku">Resensi Buku</option>
+                    <option value="Karya Peserta Didik">Karya Peserta Didik</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2">
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Penulis / Serdik</label>
+                  <input
+                    type="text"
+                    value={item.author}
+                    onChange={(e) => {
+                      const updated = [...formPublikasiItems]
+                      updated[idx].author = e.target.value
+                      setFormPublikasiItems(updated)
+                    }}
+                    placeholder="Contoh: AKBP Dr. Ridwan, M.Si."
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Angkatan / Cohort</label>
+                  <input
+                    type="text"
+                    value={item.cohort}
+                    onChange={(e) => {
+                      const updated = [...formPublikasiItems]
+                      updated[idx].cohort = e.target.value
+                      setFormPublikasiItems(updated)
+                    }}
+                    placeholder="Contoh: Ke-50"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Tahun Akademik</label>
+                  <input
+                    type="text"
+                    value={item.year}
+                    onChange={(e) => {
+                      const updated = [...formPublikasiItems]
+                      updated[idx].year = e.target.value
+                      setFormPublikasiItems(updated)
+                    }}
+                    placeholder="Contoh: 2026"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2">
+                <div className="col-span-2">
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">URL Tautan Unduhan / File PDF</label>
+                  <input
+                    type="text"
+                    value={item.href}
+                    onChange={(e) => {
+                      const updated = [...formPublikasiItems]
+                      updated[idx].href = e.target.value
+                      setFormPublikasiItems(updated)
+                    }}
+                    placeholder="Contoh: /files/naskap_serdik.pdf"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Format</label>
+                  <input
+                    type="text"
+                    value={item.format}
+                    onChange={(e) => {
+                      const updated = [...formPublikasiItems]
+                      updated[idx].format = e.target.value
+                      setFormPublikasiItems(updated)
+                    }}
+                    placeholder="PDF / DOCX"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">URL Gambar Sampul / Cover</label>
+                  <input
+                    type="text"
+                    value={item.cover}
+                    onChange={(e) => {
+                      const updated = [...formPublikasiItems]
+                      updated[idx].cover = e.target.value
+                      setFormPublikasiItems(updated)
+                    }}
+                    placeholder="Contoh: /uploads/cover.png"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Nama File / Dokumen</label>
+                  <input
+                    type="text"
+                    value={item.fileName}
+                    onChange={(e) => {
+                      const updated = [...formPublikasiItems]
+                      updated[idx].fileName = e.target.value
+                      setFormPublikasiItems(updated)
+                    }}
+                    placeholder="Contoh: naskap.pdf"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[8px] uppercase text-neutral-500 font-bold">Ringkasan / Ulasan Singkat</label>
+                <textarea
+                  value={item.description}
+                  onChange={(e) => {
+                    const updated = [...formPublikasiItems]
+                    updated[idx].description = e.target.value
+                    setFormPublikasiItems(updated)
+                  }}
+                  rows={2}
+                  placeholder="Ringkasan atau sinopsis buku/naskah..."
+                  className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2.5 py-1.5 text-xs text-white outline-none focus:border-polri-gold resize-none"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
   const renderInpassingStructuredFields = () => {
     return (
       <div className="space-y-4 max-h-[350px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3 text-neutral-200">
@@ -4216,9 +4504,16 @@ function DashboardContent() {
     const isProg = currentModule === 'Program Pendidikan' && formCategory === 'program-sekolah'
     const finalId = isProg ? `prog-${slugVal}` : undefined
     const isProfilStructured = currentModule === 'Profil' && ['p-5', 'p-6', 'p-7', 'p-8'].includes(finalId || '')
+    const isPublikasi = currentModule === 'Publikasi'
     const finalContent = isProg 
       ? buildProgramContent(formTitle) 
-      : (isProfilStructured ? buildProfilContent(finalId || '') : formContent)
+      : (isProfilStructured 
+          ? buildProfilContent(finalId || '') 
+          : (isPublikasi
+              ? buildPublikasiContent()
+              : formContent
+            )
+        )
 
     const formData = new FormData()
     if (finalId) formData.append('id', finalId)
@@ -4408,6 +4703,12 @@ function DashboardContent() {
     } else {
       setFormInpassingModules([])
     }
+
+    if (currentModule === 'Publikasi') {
+      parsePublikasiContent(item.content || '')
+    } else {
+      setFormPublikasiItems([])
+    }
     setIsEditModalOpen(true)
   }
 
@@ -4423,6 +4724,7 @@ function DashboardContent() {
     const isWidyaiswaraMateri = currentModule === 'Widyaiswara' && (selectedItem.id === 'w-4' || selectedItem.id === 'w-8')
     const isWidyaiswaraInpassing = currentModule === 'Widyaiswara' && selectedItem.id === 'w-6'
     const isKurikulum = currentModule === 'Program Pendidikan' && selectedItem.id === 'e-2'
+    const isPublikasi = currentModule === 'Publikasi'
     const finalContent = isProg 
       ? buildProgramContent(formTitle) 
       : (isProfilStructured 
@@ -4433,7 +4735,10 @@ function DashboardContent() {
                   ? buildInpassingModulesContent() 
                   : (isKurikulum
                       ? buildKurikulumContent()
-                      : formContent
+                      : (isPublikasi
+                          ? buildPublikasiContent()
+                          : formContent
+                        )
                     )
                 )
             )
@@ -5208,6 +5513,8 @@ function DashboardContent() {
                   renderMateriTerbukaStructuredFields()
                 ) : currentModule === 'Widyaiswara' && formCategory === 'Inpassing' ? (
                   renderInpassingStructuredFields()
+                ) : currentModule === 'Publikasi' ? (
+                  renderPublikasiStructuredFields()
                 ) : (
                   <div>
                     <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Isi Konten (News / Detail)</label>
@@ -5516,6 +5823,8 @@ function DashboardContent() {
                   renderKurikulumStructuredFields()
                 ) : currentModule === 'Widyaiswara' && selectedItem?.id === 'w-6' ? (
                   renderInpassingStructuredFields()
+                ) : currentModule === 'Publikasi' ? (
+                  renderPublikasiStructuredFields()
                 ) : (
                   <div>
                     {currentModule === 'Publikasi' && renderPublikasiExtraFields()}
