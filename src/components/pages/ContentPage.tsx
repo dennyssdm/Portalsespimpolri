@@ -508,7 +508,7 @@ export function ContentPage({ content, path }: ContentPageProps) {
         </>
       ) : null}
 
-      {featuredLinks.length && path !== '/kelembagaan-internal' ? (
+      {featuredLinks.length && path !== '/kelembagaan-internal' && !path.startsWith('/widyaiswara') ? (
         <section className="bg-white py-14">
           <Container>
             <SectionTitle
