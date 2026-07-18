@@ -1,14 +1,75 @@
-import { notFound } from 'next/navigation'
-import { ContentPage } from '@/components/pages/ContentPage'
-import { pages } from '@/data/pages'
+import { ContentCollectionPage } from '@/components/pages/ContentCollectionPage'
+import { publicationItems } from '@/data/contentCollections'
+import { serverFetch } from '@/lib/api'
 
-export default function Page() {
+export const dynamic = 'force-dynamic'
+
+export default async function Page() {
+  const categoryName = "Policy Brief"
   const path = "/publikasi/policy-brief"
-  const content = pages[path]
+  const eyebrow = "Publikasi"
+  const title = "Policy Brief"
+  const description = "Rekomendasi kebijakan strategis yang disusun secara ringkas, berbasis riset, guna penyelesaian masalah kamtibmas."
 
-  if (!content) {
-    notFound()
+  // Start with fallback items filtered by category
+  let displayItems = publicationItems
+    .filter((item) => item.category.toLowerCase() === categoryName.toLowerCase())
+    .map((item) => ({
+      title: item.title,
+      category: item.category,
+      date: item.date,
+      meta: item.author,
+      summary: item.summary,
+      href: item.href,
+      tags: item.tags
+    }))
+
+  try {
+    const res = await serverFetch('/api/publikasi-content', { cache: 'no-store' })
+    if (res.ok) {
+      const json = await res.json()
+      if (json.status === 'success' && json.data && json.data.records) {
+        const records = json.data.records
+        const filteredRecords = records.filter(
+          (r: any) => r.status === 'Published' && r.category?.toLowerCase() === categoryName.toLowerCase()
+        )
+        
+        if (filteredRecords.length > 0) {
+          displayItems = filteredRecords.map((r: any) => {
+            const localMatch = publicationItems.find(
+              (p) => p.title.toLowerCase() === r.title.toLowerCase()
+            )
+            
+            const dateVal = r.date ? new Date(r.date).toLocaleDateString('id-ID', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric'
+            }) : '10 Juli 2026'
+
+            return {
+              title: r.title,
+              category: r.category || categoryName,
+              date: dateVal,
+              meta: r.author || 'Admin',
+              summary: localMatch?.summary || `Karya publikasi ilmiah resmi mengenai ${r.title} yang dipublikasikan oleh Sespim Lemdiklat Polri.`,
+              href: localMatch ? localMatch.href : `/publikasi/${r.id}`,
+              tags: localMatch?.tags || [r.category?.toLowerCase() || 'publikasi']
+            }
+          })
+        }
+      }
+    }
+  } catch (err) {
+    console.warn(`Failed to fetch publications for category ${categoryName} from API, using fallback:`, err)
   }
 
-  return <ContentPage content={content} path={path} />
+  return (
+    <ContentCollectionPage
+      path={path}
+      eyebrow={eyebrow}
+      title={title}
+      description={description}
+      items={displayItems}
+    />
+  )
 }
