@@ -399,6 +399,23 @@ function DashboardContent() {
   const [formPejabatItems, setFormPejabatItems] = useState<{ group: string; name: string; pangkat: string; jabatan: string; foto: string }[]>([])
   const [formFasilitasItems, setFormFasilitasItems] = useState<{ group: string; name: string; keterangan: string; foto: string }[]>([])
   const [formMateriTerbukaItems, setFormMateriTerbukaItems] = useState<{ title: string; description: string; fileName: string; href: string; format: string; category: string }[]>([])
+
+  // States for Kurikulum Umum (e-2)
+  const [formKurikulumSespimtiTitle, setFormKurikulumSespimtiTitle] = useState('')
+  const [formKurikulumSespimtiOverview, setFormKurikulumSespimtiOverview] = useState('')
+  const [formKurikulumSespimtiSubjects, setFormKurikulumSespimtiSubjects] = useState('')
+
+  const [formKurikulumSespimmenTitle, setFormKurikulumSespimmenTitle] = useState('')
+  const [formKurikulumSespimmenOverview, setFormKurikulumSespimmenOverview] = useState('')
+  const [formKurikulumSespimmenSubjects, setFormKurikulumSespimmenSubjects] = useState('')
+
+  const [formKurikulumSppkTitle, setFormKurikulumSppkTitle] = useState('')
+  const [formKurikulumSppkOverview, setFormKurikulumSppkOverview] = useState('')
+  const [formKurikulumSppkSubjects, setFormKurikulumSppkSubjects] = useState('')
+
+  const [formKurikulumSespimmaTitle, setFormKurikulumSespimmaTitle] = useState('')
+  const [formKurikulumSespimmaOverview, setFormKurikulumSespimmaOverview] = useState('')
+  const [formKurikulumSespimmaSubjects, setFormKurikulumSespimmaSubjects] = useState('')
   const [formInpassingModules, setFormInpassingModules] = useState<{ id: string; order: number; title: string; description: string; videoHref?: string; pdfHref?: string; pdfFileName?: string }[]>([])
   
   const [formContactChatbotName, setFormContactChatbotName] = useState('')
@@ -2747,6 +2764,71 @@ function DashboardContent() {
     setFormMateriTerbukaItems(list.length > 0 ? list : [{ title: '', description: '', fileName: '', href: '', format: 'PDF', category: 'Pelatihan Dasar' }])
   }
 
+  // Parsing Kurikulum JSON content
+  const parseKurikulumContent = (contentStr: string) => {
+    try {
+      const parsed = JSON.parse(contentStr)
+      setFormKurikulumSespimtiTitle(parsed.sespimti?.title || 'Kurikulum SESPIMTI POLRI')
+      setFormKurikulumSespimtiOverview(parsed.sespimti?.overview || '')
+      setFormKurikulumSespimtiSubjects((parsed.sespimti?.subjects || []).join('\n'))
+
+      setFormKurikulumSespimmenTitle(parsed.sespimmen?.title || 'Kurikulum SESPIMMEN POLRI')
+      setFormKurikulumSespimmenOverview(parsed.sespimmen?.overview || '')
+      setFormKurikulumSespimmenSubjects((parsed.sespimmen?.subjects || []).join('\n'))
+
+      setFormKurikulumSppkTitle(parsed.sppk?.title || 'Kurikulum SPPK POLRI')
+      setFormKurikulumSppkOverview(parsed.sppk?.overview || '')
+      setFormKurikulumSppkSubjects((parsed.sppk?.subjects || []).join('\n'))
+
+      setFormKurikulumSespimmaTitle(parsed.sespimma?.title || 'Kurikulum SESPIMMA POLRI')
+      setFormKurikulumSespimmaOverview(parsed.sespimma?.overview || '')
+      setFormKurikulumSespimmaSubjects((parsed.sespimma?.subjects || []).join('\n'))
+    } catch (e) {
+      setFormKurikulumSespimtiTitle('Kurikulum SESPIMTI POLRI')
+      setFormKurikulumSespimtiOverview('Kurikulum Sekolah Staf dan Pimpinan Tinggi (Sespimti) Polri dirancang untuk mencetak pemimpin tingkat tinggi yang profesional, cerdas, bermoral, modern, dan kolaboratif.')
+      setFormKurikulumSespimtiSubjects('Manajemen Strategis Keamanan\nGeopolitik dan Keamanan Nasional\nTeknologi Informasi Strategis\nKepemimpinan Transformatif')
+
+      setFormKurikulumSespimmenTitle('Kurikulum SESPIMMEN POLRI')
+      setFormKurikulumSespimmenOverview('Kurikulum Sekolah Staf dan Pimpinan Menengah (Sespimmen) Polri berfokus pada pemantapan kepemimpinan menengah, manajemen operasional kepolisian, serta pemecahan masalah kamtibmas.')
+      setFormKurikulumSespimmenSubjects('Manajemen Operasional Kepolisian\nHukum dan Hak Asasi Manusia\nSosiologi Keamanan\nEtika Profesi Kepemimpinan')
+
+      setFormKurikulumSppkTitle('Kurikulum SPPK POLRI')
+      setFormKurikulumSppkOverview('Kurikulum Sekolah Pengembangan Profesi Kepolisian (SPPK) ditujukan untuk meningkatkan kompetensi spesialis, profesi dan etika penegakan hukum perwira Polri.')
+      setFormKurikulumSppkSubjects('Spesialisasi Fungsi Teknis Kepolisian\nManajemen Penyidikan Modern\nTeknik Audit Investigatif\nSertifikasi dan Standardisasi Profesi')
+
+      setFormKurikulumSespimmaTitle('Kurikulum SESPIMMA POLRI')
+      setFormKurikulumSespimmaOverview('Kurikulum Sekolah Staf dan Pimpinan Pertama (Sespimma) membekali perwira pertama dengan kemampuan dasar manajerial, kepemimpinan dasar kewilayahan, serta pengelolaan staf.')
+      setFormKurikulumSespimmaSubjects('Administrasi dan Manajemen Organisasi\nTaktik dan Teknik Operasional Pertama\nKepemimpinan Dasar Kewilayahan\nKomunikasi Massa dan Publik')
+    }
+  }
+
+  // Serializing Kurikulum states to JSON string
+  const buildKurikulumContent = (): string => {
+    const data = {
+      sespimti: {
+        title: formKurikulumSespimtiTitle,
+        overview: formKurikulumSespimtiOverview,
+        subjects: formKurikulumSespimtiSubjects.split('\n').map(s => s.trim()).filter(Boolean)
+      },
+      sespimmen: {
+        title: formKurikulumSespimmenTitle,
+        overview: formKurikulumSespimmenOverview,
+        subjects: formKurikulumSespimmenSubjects.split('\n').map(s => s.trim()).filter(Boolean)
+      },
+      sppk: {
+        title: formKurikulumSppkTitle,
+        overview: formKurikulumSppkOverview,
+        subjects: formKurikulumSppkSubjects.split('\n').map(s => s.trim()).filter(Boolean)
+      },
+      sespimma: {
+        title: formKurikulumSespimmaTitle,
+        overview: formKurikulumSespimmaOverview,
+        subjects: formKurikulumSespimmaSubjects.split('\n').map(s => s.trim()).filter(Boolean)
+      }
+    }
+    return JSON.stringify(data)
+  }
+
   // Building Materi Terbuka content string from states
   const buildMateriTerbukaContent = (): string => {
     let contentStr = ''
@@ -3630,6 +3712,143 @@ function DashboardContent() {
     return null
   }
 
+  const renderKurikulumStructuredFields = () => {
+    return (
+      <div className="space-y-6 max-h-[400px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-4 text-neutral-200">
+        <p className="text-[10px] font-bold text-polri-goldSoft uppercase tracking-wider">Kurikulum Umum 4 Sekolah</p>
+        
+        {/* SESPIMTI */}
+        <div className="p-3 bg-neutral-950 rounded-xl border border-neutral-800 space-y-2">
+          <p className="text-xs font-black text-polri-gold">1. SESPIMTI</p>
+          <div>
+            <label className="block text-[8px] uppercase text-neutral-500 font-bold">Judul Kurikulum</label>
+            <input
+              type="text"
+              value={formKurikulumSespimtiTitle}
+              onChange={(e) => setFormKurikulumSespimtiTitle(e.target.value)}
+              className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+            />
+          </div>
+          <div>
+            <label className="block text-[8px] uppercase text-neutral-500 font-bold">Ringkasan / Deskripsi</label>
+            <textarea
+              value={formKurikulumSespimtiOverview}
+              onChange={(e) => setFormKurikulumSespimtiOverview(e.target.value)}
+              rows={2}
+              className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold resize-none"
+            />
+          </div>
+          <div>
+            <label className="block text-[8px] uppercase text-neutral-500 font-bold">Mata Kuliah / Bidang Studi (Satu per baris)</label>
+            <textarea
+              value={formKurikulumSespimtiSubjects}
+              onChange={(e) => setFormKurikulumSespimtiSubjects(e.target.value)}
+              rows={3}
+              placeholder="Contoh:\nManajemen Strategis\nGeopolitik Keamanan"
+              className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+            />
+          </div>
+        </div>
+
+        {/* SESPIMMEN */}
+        <div className="p-3 bg-neutral-950 rounded-xl border border-neutral-800 space-y-2">
+          <p className="text-xs font-black text-polri-gold">2. SESPIMMEN</p>
+          <div>
+            <label className="block text-[8px] uppercase text-neutral-500 font-bold">Judul Kurikulum</label>
+            <input
+              type="text"
+              value={formKurikulumSespimmenTitle}
+              onChange={(e) => setFormKurikulumSespimmenTitle(e.target.value)}
+              className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+            />
+          </div>
+          <div>
+            <label className="block text-[8px] uppercase text-neutral-500 font-bold">Ringkasan / Deskripsi</label>
+            <textarea
+              value={formKurikulumSespimmenOverview}
+              onChange={(e) => setFormKurikulumSespimmenOverview(e.target.value)}
+              rows={2}
+              className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold resize-none"
+            />
+          </div>
+          <div>
+            <label className="block text-[8px] uppercase text-neutral-500 font-bold">Mata Kuliah / Bidang Studi (Satu per baris)</label>
+            <textarea
+              value={formKurikulumSespimmenSubjects}
+              onChange={(e) => setFormKurikulumSespimmenSubjects(e.target.value)}
+              rows={3}
+              className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+            />
+          </div>
+        </div>
+
+        {/* SPPK */}
+        <div className="p-3 bg-neutral-950 rounded-xl border border-neutral-800 space-y-2">
+          <p className="text-xs font-black text-polri-gold">3. SPPK</p>
+          <div>
+            <label className="block text-[8px] uppercase text-neutral-500 font-bold">Judul Kurikulum</label>
+            <input
+              type="text"
+              value={formKurikulumSppkTitle}
+              onChange={(e) => setFormKurikulumSppkTitle(e.target.value)}
+              className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+            />
+          </div>
+          <div>
+            <label className="block text-[8px] uppercase text-neutral-500 font-bold">Ringkasan / Deskripsi</label>
+            <textarea
+              value={formKurikulumSppkOverview}
+              onChange={(e) => setFormKurikulumSppkOverview(e.target.value)}
+              rows={2}
+              className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold resize-none"
+            />
+          </div>
+          <div>
+            <label className="block text-[8px] uppercase text-neutral-500 font-bold">Mata Kuliah / Bidang Studi (Satu per baris)</label>
+            <textarea
+              value={formKurikulumSppkSubjects}
+              onChange={(e) => setFormKurikulumSppkSubjects(e.target.value)}
+              rows={3}
+              className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+            />
+          </div>
+        </div>
+
+        {/* SESPIMMA */}
+        <div className="p-3 bg-neutral-950 rounded-xl border border-neutral-800 space-y-2">
+          <p className="text-xs font-black text-polri-gold">4. SESPIMMA</p>
+          <div>
+            <label className="block text-[8px] uppercase text-neutral-500 font-bold">Judul Kurikulum</label>
+            <input
+              type="text"
+              value={formKurikulumSespimmaTitle}
+              onChange={(e) => setFormKurikulumSespimmaTitle(e.target.value)}
+              className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+            />
+          </div>
+          <div>
+            <label className="block text-[8px] uppercase text-neutral-500 font-bold">Ringkasan / Deskripsi</label>
+            <textarea
+              value={formKurikulumSespimmaOverview}
+              onChange={(e) => setFormKurikulumSespimmaOverview(e.target.value)}
+              rows={2}
+              className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold resize-none"
+            />
+          </div>
+          <div>
+            <label className="block text-[8px] uppercase text-neutral-500 font-bold">Mata Kuliah / Bidang Studi (Satu per baris)</label>
+            <textarea
+              value={formKurikulumSespimmaSubjects}
+              onChange={(e) => setFormKurikulumSespimmaSubjects(e.target.value)}
+              rows={3}
+              className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+            />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   const renderMateriTerbukaStructuredFields = () => {
     return (
       <div className="space-y-4 max-h-[350px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3 text-neutral-200">
@@ -4138,6 +4357,7 @@ function DashboardContent() {
     const isProfilStructured = currentModule === 'Profil' && ['p-5', 'p-6', 'p-7', 'p-8'].includes(selectedItem.id)
     const isWidyaiswaraMateri = currentModule === 'Widyaiswara' && (selectedItem.id === 'w-4' || selectedItem.id === 'w-8')
     const isWidyaiswaraInpassing = currentModule === 'Widyaiswara' && selectedItem.id === 'w-6'
+    const isKurikulum = currentModule === 'Program Pendidikan' && selectedItem.id === 'e-2'
     const finalContent = isProg 
       ? buildProgramContent(formTitle) 
       : (isProfilStructured 
@@ -4146,7 +4366,10 @@ function DashboardContent() {
               ? buildMateriTerbukaContent() 
               : (isWidyaiswaraInpassing 
                   ? buildInpassingModulesContent() 
-                  : formContent
+                  : (isKurikulum
+                      ? buildKurikulumContent()
+                      : formContent
+                    )
                 )
             )
         )
@@ -5222,6 +5445,8 @@ function DashboardContent() {
                   renderProfilStructuredFields(selectedItem?.id || '')
                 ) : currentModule === 'Widyaiswara' && (selectedItem?.id === 'w-4' || selectedItem?.id === 'w-8') ? (
                   renderMateriTerbukaStructuredFields()
+                ) : currentModule === 'Program Pendidikan' && selectedItem?.id === 'e-2' ? (
+                  renderKurikulumStructuredFields()
                 ) : currentModule === 'Widyaiswara' && selectedItem?.id === 'w-6' ? (
                   renderInpassingStructuredFields()
                 ) : (
