@@ -8,6 +8,9 @@ export type ArticleItem = {
   body: string[]
   tags: string[]
   href: string
+  school_field?: string
+  cohort?: string
+  year?: number
 }
 
 export type EducatorProfile = {

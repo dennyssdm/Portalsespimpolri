@@ -32,7 +32,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             summary: `Publikasi ilmiah mengenai ${r.title}.`,
             body: [],
             tags: [r.category || 'publikasi'],
-            href: `/publikasi/${r.id}`
+            href: `/publikasi/${r.id}`,
+            school_field: r.school_field || undefined,
+            cohort: r.cohort || undefined,
+            year: r.year || undefined
           }
         }
       }
@@ -69,6 +72,11 @@ export default async function Page({ params }: PageProps) {
             year: 'numeric'
           }) : '10 Juli 2026'
 
+          const extraTags = []
+          if (r.school_field) extraTags.push(r.school_field)
+          if (r.cohort) extraTags.push(r.cohort)
+          if (r.year) extraTags.push(String(r.year))
+
           itemToRender = {
             slug: r.id,
             title: r.title,
@@ -83,8 +91,11 @@ export default async function Page({ params }: PageProps) {
                   "Naskah lengkap, sinopsis, dan metadata publikasi sedang diproses untuk diunggah oleh Bidang Jianbang Sespim Lemdiklat Polri.",
                   "Silakan kembali beberapa saat lagi untuk mengunduh naskah lengkap atau hubungi eLibrary Sespim."
                 ]),
-            tags: matchingLocal?.tags || [r.category?.toLowerCase() || 'publikasi', 'jianbang', 'sespim'],
-            href: `/publikasi/${r.id}`
+            tags: [...(matchingLocal?.tags || [r.category?.toLowerCase() || 'publikasi', 'jianbang', 'sespim']), ...extraTags],
+            href: `/publikasi/${r.id}`,
+            school_field: r.school_field || undefined,
+            cohort: r.cohort || undefined,
+            year: r.year || undefined
           }
         }
       }
@@ -141,7 +152,10 @@ export default async function Page({ params }: PageProps) {
         meta={[
           { label: 'Kategori', value: itemToRender.category },
           { label: 'Tanggal', value: itemToRender.date },
-          { label: 'Penulis', value: itemToRender.author }
+          { label: 'Penulis / Serdik', value: itemToRender.author },
+          ...(itemToRender.school_field ? [{ label: 'Sekolah', value: itemToRender.school_field }] : []),
+          ...(itemToRender.cohort ? [{ label: 'Angkatan', value: itemToRender.cohort }] : []),
+          ...(itemToRender.year ? [{ label: 'Tahun', value: String(itemToRender.year) }] : [])
         ]}
         tags={itemToRender.tags}
         backHref="/publikasi"

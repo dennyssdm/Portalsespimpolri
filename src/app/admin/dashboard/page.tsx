@@ -36,6 +36,9 @@ type CMSItem = {
   author?: string
   image_url?: string
   content?: string
+  school_field?: string
+  cohort?: string
+  year?: number
 }
 
 type RoleType = 'super_admin' | 'stakeholder' | 'admin' | 'serdik' | 'widyaiswara'
@@ -399,6 +402,12 @@ function DashboardContent() {
   const [formPejabatItems, setFormPejabatItems] = useState<{ group: string; name: string; pangkat: string; jabatan: string; foto: string }[]>([])
   const [formFasilitasItems, setFormFasilitasItems] = useState<{ group: string; name: string; keterangan: string; foto: string }[]>([])
   const [formMateriTerbukaItems, setFormMateriTerbukaItems] = useState<{ title: string; description: string; fileName: string; href: string; format: string; category: string }[]>([])
+
+  // States for Publikasi extra metadata
+  const [formAuthor, setFormAuthor] = useState('')
+  const [formSchoolField, setFormSchoolField] = useState('')
+  const [formCohort, setFormCohort] = useState('')
+  const [formYear, setFormYear] = useState('')
 
   // States for Kurikulum Umum (e-2)
   const [formKurikulumSespimtiTitle, setFormKurikulumSespimtiTitle] = useState('')
@@ -3849,6 +3858,62 @@ function DashboardContent() {
     )
   }
 
+  const renderPublikasiExtraFields = () => {
+    return (
+      <div className="space-y-4 p-3 bg-neutral-950 rounded-xl border border-neutral-800 text-neutral-200">
+        <p className="text-[10px] font-bold text-polri-goldSoft uppercase tracking-wider">Metadata Karya / Publikasi Serdik</p>
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="block text-[8px] uppercase text-neutral-500 font-bold">Karya Serdik (Penulis)</label>
+            <input
+              type="text"
+              value={formAuthor}
+              onChange={(e) => setFormAuthor(e.target.value)}
+              placeholder="Contoh: Budi Santoso, S.I.K."
+              className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2.5 py-1.5 text-xs text-white outline-none focus:border-polri-gold placeholder:text-neutral-600"
+            />
+          </div>
+          <div>
+            <label className="block text-[8px] uppercase text-neutral-500 font-bold">Sekolah Sespim</label>
+            <select
+              value={formSchoolField}
+              onChange={(e) => setFormSchoolField(e.target.value)}
+              className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2.5 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+            >
+              <option value="">-- Pilih Sekolah --</option>
+              <option value="SESPIMTI">SESPIMTI</option>
+              <option value="SESPIMMEN">SESPIMMEN</option>
+              <option value="SPPK">SPPK</option>
+              <option value="SESPIMMA">SESPIMMA</option>
+            </select>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="block text-[8px] uppercase text-neutral-500 font-bold">Angkatan / Cohort</label>
+            <input
+              type="text"
+              value={formCohort}
+              onChange={(e) => setFormCohort(e.target.value)}
+              placeholder="Contoh: Ke-34, Ke-50"
+              className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2.5 py-1.5 text-xs text-white outline-none focus:border-polri-gold placeholder:text-neutral-600"
+            />
+          </div>
+          <div>
+            <label className="block text-[8px] uppercase text-neutral-500 font-bold">Tahun Akademik</label>
+            <input
+              type="number"
+              value={formYear}
+              onChange={(e) => setFormYear(e.target.value)}
+              placeholder="Contoh: 2026"
+              className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2.5 py-1.5 text-xs text-white outline-none focus:border-polri-gold placeholder:text-neutral-600"
+            />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   const renderMateriTerbukaStructuredFields = () => {
     return (
       <div className="space-y-4 max-h-[350px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3 text-neutral-200">
@@ -4912,6 +4977,8 @@ function DashboardContent() {
                   </select>
                 </div>
 
+                {currentModule === 'Publikasi' && renderPublikasiExtraFields()}
+
                 <div className="space-y-4">
                   <div>
                     <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Unggah Berkas Media (Foto / Video / Dokumen)</label>
@@ -5451,7 +5518,8 @@ function DashboardContent() {
                   renderInpassingStructuredFields()
                 ) : (
                   <div>
-                    <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Isi Konten (News / Detail)</label>
+                    {currentModule === 'Publikasi' && renderPublikasiExtraFields()}
+                    <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon mt-4">Isi Konten (News / Detail)</label>
                     <textarea
                       value={formContent}
                       onChange={(e) => setFormContent(e.target.value)}

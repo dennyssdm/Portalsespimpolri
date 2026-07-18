@@ -46,6 +46,11 @@ export default async function Page() {
               year: 'numeric'
             }) : '10 Juli 2026'
 
+            const extraTags = []
+            if (r.school_field) extraTags.push(r.school_field)
+            if (r.cohort) extraTags.push(r.cohort)
+            if (r.year) extraTags.push(String(r.year))
+
             return {
               title: r.title,
               category: r.category || categoryName,
@@ -53,7 +58,7 @@ export default async function Page() {
               meta: r.author || 'Admin',
               summary: localMatch?.summary || `Karya publikasi ilmiah resmi mengenai ${r.title} yang dipublikasikan oleh Sespim Lemdiklat Polri.`,
               href: localMatch ? localMatch.href : `/publikasi/${r.id}`,
-              tags: localMatch?.tags || [r.category?.toLowerCase() || 'publikasi']
+              tags: [...(localMatch?.tags || [r.category?.toLowerCase() || 'publikasi']), ...extraTags]
             }
           })
         }
