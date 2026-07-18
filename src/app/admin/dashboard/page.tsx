@@ -5538,6 +5538,22 @@ function DashboardContent() {
                 >
                   Batal
                 </button>
+                {hasWriteAccess && currentModule !== 'Profil' && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const savedCategory = formCategory;
+                      setIsEditModalOpen(false);
+                      setTimeout(() => {
+                        handleOpenCreate();
+                        setFormCategory(savedCategory);
+                      }, 100);
+                    }}
+                    className="flex-1 rounded-xl bg-neutral-800 hover:bg-neutral-750 border border-polri-gold/25 py-3 text-xs font-bold text-polri-goldSoft transition"
+                  >
+                    + Tambah Koleksi
+                  </button>
+                )}
                 <button
                   type="submit"
                   className="flex-1 rounded-xl bg-polri-maroon hover:bg-polri-brownDark py-3 text-xs font-bold text-white transition"
