@@ -25,7 +25,7 @@ export default async function Page() {
     }))
 
   try {
-    const res = await serverFetch('/api/publikasi-content', { cache: 'no-store' })
+    const res = await serverFetch('/api/publikasi-content?limit=1000', { cache: 'no-store' })
     if (res.ok) {
       const json = await res.json()
       if (json.status === 'success' && json.data && json.data.records) {
