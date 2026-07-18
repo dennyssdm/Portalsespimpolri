@@ -3700,17 +3700,21 @@ function DashboardContent() {
                 </div>
                 <div>
                   <label className="block text-[8px] uppercase text-neutral-500 font-bold">Kategori Materi</label>
-                  <input
-                    type="text"
+                  <select
                     value={item.category}
                     onChange={(e) => {
                       const updated = [...formMateriTerbukaItems]
                       updated[idx].category = e.target.value
                       setFormMateriTerbukaItems(updated)
                     }}
-                    placeholder="Contoh: Pelatihan Dasar"
-                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
-                  />
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                  >
+                    <option value="Pelatihan Dasar">Pelatihan Dasar</option>
+                    <option value="SESPIMTI">SESPIMTI</option>
+                    <option value="SESPIMMEN">SESPIMMEN</option>
+                    <option value="SPPK">SPPK</option>
+                    <option value="SESPIMMA">SESPIMMA</option>
+                  </select>
                 </div>
               </div>
 

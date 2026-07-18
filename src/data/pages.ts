@@ -1255,6 +1255,38 @@ export const pages: Record<string, PageContent> = {
         href: '/files/widyaiswara/8.%20ETIKA%20WIDYAISWARA.pdf',
         format: 'PDF',
         category: 'Pelatihan Dasar'
+      },
+      {
+        title: 'Kurikulum Manajemen Strategis Sespimti',
+        description: 'Panduan pembelajaran mata kuliah Manajemen Strategis untuk perwira tinggi Sespimti.',
+        fileName: 'hanjar_manajemen_strategis_sespimti.pdf',
+        href: '/files/widyaiswara/hanjar_manajemen_strategis_sespimti.pdf',
+        format: 'PDF',
+        category: 'SESPIMTI'
+      },
+      {
+        title: 'Kepemimpinan Publik Sespimmen',
+        description: 'Bahan ajar kepemimpinan publik dan pelayanan prima untuk perwira menengah Sespimmen.',
+        fileName: 'hanjar_kepemimpinan_publik_sespimmen.pdf',
+        href: '/files/widyaiswara/hanjar_kepemimpinan_publik_sespimmen.pdf',
+        format: 'PDF',
+        category: 'SESPIMMEN'
+      },
+      {
+        title: 'Pengembangan Profesi Kepolisian SPPK',
+        description: 'Modul kompetensi profesi dan etika penegakan hukum untuk peserta didik SPPK.',
+        fileName: 'hanjar_pengembangan_profesi_sppk.pdf',
+        href: '/files/widyaiswara/hanjar_pengembangan_profesi_sppk.pdf',
+        format: 'PDF',
+        category: 'SPPK'
+      },
+      {
+        title: 'Administrasi Dasar Kepolisian Sespimma',
+        description: 'Hanjar pembimbingan administrasi dan kepemimpinan dasar perwira pertama Sespimma.',
+        fileName: 'hanjar_administrasi_dasar_sespimma.pdf',
+        href: '/files/widyaiswara/hanjar_administrasi_dasar_sespimma.pdf',
+        format: 'PDF',
+        category: 'SESPIMMA'
       }
     ],
     sections: [
