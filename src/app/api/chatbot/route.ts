@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { API_BASE_URL } from '@/lib/api'
 
 export const dynamic = 'force-dynamic'
 
@@ -10,7 +11,12 @@ type HistoryItem = {
 export async function POST(request: Request) {
   try {
     const body = await request.json().catch(() => ({}))
-    const { message, history } = body as { message?: string; history?: HistoryItem[] }
+    const { message, history, sessionId, visitorName } = body as { 
+      message?: string
+      history?: HistoryItem[] 
+      sessionId?: string
+      visitorName?: string
+    }
 
     if (!message || typeof message !== 'string' || !message.trim()) {
       return NextResponse.json(
@@ -19,9 +25,25 @@ export async function POST(request: Request) {
       )
     }
 
+    // Try forwarding to Express backend API first for database logging & operator sync
+    try {
+      const expressRes = await fetch(`${API_BASE_URL}/api/chatbot`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message, history, sessionId, visitorName })
+      })
+
+      if (expressRes.ok) {
+        const json = await expressRes.json()
+        return NextResponse.json(json)
+      }
+    } catch (err) {
+      console.warn('Express API backend unavailable for chatbot logging, running standalone fallback:', err)
+    }
+
+    // If Express backend is offline, run standalone fallback response
     const apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY
 
-    // If Gemini API Key is configured, attempt real AI generation
     if (apiKey) {
       try {
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`
@@ -62,8 +84,10 @@ export async function POST(request: Request) {
             return NextResponse.json({
               status: 'success',
               data: {
+                sessionId: sessionId || `sess_${Date.now()}`,
                 reply: replyText,
-                isSimulated: false
+                isSimulated: false,
+                status: 'bot_replied'
               }
             })
           }
@@ -73,14 +97,15 @@ export async function POST(request: Request) {
       }
     }
 
-    // Fallback or default: High-quality intelligent simulated response for Agen Wira
     const replyText = getSimulatedResponse(message)
 
     return NextResponse.json({
       status: 'success',
       data: {
+        sessionId: sessionId || `sess_${Date.now()}`,
         reply: replyText,
-        isSimulated: true
+        isSimulated: true,
+        status: 'bot_replied'
       }
     })
   } catch (error: any) {
@@ -90,7 +115,8 @@ export async function POST(request: Request) {
         status: 'success',
         data: {
           reply: 'Siap! Mohon maaf saat ini lalu lintas jaringan sedang padat. Namun, informasi umum mengenai program pendidikan, fasilitas, dan kontak Sespim Lemdiklat Polri dapat Anda akses melalui menu navigasi portal resmi kami.',
-          isSimulated: true
+          isSimulated: true,
+          status: 'bot_replied'
         }
       },
       { status: 200 }

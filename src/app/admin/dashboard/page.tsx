@@ -143,7 +143,8 @@ const ADMIN_SIDEBAR_ITEMS: CMSSidebarItem[] = [
   { label: 'Kontak', type: 'module', moduleName: 'Kontak' },
   { label: 'Sarana Prasarana', type: 'module', moduleName: 'Sarana Prasarana' },
   { label: 'Pembimbingan Naskap', type: 'module', moduleName: 'Pembimbingan Naskap' },
-  { label: 'Laporan Sertifikasi', type: 'module', moduleName: 'Laporan Sertifikasi' }
+  { label: 'Laporan Sertifikasi', type: 'module', moduleName: 'Laporan Sertifikasi' },
+  { label: 'Agen Wira AI & Operator', type: 'module', moduleName: 'Agen Wira AI & Operator' }
 ]
 
 function DashboardContent() {
@@ -675,6 +676,89 @@ function DashboardContent() {
   const [ssoSerdikList, setSsoSerdikList] = useState<any[]>([])
   const [visitorStats, setVisitorStats] = useState<any>(null)
   const [visitorRanking, setVisitorRanking] = useState<any[]>([])
+
+  // Agen Wira Monitor & Operator States
+  const [wiraActiveTab, setWiraActiveTab] = useState<'faq' | 'operator'>('faq')
+  const [wiraStats, setWiraStats] = useState<{
+    totalSessions: number
+    totalMessages: number
+    unresolvedCount: number
+    operatorTookOverCount: number
+    unresolvedQuestions: any[]
+    topAskedQuestions: any[]
+  } | null>(null)
+  const [wiraSessions, setWiraSessions] = useState<any[]>([])
+  const [wiraSelectedSessionId, setWiraSelectedSessionId] = useState<string | null>(null)
+  const [wiraSessionMessages, setWiraSessionMessages] = useState<any[]>([])
+  const [wiraOperatorReplyText, setWiraOperatorReplyText] = useState('')
+  const [wiraOperatorName, setWiraOperatorName] = useState('')
+  const [wiraIsLoading, setWiraIsLoading] = useState(false)
+
+  const fetchWiraData = () => {
+    setWiraIsLoading(true)
+    apiFetch('/api/chatbot/stats')
+      .then(res => res.json())
+      .then(json => {
+        if (json.status === 'success') {
+          setWiraStats(json.data)
+        }
+      })
+      .catch(err => console.error('Failed to fetch chatbot stats:', err))
+
+    apiFetch('/api/chatbot/sessions')
+      .then(res => res.json())
+      .then(json => {
+        if (json.status === 'success') {
+          setWiraSessions(json.data.sessions)
+        }
+      })
+      .catch(err => console.error('Failed to fetch chatbot sessions:', err))
+      .finally(() => setWiraIsLoading(false))
+  }
+
+  const fetchWiraSessionMessages = (sessionId: string) => {
+    setWiraSelectedSessionId(sessionId)
+    apiFetch(`/api/chatbot/messages/${sessionId}`)
+      .then(res => res.json())
+      .then(json => {
+        if (json.status === 'success') {
+          setWiraSessionMessages(json.data.messages)
+        }
+      })
+      .catch(err => console.error('Failed to fetch session messages:', err))
+  }
+
+  const handleSendOperatorReply = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!wiraSelectedSessionId || !wiraOperatorReplyText.trim()) return
+
+    const opName = wiraOperatorName.trim() || user?.name || 'Operator Sespim'
+
+    try {
+      const res = await apiFetch('/api/chatbot/operator-reply', {
+        method: 'POST',
+        body: JSON.stringify({
+          sessionId: wiraSelectedSessionId,
+          operatorName: opName,
+          message: wiraOperatorReplyText.trim()
+        })
+      })
+
+      if (res.ok) {
+        setWiraOperatorReplyText('')
+        fetchWiraSessionMessages(wiraSelectedSessionId)
+        fetchWiraData()
+      }
+    } catch (err) {
+      console.error('Failed to send operator reply:', err)
+    }
+  }
+
+  useEffect(() => {
+    if (currentModule === 'Agen Wira AI & Operator') {
+      fetchWiraData()
+    }
+  }, [currentModule])
 
   useEffect(() => {
     if (currentModule === 'Analitik Kasespim') {
@@ -1610,6 +1694,332 @@ function DashboardContent() {
           </div>
         </div>
 
+      </div>
+    )
+  }
+
+  const renderAgenWiraWorkspace = () => {
+    return (
+      <div className="space-y-6">
+        {/* Header Card */}
+        <div className="bg-gradient-to-r from-polri-brownDark via-polri-brown to-polri-maroon p-6 rounded-2xl border border-polri-gold/30 shadow-xl text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="h-14 w-14 rounded-2xl bg-white/10 p-2 backdrop-blur-md border border-white/20 shrink-0 flex items-center justify-center">
+              <img src="/images/wira-avatar.png" alt="Wira" className="h-full w-full object-cover rounded-xl" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="text-lg font-black tracking-wide uppercase">Monitor Agen Wira & Live Operator Center</h3>
+                <span className="px-2 py-0.5 text-[10px] font-extrabold uppercase bg-emerald-500 text-white rounded-full">
+                  AI + Human Hybrid
+                </span>
+              </div>
+              <p className="text-xs text-polri-goldSoft mt-1">
+                Pantau statistik pertanyaan populer (F.A.Q), evaluasi respons AI, dan ambil alih obrolan pengunjung secara langsung.
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={fetchWiraData}
+            disabled={wiraIsLoading}
+            className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-bold text-xs py-2.5 px-4 rounded-xl border border-white/20 transition backdrop-blur-md shrink-0"
+          >
+            <ArrowTopRightOnSquareIcon className="h-4 w-4" />
+            {wiraIsLoading ? 'Memuat Data...' : 'Refresh Data'}
+          </button>
+        </div>
+
+        {/* Stats Metrics Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-neutral-950 p-5 rounded-2xl border border-neutral-800 flex flex-col justify-between">
+            <p className="text-xs font-bold text-neutral-400 uppercase tracking-wider">Total Percakapan (Sesi)</p>
+            <div className="mt-3 flex items-baseline justify-between">
+              <span className="text-3xl font-black text-white">{wiraStats?.totalSessions || 0}</span>
+              <span className="text-xs text-neutral-500">Sesi Unik</span>
+            </div>
+          </div>
+
+          <div className="bg-neutral-950 p-5 rounded-2xl border border-neutral-800 flex flex-col justify-between">
+            <p className="text-xs font-bold text-neutral-400 uppercase tracking-wider">Total Pesan Terproses</p>
+            <div className="mt-3 flex items-baseline justify-between">
+              <span className="text-3xl font-black text-polri-goldSoft">{wiraStats?.totalMessages || 0}</span>
+              <span className="text-xs text-neutral-500">Log Pesan</span>
+            </div>
+          </div>
+
+          <div className="bg-neutral-950 p-5 rounded-2xl border border-neutral-800 flex flex-col justify-between">
+            <p className="text-xs font-bold text-neutral-400 uppercase tracking-wider">Butuh Operator / Fallback</p>
+            <div className="mt-3 flex items-baseline justify-between">
+              <span className="text-3xl font-black text-red-400">{wiraStats?.unresolvedCount || 0}</span>
+              <span className="px-2 py-0.5 text-[10px] font-bold bg-red-950 text-red-400 rounded-full border border-red-800">
+                Perlu Evaluasi
+              </span>
+            </div>
+          </div>
+
+          <div className="bg-neutral-950 p-5 rounded-2xl border border-neutral-800 flex flex-col justify-between">
+            <p className="text-xs font-bold text-neutral-400 uppercase tracking-wider">Sesi Diambil Alih Operator</p>
+            <div className="mt-3 flex items-baseline justify-between">
+              <span className="text-3xl font-black text-emerald-400">{wiraStats?.operatorTookOverCount || 0}</span>
+              <span className="px-2 py-0.5 text-[10px] font-bold bg-emerald-950 text-emerald-400 rounded-full border border-emerald-800">
+                Live Human Active
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Sub-Tabs Selector */}
+        <div className="flex bg-neutral-900 p-1 rounded-xl border border-neutral-800 max-w-md">
+          <button
+            type="button"
+            onClick={() => setWiraActiveTab('faq')}
+            className={`flex-1 py-2 text-xs font-bold rounded-lg transition ${
+              wiraActiveTab === 'faq' 
+                ? 'bg-polri-maroon text-white shadow-md' 
+                : 'text-neutral-400 hover:text-white'
+            }`}
+          >
+            📊 Analitik F.A.Q & Pertanyaan
+          </button>
+          <button
+            type="button"
+            onClick={() => setWiraActiveTab('operator')}
+            className={`flex-1 py-2 text-xs font-bold rounded-lg transition flex items-center justify-center gap-1.5 ${
+              wiraActiveTab === 'operator' 
+                ? 'bg-emerald-700 text-white shadow-md' 
+                : 'text-neutral-400 hover:text-white'
+            }`}
+          >
+            🎧 Konsol Live Operator
+            {(wiraStats?.unresolvedCount || 0) > 0 && (
+              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+            )}
+          </button>
+        </div>
+
+        {/* TAB 1: ANALITIK F.A.Q */}
+        {wiraActiveTab === 'faq' && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Top Asked Questions */}
+            <div className="bg-neutral-950 p-6 rounded-2xl border border-neutral-800 space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="text-sm font-black uppercase text-polri-goldSoft tracking-wider">Top 10 Pertanyaan Sering Diajukan (F.A.Q)</h4>
+                  <p className="text-xs text-neutral-400 mt-0.5">Urutan pertanyaan publik berdasarkan frekuensi tersering.</p>
+                </div>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-neutral-800 text-[10px] uppercase tracking-wider text-neutral-400">
+                      <th className="py-2.5 px-3">#</th>
+                      <th className="py-2.5 px-3">Pertanyaan Pengunjung</th>
+                      <th className="py-2.5 px-3 text-right">Frekuensi</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-neutral-900 text-xs">
+                    {wiraStats?.topAskedQuestions && wiraStats.topAskedQuestions.length > 0 ? (
+                      wiraStats.topAskedQuestions.map((item, idx) => (
+                        <tr key={idx} className="hover:bg-neutral-900/50 transition">
+                          <td className="py-2.5 px-3 font-bold text-polri-goldSoft">{idx + 1}</td>
+                          <td className="py-2.5 px-3 text-white font-medium">{item.message}</td>
+                          <td className="py-2.5 px-3 text-right font-black text-emerald-400">{item.frequency}x</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={3} className="py-6 text-center text-xs text-neutral-500">Belum ada data pertanyaan pengunjung terdeteksi.</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Unresolved / Evaluation Needed Questions */}
+            <div className="bg-neutral-950 p-6 rounded-2xl border border-neutral-800 space-y-4">
+              <div>
+                <h4 className="text-sm font-black uppercase text-red-400 tracking-wider">Evaluasi Pertanyaan Perlu Pembaruan AI</h4>
+                <p className="text-xs text-neutral-400 mt-0.5">Pertanyaan pengunjung yang belum terjawab optimal atau meminta operator human.</p>
+              </div>
+
+              <div className="space-y-2.5 max-h-[350px] overflow-y-auto pr-1 scrollbar-thin">
+                {wiraStats?.unresolvedQuestions && wiraStats.unresolvedQuestions.length > 0 ? (
+                  wiraStats.unresolvedQuestions.map((item, idx) => (
+                    <div key={idx} className="p-3.5 rounded-xl bg-neutral-900 border border-neutral-800 space-y-1">
+                      <div className="flex items-center justify-between text-[10px] text-neutral-400">
+                        <span className="font-bold text-neutral-300">{item.visitor_name}</span>
+                        <span>{new Date(item.created_at).toLocaleString('id-ID')}</span>
+                      </div>
+                      <p className="text-xs text-white font-semibold">"{item.message}"</p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="p-8 text-center text-xs text-neutral-500 bg-neutral-900/50 rounded-xl border border-neutral-800">
+                    Semua pertanyaan pengunjung berhasil dijawab oleh AI Agen Wira.
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 2: LIVE OPERATOR CONSOLE */}
+        {wiraActiveTab === 'operator' && (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Active Sessions List */}
+            <div className="lg:col-span-5 bg-neutral-950 p-6 rounded-2xl border border-neutral-800 space-y-4">
+              <div>
+                <h4 className="text-sm font-black uppercase text-emerald-400 tracking-wider">Daftar Sesi Obrolan Pengunjung</h4>
+                <p className="text-xs text-neutral-400 mt-0.5">Pilih sesi pengunjung untuk melihat obrolan dan mengambil alih percakapan secara langsung.</p>
+              </div>
+
+              <div className="space-y-2 max-h-[450px] overflow-y-auto pr-1 scrollbar-thin">
+                {wiraSessions && wiraSessions.length > 0 ? (
+                  wiraSessions.map((sess) => {
+                    const isSelected = wiraSelectedSessionId === sess.session_id
+                    const isUnresolved = sess.status === 'unresolved'
+                    const isTookOver = sess.status === 'operator_took_over'
+
+                    return (
+                      <div
+                        key={sess.session_id}
+                        onClick={() => fetchWiraSessionMessages(sess.session_id)}
+                        className={`p-3.5 rounded-xl border cursor-pointer transition flex items-center justify-between ${
+                          isSelected
+                            ? 'bg-neutral-800 border-polri-gold'
+                            : isUnresolved
+                            ? 'bg-red-950/20 border-red-900/50 hover:bg-neutral-900'
+                            : isTookOver
+                            ? 'bg-emerald-950/20 border-emerald-900/50 hover:bg-neutral-900'
+                            : 'bg-neutral-900 border-neutral-800 hover:bg-neutral-800/60'
+                        }`}
+                      >
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs font-bold text-white">{sess.visitor_name}</span>
+                            <span className={`text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded-full ${
+                              isUnresolved
+                                ? 'bg-red-500 text-white animate-pulse'
+                                : isTookOver
+                                ? 'bg-emerald-500 text-white'
+                                : 'bg-neutral-800 text-neutral-400'
+                            }`}>
+                              {isUnresolved ? 'Perlu Operator' : isTookOver ? 'Operator Active' : 'AI Active'}
+                            </span>
+                          </div>
+                          <p className="text-[10px] text-neutral-400">ID: {sess.session_id.substring(0, 15)}... • {sess.total_messages} Pesan</p>
+                          <p className="text-[10px] text-neutral-500">{new Date(sess.last_activity).toLocaleString('id-ID')}</p>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            fetchWiraSessionMessages(sess.session_id)
+                          }}
+                          className="px-3 py-1.5 bg-polri-maroon hover:bg-polri-brownDark text-white text-[10px] font-bold rounded-lg shadow-sm"
+                        >
+                          {isSelected ? 'Aktif' : 'Buka Chat'}
+                        </button>
+                      </div>
+                    )
+                  })
+                ) : (
+                  <div className="p-8 text-center text-xs text-neutral-500 bg-neutral-900/50 rounded-xl border border-neutral-800">
+                    Belum ada sesi obrolan aktif.
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Selected Chat Room Console */}
+            <div className="lg:col-span-7 bg-neutral-950 p-6 rounded-2xl border border-neutral-800 flex flex-col h-[520px]">
+              {wiraSelectedSessionId ? (
+                <>
+                  {/* Console Header */}
+                  <div className="pb-4 mb-4 border-b border-neutral-800 flex items-center justify-between">
+                    <div>
+                      <h4 className="text-sm font-black text-white uppercase flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                        Live Chat Room: {wiraSelectedSessionId}
+                      </h4>
+                      <p className="text-xs text-neutral-400 mt-0.5">
+                        Mengambil alih percakapan pengunjung secara langsung.
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => fetchWiraSessionMessages(wiraSelectedSessionId)}
+                      className="px-3 py-1 bg-neutral-800 hover:bg-neutral-700 text-neutral-300 text-xs rounded-lg border border-neutral-700"
+                    >
+                      Refresh Chat
+                    </button>
+                  </div>
+
+                  {/* Chat Messages Transcript */}
+                  <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-neutral-900/60 rounded-xl border border-neutral-800/80 mb-4 scrollbar-thin">
+                    {wiraSessionMessages.map((msg: any) => (
+                      <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-start' : 'justify-end'}`}>
+                        <div className={`max-w-[85%] rounded-xl px-3.5 py-2 text-xs leading-relaxed ${
+                          msg.sender === 'user'
+                            ? 'bg-neutral-800 text-white border border-neutral-700'
+                            : msg.sender === 'operator'
+                            ? 'bg-emerald-950 border border-emerald-700 text-emerald-100'
+                            : 'bg-polri-maroon/80 border border-polri-gold/30 text-white'
+                        }`}>
+                          <p className="text-[9px] font-black uppercase tracking-wider mb-0.5 text-neutral-400">
+                            {msg.sender === 'user' ? `[Pengunjung] ${msg.visitor_name}` : msg.sender === 'operator' ? `[Operator] ${msg.operator_name}` : '[AI Agen Wira]'}
+                          </p>
+                          <p className="whitespace-pre-line">{msg.message}</p>
+                          <span className="text-[8px] opacity-60 text-right block mt-1">
+                            {new Date(msg.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Operator Input Form */}
+                  <form onSubmit={handleSendOperatorReply} className="space-y-3 pt-2">
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="text"
+                        value={wiraOperatorName}
+                        onChange={(e) => setWiraOperatorName(e.target.value)}
+                        placeholder={`Nama Operator (Default: ${user?.name || 'Operator Sespim'})`}
+                        className="w-1/3 px-3 py-2 bg-neutral-900 border border-neutral-800 rounded-xl text-xs text-white outline-none focus:border-emerald-500"
+                      />
+                      <input
+                        type="text"
+                        value={wiraOperatorReplyText}
+                        onChange={(e) => setWiraOperatorReplyText(e.target.value)}
+                        placeholder="Ketikkan balasan operator di sini untuk dikirim ke pengunjung..."
+                        className="flex-1 px-3 py-2 bg-neutral-900 border border-neutral-800 rounded-xl text-xs text-white outline-none focus:border-emerald-500"
+                      />
+                      <button
+                        type="submit"
+                        disabled={!wiraOperatorReplyText.trim()}
+                        className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition shadow-md disabled:opacity-40"
+                      >
+                        Kirim Balasan
+                      </button>
+                    </div>
+                  </form>
+                </>
+              ) : (
+                <div className="flex-1 flex flex-col items-center justify-center text-center p-8 text-neutral-500 space-y-2">
+                  <UserGroupIcon className="h-10 w-10 text-neutral-600" />
+                  <p className="text-xs font-semibold text-neutral-400">Pilih sesi obrolan pengunjung di sebelah kiri untuk membuka Konsol Chat Live Operator.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     )
   }
@@ -4002,6 +4412,8 @@ function DashboardContent() {
             renderPembimbinganNaskapWorkspace()
           ) : currentModule === 'Analitik Kasespim' ? (
             renderAnalitikKasespimWorkspace()
+          ) : currentModule === 'Agen Wira AI & Operator' ? (
+            renderAgenWiraWorkspace()
           ) : (
             <>
               {/* Header Title Section */}
