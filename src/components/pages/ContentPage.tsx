@@ -576,47 +576,69 @@ export function ContentPage({ content, path }: ContentPageProps) {
           {filteredResources.map((resource) => (
             <div
               key={resource.href}
-              className="rounded-lg border border-polri-gold/25 bg-white p-5 shadow-soft transition hover:-translate-y-1 hover:border-polri-gold hover:shadow-gold"
+              className="rounded-lg border border-polri-gold/25 bg-white p-5 shadow-soft transition hover:-translate-y-1 hover:border-polri-gold hover:shadow-gold flex flex-col sm:flex-row gap-5 items-start"
             >
-              <div className="flex flex-wrap gap-2">
-                <span className="rounded-lg bg-polri-maroon px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-white">
-                  {resource.format}
-                </span>
-                {resource.category ? (
-                  <span className="rounded-lg bg-polri-cream px-3 py-1 text-xs font-bold text-polri-brownDark">
-                    {resource.category}
-                  </span>
-                ) : null}
+              {/* Premium CSS-based Book Cover for Hanjar */}
+              <div className="relative w-28 h-36 shrink-0 rounded-lg overflow-hidden border border-polri-gold/20 bg-neutral-900 shadow flex items-center justify-center text-center p-2.5 select-none flex-col justify-between">
+                <div className={`w-full h-full absolute inset-0 flex flex-col justify-between p-2 text-white bg-gradient-to-b ${
+                  resource.category === 'SESPIMTI' ? 'from-amber-950 to-neutral-950 border-t-4 border-polri-gold' :
+                  resource.category === 'SESPIMMEN' ? 'from-emerald-950 to-neutral-950 border-t-4 border-polri-gold' :
+                  resource.category === 'SESPIMMA' ? 'from-blue-950 to-neutral-950 border-t-4 border-polri-gold' :
+                  resource.category === 'SPPK' ? 'from-purple-950 to-neutral-950 border-t-4 border-polri-gold' :
+                  'from-slate-900 to-slate-950 border-t-4 border-polri-gold'
+                }`}>
+                  <div className="space-y-0.5 text-left">
+                    <span className="text-[5px] font-black uppercase tracking-widest text-polri-goldSoft">HANJAR SESPIM</span>
+                    <p className="text-[7px] font-black leading-tight line-clamp-4 text-neutral-100">{resource.title}</p>
+                  </div>
+                  <div className="text-left border-t border-white/10 pt-1 mt-auto">
+                    <p className="text-[5px] text-neutral-400 font-bold uppercase tracking-wider truncate">Widyaiswara</p>
+                    <span className="text-[4px] text-polri-goldSoft font-bold block mt-0.5">{resource.category || 'Materi Pokok'}</span>
+                  </div>
+                </div>
               </div>
-              <h2 className="mt-4 text-lg font-black text-polri-brownDark sm:text-xl">
-                {resource.title}
-              </h2>
-              <p className="mt-3 text-sm leading-7 text-neutral-700">{resource.description}</p>
-              <p className="mt-4 rounded-lg bg-polri-cream px-4 py-3 text-xs font-bold text-polri-brownDark">
-                {resource.fileName}
-              </p>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <a
-                  href={resource.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-polri-gold px-4 py-2.5 text-xs font-black text-polri-brownDark hover:bg-polri-goldSoft transition"
-                >
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                  </svg>
-                  Buka File
-                </a>
-                <a
-                  href={resource.href}
-                  download={resource.fileName}
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-polri-maroon px-4 py-2.5 text-xs font-black text-white hover:bg-polri-brownDark transition"
-                >
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                  </svg>
-                  Unduh File
-                </a>
+
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-wrap gap-2">
+                  <span className="rounded-lg bg-polri-maroon px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-white">
+                    {resource.format}
+                  </span>
+                  {resource.category ? (
+                    <span className="rounded-lg bg-polri-cream px-3 py-1 text-xs font-bold text-polri-brownDark">
+                      {resource.category}
+                    </span>
+                  ) : null}
+                </div>
+                <h2 className="mt-4 text-lg font-black text-polri-brownDark sm:text-xl">
+                  {resource.title}
+                </h2>
+                <p className="mt-3 text-sm leading-7 text-neutral-700">{resource.description}</p>
+                <p className="mt-4 rounded-lg bg-polri-cream px-4 py-3 text-xs font-bold text-polri-brownDark">
+                  {resource.fileName}
+                </p>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <a
+                    href={resource.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-polri-gold px-4 py-2.5 text-xs font-black text-polri-brownDark hover:bg-polri-goldSoft transition"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                    </svg>
+                    Buka File
+                  </a>
+                  <a
+                    href={resource.href}
+                    download={resource.fileName}
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-polri-maroon px-4 py-2.5 text-xs font-black text-white hover:bg-polri-brownDark transition"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                    </svg>
+                    Unduh
+                  </a>
+                </div>
               </div>
             </div>
           ))}
