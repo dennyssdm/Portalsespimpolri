@@ -2,6 +2,71 @@ import { ContentCollectionPage } from '@/components/pages/ContentCollectionPage'
 import { publicationItems } from '@/data/contentCollections'
 import { serverFetch } from '@/lib/api'
 
+function parseGroupedPublications(records: any[]) {
+  const items: any[] = []
+  for (const record of records) {
+    if (!record.content) continue
+    
+    // Split entries by double newlines or empty lines
+    const rawEntries = record.content.split(/\n\s*\n/)
+    for (const rawEntry of rawEntries) {
+      const lines = rawEntry.split('\n')
+      let item: any = {
+        id: '',
+        title: '',
+        category: '',
+        date: record.date ? new Date(record.date).toLocaleDateString('id-ID', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        }) : '10 Juli 2026',
+        author: 'Admin',
+        content: '',
+        school_field: record.category || '', // Group category is the school (SESPIMTI, etc.)
+        cohort: '',
+        year: '',
+        image_url: ''
+      }
+
+      let hasName = false
+      for (const line of lines) {
+        const trimmed = line.trim()
+        if (!trimmed) continue
+        const colonIdx = trimmed.indexOf(':')
+        if (colonIdx === -1) continue
+        const key = trimmed.substring(0, colonIdx).trim().toUpperCase()
+        const val = trimmed.substring(colonIdx + 1).trim()
+
+        if (key === 'NAMA') {
+          item.title = val
+          hasName = true
+        } else if (key === 'DESKRIPSI') {
+          item.content = val
+        } else if (key === 'KATEGORI') {
+          item.category = val
+        } else if (key === 'PENULIS') {
+          item.author = val
+        } else if (key === 'ANGKATAN') {
+          item.cohort = val
+        } else if (key === 'TAHUN') {
+          item.year = val
+        } else if (key === 'COVER') {
+          item.image_url = val
+        } else if (key === 'URL') {
+          const parts = val.split('/')
+          item.id = parts[parts.length - 1] || ''
+        }
+      }
+
+      if (hasName) {
+        items.push(item)
+      }
+    }
+  }
+  return items
+}
+
+
 export default async function Page() {
   let displayItems = publicationItems.map((item) => ({
     title: item.title,
@@ -19,53 +84,26 @@ export default async function Page() {
     if (res.ok) {
       const json = await res.json()
       if (json.status === 'success' && json.data && json.data.records) {
-        const records = json.data.records
-        const publishedRecords = records.filter((r: any) => r.status === 'Published')
+        const parsed = parseGroupedPublications(json.data.records)
         
-        if (publishedRecords.length > 0) {
-          displayItems = publishedRecords.map((r: any) => {
+        if (parsed.length > 0) {
+          displayItems = parsed.map((r: any) => {
             const localMatch = publicationItems.find(
               (p) => p.title.toLowerCase() === r.title.toLowerCase()
             )
             
-            const dateVal = r.date ? new Date(r.date).toLocaleDateString('id-ID', {
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric'
-            }) : '10 Juli 2026'
-
-            let schoolField = r.school_field || ''
-            let cohort = r.cohort || ''
-            let year = r.year ? String(r.year) : ''
-            let cleanContent = r.content || ''
-
-            if (r.content) {
-              const lines = r.content.split('\n')
-              for (const line of lines) {
-                const trimmed = line.trim()
-                if (trimmed.startsWith('SEKOLAH:')) schoolField = trimmed.substring(8).trim()
-                if (trimmed.startsWith('ANGKATAN:')) cohort = trimmed.substring(9).trim()
-                if (trimmed.startsWith('TAHUN:')) year = trimmed.substring(6).trim()
-              }
-              cleanContent = cleanContent
-                .replace(/^SEKOLAH:[^\n]*\n?/mi, '')
-                .replace(/^ANGKATAN:[^\n]*\n?/mi, '')
-                .replace(/^TAHUN:[^\n]*\n?/mi, '')
-                .trim()
-            }
-
             const extraTags = []
-            if (schoolField) extraTags.push(schoolField)
-            if (cohort) extraTags.push(cohort)
-            if (year) extraTags.push(year)
+            if (r.school_field) extraTags.push(r.school_field)
+            if (r.cohort) extraTags.push(r.cohort)
+            if (r.year) extraTags.push(String(r.year))
 
             return {
               title: r.title,
               category: r.category || 'Publikasi',
-              date: dateVal,
+              date: r.date,
               meta: r.author || 'Admin',
-              summary: localMatch?.summary || cleanContent || `Karya publikasi ilmiah resmi mengenai ${r.title} yang dipublikasikan oleh Sespim Lemdiklat Polri.`,
-              href: localMatch ? localMatch.href : `/publikasi/${r.id}`,
+              summary: localMatch?.summary || r.content || ("Karya publikasi ilmiah resmi mengenai " + r.title + " yang dipublikasikan oleh Sespim Lemdiklat Polri."),
+              href: localMatch ? localMatch.href : ("/publikasi/" + r.id),
               tags: [...(localMatch?.tags || [r.category?.toLowerCase() || 'publikasi']), ...extraTags],
               image_url: r.image_url
             }

@@ -4,13 +4,78 @@ import { PageHero } from '@/components/ui/PageHero'
 import { Breadcrumb } from '@/components/ui/Breadcrumb'
 import { serverFetch } from '@/lib/api'
 
+function parseGroupedPublications(records: any[]) {
+  const items: any[] = []
+  for (const record of records) {
+    if (!record.content) continue
+    
+    // Split entries by double newlines or empty lines
+    const rawEntries = record.content.split(/\n\s*\n/)
+    for (const rawEntry of rawEntries) {
+      const lines = rawEntry.split('\n')
+      let item: any = {
+        id: '',
+        title: '',
+        category: '',
+        date: record.date ? new Date(record.date).toLocaleDateString('id-ID', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        }) : '10 Juli 2026',
+        author: 'Admin',
+        content: '',
+        school_field: record.category || '', // Group category is the school (SESPIMTI, etc.)
+        cohort: '',
+        year: '',
+        image_url: ''
+      }
+
+      let hasName = false
+      for (const line of lines) {
+        const trimmed = line.trim()
+        if (!trimmed) continue
+        const colonIdx = trimmed.indexOf(':')
+        if (colonIdx === -1) continue
+        const key = trimmed.substring(0, colonIdx).trim().toUpperCase()
+        const val = trimmed.substring(colonIdx + 1).trim()
+
+        if (key === 'NAMA') {
+          item.title = val
+          hasName = true
+        } else if (key === 'DESKRIPSI') {
+          item.content = val
+        } else if (key === 'KATEGORI') {
+          item.category = val
+        } else if (key === 'PENULIS') {
+          item.author = val
+        } else if (key === 'ANGKATAN') {
+          item.cohort = val
+        } else if (key === 'TAHUN') {
+          item.year = val
+        } else if (key === 'COVER') {
+          item.image_url = val
+        } else if (key === 'URL') {
+          const parts = val.split('/')
+          item.id = parts[parts.length - 1] || ''
+        }
+      }
+
+      if (hasName) {
+        items.push(item)
+      }
+    }
+  }
+  return items
+}
+
+
 export const dynamic = 'force-dynamic'
 
 export default async function Page() {
   const path = "/publikasi/naskah-akademik"
   const eyebrow = "Publikasi"
   const title = "Naskah Akademik Terbaik"
-  const description = "Koleksi Karya Tulis Unggulan Peserta Didik (Serdik) berupa Nastrap (SESPIMTI), Naskap (SESPIMMEN), dan Taskap (SESPIMMA) 3 Terbaik."
+  const description = "Koleksi Karya Tulis Utama Peserta Didik (Serdik) berupa Nastrap (SESPIMTI), Naskap (SESPIMMEN), dan Taskap (SESPIMMA) 3 Terbaik."
 
   let allRecords: any[] = []
 
@@ -19,37 +84,9 @@ export default async function Page() {
     if (res.ok) {
       const json = await res.json()
       if (json.status === 'success' && json.data && json.data.records) {
-        allRecords = json.data.records
-          .filter((r: any) => r.status === 'Published' && r.category === 'Naskah Akademik')
-          .map((r: any) => {
-            let school_field = r.school_field || ''
-            let cohort = r.cohort || ''
-            let year = r.year ? String(r.year) : ''
-            let cleanContent = r.content || ''
-
-            if (r.content) {
-              const lines = r.content.split('\n')
-              for (const line of lines) {
-                const trimmed = line.trim()
-                if (trimmed.startsWith('SEKOLAH:')) school_field = trimmed.substring(8).trim()
-                if (trimmed.startsWith('ANGKATAN:')) cohort = trimmed.substring(9).trim()
-                if (trimmed.startsWith('TAHUN:')) year = trimmed.substring(6).trim()
-              }
-              cleanContent = cleanContent
-                .replace(/^SEKOLAH:[^\n]*\n?/mi, '')
-                .replace(/^ANGKATAN:[^\n]*\n?/mi, '')
-                .replace(/^TAHUN:[^\n]*\n?/mi, '')
-                .trim()
-            }
-
-            return {
-              ...r,
-              school_field,
-              cohort,
-              year,
-              content: cleanContent
-            }
-          })
+        allRecords = parseGroupedPublications(json.data.records).filter(
+          (r: any) => r.category === 'Naskah Akademik'
+        )
       }
     }
   } catch (err) {
@@ -93,7 +130,7 @@ export default async function Page() {
   const getMediaUrl = (url: string) => {
     if (!url) return ''
     if (url.startsWith('http') || url.startsWith('/')) return url
-    return `http://localhost:5001${url}`
+    return "http://localhost:5001" + url
   }
 
   return (
@@ -124,12 +161,6 @@ export default async function Page() {
             ) : (
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {section.items.map((item: any) => {
-                  const dateStr = item.date ? new Date(item.date).toLocaleDateString('id-ID', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric'
-                  }) : '10 Juli 2026'
-
                   return (
                     <div
                       key={item.id}
@@ -141,11 +172,11 @@ export default async function Page() {
                           {item.image_url ? (
                             <img src={getMediaUrl(item.image_url)} alt={item.title} className="w-full h-full object-cover" />
                           ) : (
-                            <div className={`w-full h-full absolute inset-0 flex flex-col justify-between p-2.5 text-white bg-gradient-to-b ${
+                            <div className={"w-full h-full absolute inset-0 flex flex-col justify-between p-2.5 text-white bg-gradient-to-b " + (
                               item.title.toLowerCase().includes('nastrap') ? 'from-amber-950 to-neutral-950 border-t-4 border-polri-gold' :
                               item.title.toLowerCase().includes('naskap') ? 'from-emerald-950 to-neutral-950 border-t-4 border-polri-gold' :
                               'from-blue-950 to-neutral-950 border-t-4 border-polri-gold'
-                            }`}>
+                            )}>
                               <div className="space-y-1 text-left">
                                 <span className="text-[6px] font-black uppercase tracking-widest text-polri-goldSoft">SESPIM POLRI</span>
                                 <p className="text-[8px] font-black leading-snug line-clamp-4 text-neutral-100">{item.title}</p>
@@ -159,7 +190,7 @@ export default async function Page() {
                         </div>
 
                         <div className="flex flex-wrap gap-1.5">
-                          <span className={`inline-block rounded-lg border px-2 py-0.5 text-[10px] font-bold ${section.badgeColor}`}>
+                          <span className={"inline-block rounded-lg border px-2 py-0.5 text-[10px] font-bold " + section.badgeColor}>
                             {item.school_field || 'SESPIM'}
                           </span>
                           {item.cohort && (
@@ -182,19 +213,19 @@ export default async function Page() {
                             Penulis / Serdik: {item.author || 'Admin'}
                           </p>
                           <p className="text-[10px] text-neutral-400">
-                            Dipublikasi: {dateStr}
+                            Dipublikasi: {item.date}
                           </p>
                         </div>
 
                         <p className="text-xs leading-relaxed text-neutral-500 line-clamp-3">
-                          {item.content || `Karya tulis ilmiah resmi naskah akademik yang dipublikasikan oleh Sespim Lemdiklat Polri.`}
+                          {item.content || "Karya tulis ilmiah resmi naskah akademik yang dipublikasikan oleh Sespim Lemdiklat Polri."}
                         </p>
                       </div>
 
                       <div className="mt-6 pt-4 border-t border-neutral-100 flex items-center justify-between">
                         <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Naskah Terbaik</span>
                         <Link
-                          href={`/publikasi/${item.id}`}
+                          href={"/publikasi/" + item.id}
                           className="inline-flex items-center gap-1.5 text-xs font-black text-polri-maroon hover:text-polri-brownDark transition"
                         >
                           Baca Naskah
