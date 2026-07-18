@@ -1188,7 +1188,7 @@ export const pages: Record<string, PageContent> = {
     ]
   },
   '/widyaiswara/materi-terbuka': {
-    title: "Materi Terbuka (HANJAR)",
+    title: "Materi Terbuka",
     eyebrow: "Tenaga Pendidik",
     description: "Kumpulan materi pelatihan dasar Widyaiswara yang dapat diakses sebagai bahan ajar dan rujukan pembelajaran.",
     resources: [
@@ -1255,7 +1255,20 @@ export const pages: Record<string, PageContent> = {
         href: '/files/widyaiswara/8.%20ETIKA%20WIDYAISWARA.pdf',
         format: 'PDF',
         category: 'Pelatihan Dasar'
-      },
+      }
+    ],
+    sections: [
+      {
+        title: "Bahan Rujukan Belajar Terbuka",
+        body: "Materi terbuka disediakan untuk memberikan transparansi bahan ajar dan mendukung peningkatan kualitas pengajaran yang diselenggarakan oleh para Widyaiswara Sespim Polri."
+      }
+    ]
+  },
+  '/widyaiswara/hanjar': {
+    title: "Bahan Ajar (HANJAR)",
+    eyebrow: "Tenaga Pendidik",
+    description: "Kumpulan Bahan Ajar (Hanjar) lengkap untuk program pendidikan SESPIMTI, SESPIMMEN, SPPK, dan SESPIMMA Sespim Lemdiklat Polri.",
+    resources: [
       {
         title: 'Kurikulum Manajemen Strategis Sespimti',
         description: 'Panduan pembelajaran mata kuliah Manajemen Strategis untuk perwira tinggi Sespimti.',

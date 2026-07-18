@@ -88,7 +88,8 @@ export const navigation: NavItem[] = [
       { label: 'Profil Widyaiswara', href: '/widyaiswara/profil' },
       { label: 'Bidang Keahlian', href: '/widyaiswara/bidang-keahlian' },
       { label: 'Publikasi Widyaiswara', href: '/widyaiswara/publikasi' },
-      { label: 'Materi Terbuka (HANJAR)', href: '/widyaiswara/materi-terbuka' },
+      { label: 'Materi Terbuka', href: '/widyaiswara/materi-terbuka' },
+      { label: 'HANJAR', href: '/widyaiswara/hanjar' },
       { label: 'Pembimbingan Naskap', href: '/widyaiswara/pembimbingan-naskap' },
       { label: 'Inpassing', href: '/widyaiswara/inpassing' },
       { label: 'LSP / BNSP', href: 'https://lsppolri.id/' }
