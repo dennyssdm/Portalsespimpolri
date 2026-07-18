@@ -47,17 +47,37 @@ export default async function Page() {
               year: 'numeric'
             }) : '10 Juli 2026'
 
+            let schoolField = r.school_field || ''
+            let cohort = r.cohort || ''
+            let year = r.year ? String(r.year) : ''
+            let cleanContent = r.content || ''
+
+            if (r.content) {
+              const lines = r.content.split('\n')
+              for (const line of lines) {
+                const trimmed = line.trim()
+                if (trimmed.startsWith('SEKOLAH:')) schoolField = trimmed.substring(8).trim()
+                if (trimmed.startsWith('ANGKATAN:')) cohort = trimmed.substring(9).trim()
+                if (trimmed.startsWith('TAHUN:')) year = trimmed.substring(6).trim()
+              }
+              cleanContent = cleanContent
+                .replace(/^SEKOLAH:[^\n]*\n?/mi, '')
+                .replace(/^ANGKATAN:[^\n]*\n?/mi, '')
+                .replace(/^TAHUN:[^\n]*\n?/mi, '')
+                .trim()
+            }
+
             const extraTags = []
-            if (r.school_field) extraTags.push(r.school_field)
-            if (r.cohort) extraTags.push(r.cohort)
-            if (r.year) extraTags.push(String(r.year))
+            if (schoolField) extraTags.push(schoolField)
+            if (cohort) extraTags.push(cohort)
+            if (year) extraTags.push(year)
 
             return {
               title: r.title,
               category: r.category || categoryName,
               date: dateVal,
               meta: r.author || 'Admin',
-              summary: localMatch?.summary || `Karya publikasi ilmiah resmi mengenai ${r.title} yang dipublikasikan oleh Sespim Lemdiklat Polri.`,
+              summary: localMatch?.summary || cleanContent || `Karya publikasi ilmiah resmi mengenai ${r.title} yang dipublikasikan oleh Sespim Lemdiklat Polri.`,
               href: localMatch ? localMatch.href : `/publikasi/${r.id}`,
               tags: [...(localMatch?.tags || [r.category?.toLowerCase() || 'publikasi']), ...extraTags],
               image_url: r.image_url

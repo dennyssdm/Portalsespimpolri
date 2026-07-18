@@ -19,9 +19,37 @@ export default async function Page() {
     if (res.ok) {
       const json = await res.json()
       if (json.status === 'success' && json.data && json.data.records) {
-        allRecords = json.data.records.filter(
-          (r: any) => r.status === 'Published' && r.category === 'Naskah Akademik'
-        )
+        allRecords = json.data.records
+          .filter((r: any) => r.status === 'Published' && r.category === 'Naskah Akademik')
+          .map((r: any) => {
+            let school_field = r.school_field || ''
+            let cohort = r.cohort || ''
+            let year = r.year ? String(r.year) : ''
+            let cleanContent = r.content || ''
+
+            if (r.content) {
+              const lines = r.content.split('\n')
+              for (const line of lines) {
+                const trimmed = line.trim()
+                if (trimmed.startsWith('SEKOLAH:')) school_field = trimmed.substring(8).trim()
+                if (trimmed.startsWith('ANGKATAN:')) cohort = trimmed.substring(9).trim()
+                if (trimmed.startsWith('TAHUN:')) year = trimmed.substring(6).trim()
+              }
+              cleanContent = cleanContent
+                .replace(/^SEKOLAH:[^\n]*\n?/mi, '')
+                .replace(/^ANGKATAN:[^\n]*\n?/mi, '')
+                .replace(/^TAHUN:[^\n]*\n?/mi, '')
+                .trim()
+            }
+
+            return {
+              ...r,
+              school_field,
+              cohort,
+              year,
+              content: cleanContent
+            }
+          })
       }
     }
   } catch (err) {
