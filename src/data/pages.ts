@@ -1188,7 +1188,7 @@ export const pages: Record<string, PageContent> = {
     ]
   },
   '/widyaiswara/materi-terbuka': {
-    title: "Materi Terbuka",
+    title: "Materi Terbuka (HANJAR)",
     eyebrow: "Tenaga Pendidik",
     description: "Kumpulan materi pelatihan dasar Widyaiswara yang dapat diakses sebagai bahan ajar dan rujukan pembelajaran.",
     resources: [
