@@ -25,7 +25,9 @@ function parseGroupedPublications(records: any[]) {
         school_field: record.category || '', // Group category is the school (SESPIMTI, etc.)
         cohort: '',
         year: '',
-        image_url: ''
+        image_url: '',
+        url: '',
+        href: ''
       }
 
       let hasName = false
@@ -53,12 +55,18 @@ function parseGroupedPublications(records: any[]) {
         } else if (key === 'COVER') {
           item.image_url = val
         } else if (key === 'URL') {
+          item.url = val
+          item.href = val
           const parts = val.split('/')
           item.id = parts[parts.length - 1] || ''
         }
       }
 
       if (hasName) {
+        // Fallback href if not defined
+        if (!item.href) {
+          item.href = "/publikasi/" + item.id
+        }
         items.push(item)
       }
     }
@@ -117,7 +125,7 @@ export default async function Page() {
               date: r.date,
               meta: r.author || 'Admin',
               summary: localMatch?.summary || r.content || ("Karya publikasi ilmiah resmi mengenai " + r.title + " yang dipublikasikan oleh Sespim Lemdiklat Polri."),
-              href: localMatch ? localMatch.href : ("/publikasi/" + r.id),
+              href: localMatch ? localMatch.href : r.href,
               tags: [...(localMatch?.tags || [r.category?.toLowerCase() || 'publikasi']), ...extraTags],
               image_url: r.image_url
             }
