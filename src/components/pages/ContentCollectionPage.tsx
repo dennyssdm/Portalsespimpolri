@@ -16,6 +16,7 @@ export type CollectionCardItem = {
   summary: string
   href: string
   tags?: string[]
+  image_url?: string
 }
 
 type ContentCollectionPageProps = {
@@ -82,6 +83,12 @@ export function ContentCollectionPage({ path, eyebrow, title, description, items
   })
 
   const featured = filteredItems[0]
+
+  const getMediaUrl = (url: string) => {
+    if (!url) return ''
+    if (url.startsWith('http') || url.startsWith('/')) return url
+    return `http://localhost:5001${url}`
+  }
 
   return (
     <main className="bg-neutral-50 min-h-screen">
@@ -201,33 +208,60 @@ export function ContentCollectionPage({ path, eyebrow, title, description, items
                 {filteredItems.length ? (
                   filteredItems.map((item) => (
                     <Link key={item.href} href={item.href} className="group block min-w-0 rounded-xl border border-polri-gold/25 bg-white p-6 shadow-soft transition hover:border-polri-gold hover:shadow-gold">
-                      <article>
-                        <div className="flex flex-wrap items-center gap-2">
-                          <span className="rounded-lg bg-polri-maroon px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-white">
-                            {item.category}
-                          </span>
-                          {item.date && (
-                            <span className="rounded-lg bg-polri-cream px-3 py-1 text-xs font-bold text-polri-brownDark">
-                              {item.date}
-                            </span>
-                          )}
-                          {item.meta && (
-                            <span className="rounded-lg bg-polri-cream px-3 py-1 text-xs font-bold text-polri-brownDark">
-                              {item.meta}
-                            </span>
+                      <article className="flex flex-col md:flex-row gap-6 items-start">
+                        {/* Book/Document Cover Preview */}
+                        <div className="relative w-32 h-44 shrink-0 rounded-lg overflow-hidden border border-polri-gold/20 bg-neutral-900 shadow flex items-center justify-center text-center p-3 select-none flex-col justify-between">
+                          {item.image_url ? (
+                            <img src={getMediaUrl(item.image_url)} alt={item.title} className="w-full h-full object-cover" />
+                          ) : (
+                            <div className={`w-full h-full absolute inset-0 flex flex-col justify-between p-2.5 text-white bg-gradient-to-b ${
+                              item.category === 'Jurnal Ilmiah' ? 'from-slate-900 to-slate-950 border-t-4 border-polri-gold' :
+                              item.category === 'Policy Brief' ? 'from-red-950 to-neutral-950 border-t-4 border-polri-gold' :
+                              item.category === 'Karya Peserta Didik' ? 'from-emerald-950 to-neutral-950 border-t-4 border-polri-gold' :
+                              item.category === 'Kajian Strategis' ? 'from-amber-950 to-neutral-950 border-t-4 border-polri-gold' :
+                              'from-neutral-900 to-neutral-950 border-t-4 border-polri-gold'
+                            }`}>
+                              <div className="space-y-1 text-left">
+                                <span className="text-[6px] font-black uppercase tracking-widest text-polri-goldSoft">SESPIM POLRI</span>
+                                <p className="text-[8px] font-black leading-snug line-clamp-4 text-neutral-100">{item.title}</p>
+                              </div>
+                              <div className="text-left border-t border-white/10 pt-1 mt-auto">
+                                <p className="text-[6px] text-neutral-400 font-bold uppercase tracking-wider truncate">{item.meta || 'Dewan Redaksi'}</p>
+                                <span className="text-[5px] text-polri-goldSoft font-bold block mt-0.5">{item.category}</span>
+                              </div>
+                            </div>
                           )}
                         </div>
-                        <h2 className="mt-4 text-lg font-black text-polri-brownDark group-hover:text-polri-maroon sm:text-xl leading-snug">{item.title}</h2>
-                        <p className="mt-3 text-sm leading-relaxed text-neutral-600 font-medium">{item.summary}</p>
-                        {item.tags?.length ? (
-                          <div className="mt-4 flex flex-wrap gap-2.5">
-                            {item.tags.map((tag) => (
-                              <span key={tag} className="text-xs font-bold text-neutral-400 hover:text-polri-maroon transition">
-                                #{tag}
+
+                        {/* Details */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="rounded-lg bg-polri-maroon px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-white">
+                              {item.category}
+                            </span>
+                            {item.date && (
+                              <span className="rounded-lg bg-polri-cream px-3 py-1 text-xs font-bold text-polri-brownDark">
+                                {item.date}
                               </span>
-                            ))}
+                            )}
+                            {item.meta && (
+                              <span className="rounded-lg bg-polri-cream px-3 py-1 text-xs font-bold text-polri-brownDark">
+                                {item.meta}
+                              </span>
+                            )}
                           </div>
-                        ) : null}
+                          <h2 className="mt-4 text-lg font-black text-polri-brownDark group-hover:text-polri-maroon sm:text-xl leading-snug">{item.title}</h2>
+                          <p className="mt-3 text-sm leading-relaxed text-neutral-600 font-medium">{item.summary}</p>
+                          {item.tags?.length ? (
+                            <div className="mt-4 flex flex-wrap gap-2.5">
+                              {item.tags.map((tag) => (
+                                <span key={tag} className="text-xs font-bold text-neutral-400 hover:text-polri-maroon transition">
+                                  #{tag}
+                                </span>
+                              ))}
+                            </div>
+                          ) : null}
+                        </div>
                       </article>
                     </Link>
                   ))

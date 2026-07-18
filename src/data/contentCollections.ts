@@ -11,6 +11,7 @@ export type ArticleItem = {
   school_field?: string
   cohort?: string
   year?: number
+  image_url?: string
 }
 
 export type EducatorProfile = {

@@ -45,7 +45,8 @@ export default async function Page() {
               meta: r.author || 'Admin',
               summary: localMatch?.summary || `Karya publikasi ilmiah resmi mengenai ${r.title} yang dipublikasikan oleh Sespim Lemdiklat Polri.`,
               href: localMatch ? localMatch.href : `/publikasi/${r.id}`,
-              tags: [...(localMatch?.tags || [r.category?.toLowerCase() || 'publikasi']), ...extraTags]
+              tags: [...(localMatch?.tags || [r.category?.toLowerCase() || 'publikasi']), ...extraTags],
+              image_url: r.image_url
             }
           })
         }
