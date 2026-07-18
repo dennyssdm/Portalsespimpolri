@@ -7,7 +7,6 @@ import {
   PaperAirplaneIcon, 
   TrashIcon
 } from '@heroicons/react/24/outline'
-import { API_BASE_URL } from '@/lib/api'
 
 type Message = {
   id: string
@@ -79,7 +78,7 @@ export function FloatingChatWidget() {
       }))
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/chatbot`, {
+      const response = await fetch('/api/chatbot', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
