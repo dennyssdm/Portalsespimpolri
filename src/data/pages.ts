@@ -1193,6 +1193,14 @@ export const pages: Record<string, PageContent> = {
     description: "Kumpulan materi pelatihan dasar Widyaiswara yang dapat diakses sebagai bahan ajar dan rujukan pembelajaran.",
     resources: [
       {
+        title: 'FOLDER UTAMA HANJAR WIDYAISWARA (GOOGLE DRIVE)',
+        description: 'Akses folder cloud resmi penyimpanan seluruh dokumen Hanjar (Bahan Ajar) Widyaiswara Sespim Lemdiklat Polri.',
+        fileName: 'FOLDER HANJAR (GOOGLE DRIVE)',
+        href: 'https://drive.google.com/drive/folders/1ON9kgJW6RZQEOr-zoCJITInoLFeGC_WU',
+        format: 'DRIVE',
+        category: 'Akses Cloud'
+      },
+      {
         title: 'RENCANA PEMBELAJARAN WIDYAISWARA.pdf',
         description: 'RANCANG BANGUN PEMBELAJARAN MATA PELATIHAN dan RENCANA PEMBELAJARAN.',
         fileName: '1. RENCANA PEMBELAJARAN WIDYAISWARA.pdf',
