@@ -6787,6 +6787,12 @@ startxref
                   renderPublikasiStructuredFields()
                 ) : currentModule === 'Sarana Prasarana' && selectedItem?.id === 's-5' ? (
                   renderPlagiarismStructuredFields()
+                ) : (currentModule === 'Galeri & Unduhan' && selectedItem?.id === 'g-1') ? (
+                  renderGaleriFotoStructuredFields()
+                ) : (currentModule === 'Galeri & Unduhan' && selectedItem?.id === 'g-2') ? (
+                  renderGaleriVideoStructuredFields()
+                ) : ((currentModule === 'Galeri & Unduhan' && ['g-3', 'g-4', 'g-5'].includes(selectedItem?.id || '')) || (currentModule === 'Program Pendidikan' && selectedItem?.id === 'e-3')) ? (
+                  renderUnduhanStructuredFields()
                 ) : (
                   <div>
                     {currentModule === 'Publikasi' && renderPublikasiExtraFields()}
