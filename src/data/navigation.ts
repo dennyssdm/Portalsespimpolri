@@ -138,7 +138,6 @@ export const navigation: NavItem[] = [
     children: [
       { label: 'Semua Unduhan', href: '/unduhan' },
       { label: 'Pedoman Akademik', href: '/unduhan/pedoman-akademik' },
-      { label: 'Template Policy Brief', href: '/unduhan/template-policy-brief' },
       { label: 'Formulir Umum', href: '/unduhan/formulir' }
     ]
   },

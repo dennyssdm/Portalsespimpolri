@@ -1920,23 +1920,6 @@ export const pages: Record<string, PageContent> = {
       }
     ]
   },
-  '/unduhan/template-policy-brief': {
-    title: "Template Policy Brief",
-    eyebrow: "Dokumen",
-    description: "Template policy brief untuk penyusunan rekomendasi kebijakan.",
-    sections: [
-      {
-        title: 'Ringkasan Halaman',
-        body: "Template policy brief untuk penyusunan rekomendasi kebijakan.",
-        items: ['Konten awal mengikuti sitemap Sespim Polri.', 'Layout disiapkan sebagai baseline front-end.', 'Detail konten dapat diperbarui setelah approval.']
-      },
-      {
-        title: 'Kebutuhan UI',
-        body: 'Halaman ini membutuhkan struktur hero, breadcrumb, konten utama, kartu informasi, dan CTA menuju halaman terkait.',
-        items: ['Hero halaman', 'Section konten utama', 'Kartu informasi', 'CTA dan tautan terkait']
-      }
-    ]
-  },
   '/unduhan/formulir': {
     title: "Formulir Umum",
     eyebrow: "Dokumen",
