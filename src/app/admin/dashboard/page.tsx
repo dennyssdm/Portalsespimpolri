@@ -405,6 +405,7 @@ function DashboardContent() {
   const [formPublikasiItems, setFormPublikasiItems] = useState<{ title: string; description: string; fileName: string; href: string; format: string; category: string; author: string; cohort: string; year: string; cover: string }[]>([])
   const [formGaleriFotoItems, setFormGaleriFotoItems] = useState<{ title: string; description: string; category: string; imageUrl: string; date: string }[]>([])
   const [formGaleriVideoItems, setFormGaleriVideoItems] = useState<{ title: string; description: string; category: string; url: string; cover: string; date: string }[]>([])
+  const [formUnduhanItems, setFormUnduhanItems] = useState<{ title: string; description: string; fileName: string; href: string; format: string; category: string }[]>([])
   
   // Cek Plagiarisme (s-5) Specific Form Fields
   const [formPlagiarismDesc, setFormPlagiarismDesc] = useState('')
@@ -3281,6 +3282,64 @@ startxref
     return contentStr.trim()
   }
 
+  // Parsing Unduhan string content into states
+  const parseUnduhanContent = (contentStr: string) => {
+    if (!contentStr) {
+      setFormUnduhanItems([])
+      return
+    }
+    const list: any[] = []
+    const rawEntries = contentStr.split(/\n\s*\n/)
+    for (const rawEntry of rawEntries) {
+      const lines = rawEntry.split('\n')
+      let item: any = { title: '', description: '', fileName: '', href: '', format: 'PDF', category: 'Umum' }
+      let hasName = false
+      for (const line of lines) {
+        const trimmed = line.trim()
+        if (!trimmed) continue
+        const colonIdx = trimmed.indexOf(':')
+        if (colonIdx === -1) continue
+        const key = trimmed.substring(0, colonIdx).trim().toUpperCase()
+        const val = trimmed.substring(colonIdx + 1).trim()
+        
+        if (key === 'NAMA' || key === 'JUDUL') {
+          item.title = val
+          hasName = true
+        } else if (key === 'DESKRIPSI') {
+          item.description = val
+        } else if (key === 'FILE') {
+          item.fileName = val
+        } else if (key === 'URL') {
+          item.href = val
+        } else if (key === 'FORMAT') {
+          item.format = val
+        } else if (key === 'KATEGORI') {
+          item.category = val
+        }
+      }
+      if (hasName) {
+        list.push(item)
+      }
+    }
+    setFormUnduhanItems(list)
+  }
+
+  // Building Unduhan content string from states
+  const buildUnduhanContent = (): string => {
+    let contentStr = ''
+    for (const item of formUnduhanItems) {
+      if (!item.title.trim()) continue
+      contentStr += `NAMA: ${item.title}\n`
+      if (item.description) contentStr += `DESKRIPSI: ${item.description}\n`
+      if (item.fileName) contentStr += `FILE: ${item.fileName}\n`
+      if (item.href) contentStr += `URL: ${item.href}\n`
+      if (item.format) contentStr += `FORMAT: ${item.format}\n`
+      if (item.category) contentStr += `KATEGORI: ${item.category}\n`
+      contentStr += `\n`
+    }
+    return contentStr.trim()
+  }
+
   // Parsing Inpassing modules string content into states
   const parseInpassingModules = (contentStr: string) => {
     const lines = contentStr.split(/\r?\n/)
@@ -4942,6 +5001,146 @@ startxref
     )
   }
 
+  const renderUnduhanStructuredFields = () => {
+    return (
+      <div className="space-y-4 max-h-[450px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3 text-neutral-200">
+        <div className="flex justify-between items-center">
+          <div>
+            <p className="text-[10px] font-bold text-polri-goldSoft uppercase tracking-wider">Daftar Berkas Unduhan</p>
+            <p className="text-[9px] text-neutral-400 mt-0.5">Tambah, edit, atau hapus berkas dokumen unduhan.</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setFormUnduhanItems([...formUnduhanItems, { title: '', description: '', fileName: '', href: '', format: 'PDF', category: 'Umum' }])}
+            className="px-2.5 py-1.5 rounded bg-polri-gold text-neutral-950 text-[9px] font-black uppercase hover:bg-yellow-500 transition"
+          >
+            + Tambah Berkas
+          </button>
+        </div>
+        <div className="space-y-5">
+          {formUnduhanItems.map((item, idx) => (
+            <div key={idx} className="p-4 bg-neutral-950 rounded-xl border border-neutral-800 space-y-3 relative">
+              <button
+                type="button"
+                onClick={() => setFormUnduhanItems(formUnduhanItems.filter((_, i) => i !== idx))}
+                className="absolute right-3 top-3 text-red-500 hover:text-red-400 font-black text-[10px] uppercase tracking-wider"
+              >
+                Hapus
+              </button>
+              
+              {/* Preview block */}
+              <div className="bg-neutral-900/60 p-2.5 rounded-lg border border-neutral-800/80 flex gap-4 items-center">
+                <div className="relative w-12 h-12 shrink-0 rounded overflow-hidden bg-neutral-900 border border-polri-gold/20 flex items-center justify-center">
+                  <span className="text-[9px] font-black text-polri-goldSoft">{item.format}</span>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] font-black text-white truncate">{item.title || 'Masukkan Judul Berkas...'}</p>
+                  <p className="text-[8px] text-neutral-400 mt-1 truncate">{item.fileName || 'Masukkan Nama Berkas...'}</p>
+                  <span className="inline-block bg-polri-maroon/20 text-polri-goldSoft text-[7px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider mt-1.5">{item.category}</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Nama / Judul Dokumen</label>
+                  <input
+                    type="text"
+                    value={item.title}
+                    onChange={(e) => {
+                      const updated = [...formUnduhanItems]
+                      updated[idx].title = e.target.value
+                      setFormUnduhanItems(updated)
+                    }}
+                    placeholder="Contoh: Template Word NASKAP"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Kategori Dokumen</label>
+                  <input
+                    type="text"
+                    value={item.category}
+                    onChange={(e) => {
+                      const updated = [...formUnduhanItems]
+                      updated[idx].category = e.target.value
+                      setFormUnduhanItems(updated)
+                    }}
+                    placeholder="Contoh: SESPIMTI / Umum"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2">
+                <div className="col-span-2">
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Nama File Asli</label>
+                  <input
+                    type="text"
+                    value={item.fileName}
+                    onChange={(e) => {
+                      const updated = [...formUnduhanItems]
+                      updated[idx].fileName = e.target.value
+                      setFormUnduhanItems(updated)
+                    }}
+                    placeholder="Contoh: template-naskap.docx"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Format</label>
+                  <select
+                    value={item.format}
+                    onChange={(e) => {
+                      const updated = [...formUnduhanItems]
+                      updated[idx].format = e.target.value
+                      setFormUnduhanItems(updated)
+                    }}
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                  >
+                    <option value="PDF">PDF</option>
+                    <option value="DOCX">DOCX</option>
+                    <option value="XLSX">XLSX</option>
+                    <option value="ZIP">ZIP</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[8px] uppercase text-neutral-500 font-bold">URL Tautan Unduh</label>
+                <input
+                  type="text"
+                  value={item.href}
+                  onChange={(e) => {
+                    const updated = [...formUnduhanItems]
+                    updated[idx].href = e.target.value
+                    setFormUnduhanItems(updated)
+                  }}
+                  placeholder="Contoh: /files/template-naskap.docx"
+                  className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[8px] uppercase text-neutral-500 font-bold">Deskripsi Singkat Dokumen</label>
+                <textarea
+                  value={item.description}
+                  onChange={(e) => {
+                    const updated = [...formUnduhanItems]
+                    updated[idx].description = e.target.value
+                    setFormUnduhanItems(updated)
+                  }}
+                  rows={2}
+                  placeholder="Keterangan singkat mengenai isi dokumen..."
+                  className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold resize-none"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
   const renderInpassingStructuredFields = () => {
     return (
       <div className="space-y-4 max-h-[350px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3 text-neutral-200">
@@ -5432,6 +5631,13 @@ startxref
       setFormGaleriVideoItems([])
     }
 
+    const isUnduhanContent = (currentModule === 'Galeri & Unduhan' && ['g-3', 'g-4', 'g-5'].includes(item.id)) || (currentModule === 'Program Pendidikan' && item.id === 'e-3')
+    if (isUnduhanContent) {
+      parseUnduhanContent(item.content || '')
+    } else {
+      setFormUnduhanItems([])
+    }
+
     if (currentModule === 'Sarana Prasarana' && item.id === 's-5') {
       parsePlagiarismContent(item.content || '')
     } else {
@@ -5457,6 +5663,7 @@ startxref
     const isPlagiarism = currentModule === 'Sarana Prasarana' && selectedItem.id === 's-5'
     const isGaleriFoto = currentModule === 'Galeri & Unduhan' && selectedItem.id === 'g-1'
     const isGaleriVideo = currentModule === 'Galeri & Unduhan' && selectedItem.id === 'g-2'
+    const isUnduhan = (currentModule === 'Galeri & Unduhan' && ['g-3', 'g-4', 'g-5'].includes(selectedItem.id)) || (currentModule === 'Program Pendidikan' && selectedItem.id === 'e-3')
     const finalContent = isProg 
       ? buildProgramContent(formTitle) 
       : (isProfilStructured 
@@ -5475,7 +5682,10 @@ startxref
                                   ? buildGaleriFotoContent()
                                   : (isGaleriVideo
                                       ? buildGaleriVideoContent()
-                                      : formContent
+                                      : (isUnduhan
+                                          ? buildUnduhanContent()
+                                          : formContent
+                                        )
                                     )
                                 )
                             )
@@ -6260,6 +6470,8 @@ startxref
                   renderGaleriFotoStructuredFields()
                 ) : (currentModule === 'Galeri & Unduhan' && selectedItem?.id === 'g-2') ? (
                   renderGaleriVideoStructuredFields()
+                ) : ((currentModule === 'Galeri & Unduhan' && ['g-3', 'g-4', 'g-5'].includes(selectedItem?.id || '')) || (currentModule === 'Program Pendidikan' && selectedItem?.id === 'e-3')) ? (
+                  renderUnduhanStructuredFields()
                 ) : (
                   <div>
                     <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Isi Konten (News / Detail)</label>
