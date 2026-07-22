@@ -173,26 +173,28 @@ export default async function Page() {
                       className="group flex flex-col justify-between rounded-2xl border border-polri-gold/20 bg-white p-6 shadow-soft hover:shadow-hover hover:border-polri-gold/50 transition duration-300"
                     >
                       <div className="space-y-4">
-                        {/* Book/Document Cover Preview */}
-                        <div className="relative w-full h-44 rounded-lg overflow-hidden border border-polri-gold/20 bg-neutral-900 shadow flex items-center justify-center text-center p-3 select-none flex-col justify-between">
-                          {item.image_url ? (
-                            <img src={getMediaUrl(item.image_url)} alt={item.title} className="w-full h-full object-cover" />
-                          ) : (
-                            <div className={"w-full h-full absolute inset-0 flex flex-col justify-between p-2.5 text-white bg-gradient-to-b " + (
-                              item.title.toLowerCase().includes('nastrap') ? 'from-amber-950 to-neutral-950 border-t-4 border-polri-gold' :
-                              item.title.toLowerCase().includes('naskap') ? 'from-emerald-950 to-neutral-950 border-t-4 border-polri-gold' :
-                              'from-blue-950 to-neutral-950 border-t-4 border-polri-gold'
-                            )}>
-                              <div className="space-y-1 text-left">
-                                <span className="text-[6px] font-black uppercase tracking-widest text-polri-goldSoft">SESPIM POLRI</span>
-                                <p className="text-[8px] font-black leading-snug line-clamp-4 text-neutral-100">{item.title}</p>
+                        {/* Centered Portrait Book/Document Cover Preview */}
+                        <div className="w-full flex justify-center py-4 bg-neutral-100/50 rounded-xl border border-neutral-200/40">
+                          <div className="relative w-36 h-48 rounded-md overflow-hidden border border-polri-gold/25 bg-neutral-900 shadow-md flex items-center justify-center text-center p-3 select-none flex-col justify-between transition-transform duration-300 group-hover:scale-105">
+                            {item.image_url ? (
+                              <img src={getMediaUrl(item.image_url)} alt={item.title} className="w-full h-full object-cover" />
+                            ) : (
+                              <div className={"w-full h-full absolute inset-0 flex flex-col justify-between p-2.5 text-white bg-gradient-to-b " + (
+                                item.title.toLowerCase().includes('nastrap') ? 'from-amber-950 to-neutral-950 border-t-4 border-polri-gold' :
+                                item.title.toLowerCase().includes('naskap') ? 'from-emerald-950 to-neutral-950 border-t-4 border-polri-gold' :
+                                'from-blue-950 to-neutral-950 border-t-4 border-polri-gold'
+                              )}>
+                                <div className="space-y-1 text-left">
+                                  <span className="text-[6px] font-black uppercase tracking-widest text-polri-goldSoft">SESPIM POLRI</span>
+                                  <p className="text-[8px] font-black leading-snug line-clamp-4 text-neutral-100">{item.title}</p>
+                                </div>
+                                <div className="text-left border-t border-white/10 pt-1 mt-auto">
+                                  <p className="text-[6px] text-neutral-400 font-bold uppercase tracking-wider truncate">{item.author || 'Serdik'}</p>
+                                  <span className="text-[5px] text-polri-goldSoft font-bold block mt-0.5">{item.school_field || 'Naskah Terbaik'}</span>
+                                </div>
                               </div>
-                              <div className="text-left border-t border-white/10 pt-1 mt-auto">
-                                <p className="text-[6px] text-neutral-400 font-bold uppercase tracking-wider truncate">{item.author || 'Serdik'}</p>
-                                <span className="text-[5px] text-polri-goldSoft font-bold block mt-0.5">{item.school_field || 'Naskah Terbaik'}</span>
-                              </div>
-                            </div>
-                          )}
+                            )}
+                          </div>
                         </div>
 
                         <div className="flex flex-wrap gap-1.5">
