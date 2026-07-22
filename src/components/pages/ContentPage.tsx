@@ -100,6 +100,131 @@ export function ContentPage({ content, path }: ContentPageProps) {
     }, 150)
   }
 
+  const downloadPlagiarismReportPDF = () => {
+    if (!plagiarismResults) return
+
+    const title = 'LAPORAN HASIL PENGECEKAN SIMILARITY TURNITIN'
+    const subTitle = 'SEKOLAH STAF DAN PIMPINAN LEMDIKLAT POLRI'
+    
+    const docName = plagiarismResults.fileName.replace(/[\(\)]/g, '')
+    const similarityVal = `${plagiarismResults.similarity}%`
+    const statusText = plagiarismResults.status
+    const dateStr = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })
+
+    let sourcesText = ''
+    plagiarismResults.sources.forEach((s, idx) => {
+      const cleanDomain = s.domain.replace(/[\(\)]/g, '')
+      sourcesText += `0 -20 Td\n(${idx + 1}. ${cleanDomain} - Similarity: ${s.percentage}% - Match: ${s.matchCount}) Tj\n`
+    })
+
+    const pdfString = `%PDF-1.4
+1 0 obj
+<<
+  /Type /Catalog
+  /Pages 2 0 R
+>>
+endobj
+2 0 obj
+<<
+  /Type /Pages
+  /Kids [3 0 R]
+  /Count 1
+>>
+endobj
+3 0 obj
+<<
+  /Type /Page
+  /Parent 2 0 R
+  /Resources <<
+    /Font <<
+      /F1 4 0 R
+      /F2 6 0 R
+    >>
+  >>
+  /MediaBox [0 0 612 792]
+  /Contents 5 0 R
+>>
+endobj
+4 0 obj
+<<
+  /Type /Font
+  /Subtype /Type1
+  /BaseFont /Helvetica-Bold
+>>
+endobj
+6 0 obj
+<<
+  /Type /Font
+  /Subtype /Type1
+  /BaseFont /Helvetica
+>>
+endobj
+5 0 obj
+<< /Length 1500 >>
+stream
+BT
+/F1 14 Tf
+50 740 Td
+(${subTitle}) Tj
+/F1 12 Tf
+0 -30 Td
+(${title}) Tj
+/F2 10 Tf
+0 -30 Td
+(Tanggal Pemeriksaan: ${dateStr}) Tj
+0 -20 Td
+(Nama Dokumen: ${docName}) Tj
+0 -20 Td
+(Indeks Kemiripan (Similarity Index): ${similarityVal}) Tj
+0 -20 Td
+(Status Kelulusan: ${statusText}) Tj
+0 -20 Td
+(Sumber Dominan: ${plagiarismResults.dominantSource}) Tj
+/F1 11 Tf
+0 -40 Td
+(DAFTAR SUMBER KECOCOKAN (SIMILARITY MATCHES):) Tj
+/F2 9 Tf
+${sourcesText}
+/F1 10 Tf
+0 -50 Td
+(CATATAN:) Tj
+/F2 9 Tf
+0 -20 Td
+(Hasil ini dihasilkan secara otomatis melalui platform verifikasi keaslian naskah akademik) Tj
+0 -15 Td
+(Sespim Lemdiklat Polri sebagai bagian dari penjaminan mutu karya ilmiah.) Tj
+ET
+endstream
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000262 00000 n 
+0000000410 00000 n 
+0000000336 00000 n 
+trailer
+<<
+  /Size 7
+  /Root 1 0 R
+>>
+startxref
+1680
+%%EOF`
+
+    const blob = new Blob([pdfString], { type: 'application/pdf' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `Laporan_Similarity_Turnitin_${docName.replace(/\s+/g, '_')}.pdf`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }
+
   const officialAddress = 'Jl. Maribaya No.53, Kayuambon, Kec. Lembang, Kabupaten Bandung Barat, Jawa Barat 40391, Indonesia'
   const officialMapHref = 'https://maps.app.goo.gl/k7YqKzsiNCdpKcqY7'
   const officialMapPreviewSrc = `https://www.google.com/maps?q=${encodeURIComponent(officialAddress)}&output=embed`
@@ -815,7 +940,18 @@ export function ContentPage({ content, path }: ContentPageProps) {
             <div className="mt-8 overflow-hidden rounded-lg border border-polri-gold/35 bg-polri-brownDark text-white shadow-gold">
               <div className="grid gap-0 lg:grid-cols-[minmax(0,1fr)_360px]">
                 <div className="p-6 sm:p-8">
-                  <p className="text-sm font-black uppercase tracking-[0.22em] text-polri-goldSoft">Hasil Plagiarisme</p>
+                  <div className="flex justify-between items-center flex-wrap gap-2">
+                    <p className="text-sm font-black uppercase tracking-[0.22em] text-polri-goldSoft">Hasil Plagiarisme</p>
+                    {plagiarismResults && (
+                      <button
+                        onClick={downloadPlagiarismReportPDF}
+                        type="button"
+                        className="inline-flex items-center gap-1.5 bg-red-600 hover:bg-red-700 text-white font-extrabold text-[10px] uppercase tracking-wider px-3.5 py-2 rounded-xl shadow transition shrink-0"
+                      >
+                        📥 Unduh PDF Laporan
+                      </button>
+                    )}
+                  </div>
                   <div className="mt-6 grid gap-4 sm:grid-cols-3">
                     <div className="rounded-lg border border-polri-gold/25 bg-white/10 p-5">
                       <p className="text-3xl font-black text-polri-goldSoft">
