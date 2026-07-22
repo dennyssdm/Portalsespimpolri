@@ -4684,7 +4684,7 @@ startxref
                 {/* Simulated Book Cover preview */}
                 <div className="relative w-12 h-16 shrink-0 rounded overflow-hidden bg-neutral-900 border border-polri-gold/20 flex items-center justify-center text-center p-1 select-none flex-col justify-between text-white">
                   {item.cover ? (
-                    <img src={item.cover.startsWith('http') || item.cover.startsWith('/') ? item.cover : getMediaUrl(item.cover)} alt="" className="w-full h-full object-cover" />
+                    <img src={getMediaUrl(item.cover)} alt="" className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full flex flex-col justify-between bg-gradient-to-b from-neutral-850 to-neutral-950 p-1">
                       <span className="text-[3px] font-black tracking-widest text-polri-goldSoft uppercase">PREVIEW</span>
@@ -4900,7 +4900,7 @@ startxref
               <div className="bg-neutral-900/60 p-2.5 rounded-lg border border-neutral-800/80 flex gap-4 items-center">
                 <div className="relative w-16 h-12 shrink-0 rounded overflow-hidden bg-neutral-900 border border-polri-gold/20 flex items-center justify-center">
                   {item.imageUrl ? (
-                    <img src={item.imageUrl.startsWith('http') || item.imageUrl.startsWith('/') ? item.imageUrl : getMediaUrl(item.imageUrl)} alt="" className="w-full h-full object-cover" />
+                    <img src={getMediaUrl(item.imageUrl)} alt="" className="w-full h-full object-cover" />
                   ) : (
                     <span className="text-[7px] text-neutral-500 uppercase font-bold">No Image</span>
                   )}
@@ -6085,6 +6085,18 @@ startxref
     setIsViewModalOpen(true)
   }
 
+  const getDisplayThumbnail = (item: CMSItem): string | null => {
+    if (item.image_url) return item.image_url
+    if (item.content) {
+      // Find the first image match from GAMBAR or FOTO keys
+      const match = item.content.match(/(?:GAMBAR|FOTO):\s*([^\n\r]+)/i)
+      if (match) {
+        return match[1].trim()
+      }
+    }
+    return null
+  }
+
   // Filter & Search Logic
   const filteredItems = items.filter((item) => {
 
@@ -6356,9 +6368,9 @@ startxref
                       <tr key={item.id} className="hover:bg-neutral-900/30 transition">
                         {/* 1. Gambar Column */}
                         <td className="px-6 py-4 whitespace-nowrap">
-                          {item.image_url ? (
+                          {getDisplayThumbnail(item) ? (
                             <img
-                              src={getMediaUrl(item.image_url)}
+                              src={getMediaUrl(getDisplayThumbnail(item))}
                               alt={item.title}
                               className="w-14 h-10 object-cover rounded-lg border border-neutral-800 shadow"
                             />
