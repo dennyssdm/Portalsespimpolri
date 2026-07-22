@@ -5,17 +5,17 @@
     "rank": "Ajun Komisaris Besar Polisi",
     "classGroup": "Sespimmen Polri Dikreg Ke-64",
     "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    "status": "Pengajuan Judul",
-    "proposedTitles": [
-      "Penerapan Restorative Justice dalam Penanganan Kasus Kejahatan Siber Minor di Wilayah Hukum Polda Metro Jaya",
-      "Optimalisasi Peran Bhabinkamtibmas dalam Deteksi Dini Radikalisme di Lingkungan Pendidikan Menengah",
-      "Strategi Pengamanan Pilkada Serentak Berbasis Kemitraan Komunitas Lokal di Daerah Rawan Konflik"
-    ],
+    "status": "Bimbingan Draf",
     "comments": [
       {
         "sender": "Serdik",
         "text": "Mohon petunjuk Jenderal/Bapak Widyaiswara mengenai 3 judul naskap yang saya ajukan ini.",
         "date": "12 Jul 2026, 08:30"
+      },
+      {
+        "sender": "Widyaiswara",
+        "text": "Judul terpilih dan disetujui: \"Penerapan Restorative Justice dalam Penanganan Kasus Kejahatan Siber Minor di Wilayah Hukum Polda Metro Jaya\". Silakan susun kerangka Bab I (Pendahuluan).",
+        "date": "21/7/2026, 13.02.59"
       }
     ],
     "email": "budi.santoso@sespim.polri.go.id",
@@ -24,7 +24,9 @@
     "serdikNrpNip": "88011234",
     "widyaiswaraName": "Abioso Seno Aji, S.I.K., M.H.",
     "widyaiswaraNip": "75123456",
-    "scheduleText": "Setiap Hari Senin, Pukul 10:00 WIB"
+    "scheduleText": "Setiap Hari Senin, Pukul 10:00 WIB",
+    "activeTitle": "Penerapan Restorative Justice dalam Penanganan Kasus Kejahatan Siber Minor di Wilayah Hukum Polda Metro Jaya",
+    "currentChapter": "Bab I: Pendahuluan"
   },
   {
     "id": "s-2",
