@@ -65,17 +65,33 @@ export function ContentPage({ content, path }: ContentPageProps) {
         const isSafe = Math.random() > 0.3
         const similarity = isSafe ? Math.floor(Math.random() * 15) + 5 : Math.floor(Math.random() * 20) + 20
         const statusText = similarity < 15 ? 'Selesai (Sangat Aman)' : similarity <= 25 ? 'Selesai (Aman)' : 'Revisi (Similarity Tinggi)'
-        const sourceList = [
-          { domain: 'jurnal.polri.go.id', percentage: Math.max(1, Math.floor(similarity * 0.4)), matchCount: Math.floor(Math.random() * 12) + 4 },
-          { domain: 'perpusnas.go.id', percentage: Math.max(1, Math.floor(similarity * 0.3)), matchCount: Math.floor(Math.random() * 8) + 2 },
-          { domain: 'sespim.polri.go.id', percentage: Math.max(1, Math.floor(similarity * 0.2)), matchCount: Math.floor(Math.random() * 6) + 1 },
-          { domain: 'perpustakaan.kemhan.go.id', percentage: Math.max(1, Math.floor(similarity * 0.1)), matchCount: Math.floor(Math.random() * 3) + 1 }
-        ].filter(s => s.percentage > 0)
+        
+        const dbSources = (content as any).plagiarismSources
+        const hasDbSources = Array.isArray(dbSources) && dbSources.length > 0
+
+        const sourceList = hasDbSources 
+          ? dbSources 
+          : [
+              { domain: 'jurnal.polri.go.id', percentage: Math.max(1, Math.floor(similarity * 0.4)), matchCount: Math.floor(Math.random() * 12) + 4 },
+              { domain: 'perpusnas.go.id', percentage: Math.max(1, Math.floor(similarity * 0.3)), matchCount: Math.floor(Math.random() * 8) + 2 },
+              { domain: 'sespim.polri.go.id', percentage: Math.max(1, Math.floor(similarity * 0.2)), matchCount: Math.floor(Math.random() * 6) + 1 },
+              { domain: 'perpustakaan.kemhan.go.id', percentage: Math.max(1, Math.floor(similarity * 0.1)), matchCount: Math.floor(Math.random() * 3) + 1 }
+            ].filter(s => s.percentage > 0)
+
+        const totalSimilarity = hasDbSources
+          ? dbSources.reduce((acc: number, curr: any) => acc + (curr.percentage || 0), 0)
+          : similarity
+
+        const totalStatusText = totalSimilarity < 15 
+          ? 'Selesai (Sangat Aman)' 
+          : totalSimilarity <= 25 
+            ? 'Selesai (Aman)' 
+            : 'Revisi (Similarity Tinggi)'
 
         setPlagiarismResults({
-          similarity,
+          similarity: totalSimilarity,
           fileName: file.name,
-          status: statusText,
+          status: totalStatusText,
           dominantSource: sourceList[0]?.domain || 'Internet Source',
           sources: sourceList
         })

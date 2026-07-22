@@ -403,6 +403,10 @@ function DashboardContent() {
   const [formFasilitasItems, setFormFasilitasItems] = useState<{ group: string; name: string; keterangan: string; foto: string }[]>([])
   const [formMateriTerbukaItems, setFormMateriTerbukaItems] = useState<{ title: string; description: string; fileName: string; href: string; format: string; category: string }[]>([])
   const [formPublikasiItems, setFormPublikasiItems] = useState<{ title: string; description: string; fileName: string; href: string; format: string; category: string; author: string; cohort: string; year: string; cover: string }[]>([])
+  
+  // Cek Plagiarisme (s-5) Specific Form Fields
+  const [formPlagiarismDesc, setFormPlagiarismDesc] = useState('')
+  const [formPlagiarismSources, setFormPlagiarismSources] = useState<{ domain: string; percentage: number; matchCount: number }[]>([])
 
   // States for Publikasi extra metadata
   const [formAuthor, setFormAuthor] = useState('')
@@ -2737,6 +2741,69 @@ function DashboardContent() {
     )
   }
 
+  // Building Plagiarism content string from states
+  const buildPlagiarismContent = (): string => {
+    let contentStr = `DESKRIPSI: ${formPlagiarismDesc}\n\n`
+    for (const item of formPlagiarismSources) {
+      if (!item.domain.trim()) continue
+      contentStr += `SUMBER: ${item.domain}\n`
+      contentStr += `PERSENTASE: ${item.percentage}\n`
+      contentStr += `TEMUAN: ${item.matchCount}\n`
+      contentStr += `\n`
+    }
+    return contentStr.trim()
+  }
+
+  // Parsing Plagiarism string content into states
+  const parsePlagiarismContent = (contentStr: string) => {
+    const lines = contentStr.split(/\r?\n/)
+    const sourcesList: { domain: string; percentage: number; matchCount: number }[] = []
+    let currentSource: any = null
+    let descriptionText = ''
+    
+    for (const line of lines) {
+      const trimmed = line.trim()
+      if (!trimmed) continue
+      
+      const colonIdx = trimmed.indexOf(':')
+      if (colonIdx === -1) {
+        if (sourcesList.length === 0) {
+          descriptionText += (descriptionText ? '\n' : '') + trimmed
+        }
+        continue
+      }
+      
+      const key = trimmed.substring(0, colonIdx).trim().toUpperCase()
+      const val = trimmed.substring(colonIdx + 1).trim()
+      
+      if (key === 'DESKRIPSI') {
+        descriptionText = val
+        continue
+      }
+      
+      if (key === 'SUMBER') {
+        currentSource = {
+          domain: val,
+          percentage: 0,
+          matchCount: 0
+        }
+        sourcesList.push(currentSource)
+        continue
+      }
+      
+      if (currentSource) {
+        if (key === 'PERSENTASE') {
+          currentSource.percentage = parseInt(val, 10) || 0
+        } else if (key === 'TEMUAN') {
+          currentSource.matchCount = parseInt(val, 10) || 0
+        }
+      }
+    }
+    
+    setFormPlagiarismDesc(descriptionText || contentStr)
+    setFormPlagiarismSources(sourcesList)
+  }
+
   // Parsing Materi Terbuka string content into states
   const parseMateriTerbukaContent = (contentStr: string) => {
     const lines = contentStr.split(/\r?\n/)
@@ -4447,6 +4514,101 @@ function DashboardContent() {
     )
   }
 
+  const renderPlagiarismStructuredFields = () => {
+    return (
+      <div className="space-y-4 text-neutral-200">
+        <div>
+          <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Deskripsi Layanan</label>
+          <textarea
+            value={formPlagiarismDesc}
+            onChange={(e) => setFormPlagiarismDesc(e.target.value)}
+            rows={3}
+            className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold resize-none"
+            placeholder="Masukkan keterangan tentang sistem Turnitin di Sespim..."
+          />
+        </div>
+
+        <div className="border-t border-neutral-800 pt-3">
+          <div className="flex justify-between items-center mb-3">
+            <p className="text-[10px] font-bold text-polri-goldSoft uppercase tracking-wider">Daftar Sumber Kecocokan (Similarity Matches)</p>
+            <button
+              type="button"
+              onClick={() => setFormPlagiarismSources([...formPlagiarismSources, { domain: '', percentage: 0, matchCount: 0 }])}
+              className="px-2 py-1 rounded bg-polri-gold text-neutral-950 text-[9px] font-black uppercase hover:bg-yellow-500 transition"
+            >
+              + Tambah Sumber
+            </button>
+          </div>
+
+          <div className="max-h-[220px] overflow-y-auto pr-2 space-y-3">
+            {formPlagiarismSources.map((item, idx) => (
+              <div key={idx} className="p-3 bg-neutral-950 rounded-xl border border-neutral-800 space-y-2 relative flex flex-col md:flex-row gap-3 items-end">
+                <div className="flex-1 min-w-0">
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold mb-1">Domain Sumber / Situs</label>
+                  <input
+                    type="text"
+                    required
+                    value={item.domain}
+                    onChange={(e) => {
+                      const updated = [...formPlagiarismSources]
+                      updated[idx].domain = e.target.value
+                      setFormPlagiarismSources(updated)
+                    }}
+                    placeholder="Contoh: jurnal.polri.go.id"
+                    className="w-full rounded-lg bg-neutral-900 border border-neutral-800 px-3 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+
+                <div className="w-24">
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold mb-1">Similarity (%)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    max="100"
+                    value={item.percentage}
+                    onChange={(e) => {
+                      const updated = [...formPlagiarismSources]
+                      updated[idx].percentage = parseInt(e.target.value) || 0
+                      setFormPlagiarismSources(updated)
+                    }}
+                    className="w-full rounded-lg bg-neutral-900 border border-neutral-800 px-3 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+
+                <div className="w-24">
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold mb-1">Temuan (Match)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={item.matchCount}
+                    onChange={(e) => {
+                      const updated = [...formPlagiarismSources]
+                      updated[idx].matchCount = parseInt(e.target.value) || 0
+                      setFormPlagiarismSources(updated)
+                    }}
+                    className="w-full rounded-lg bg-neutral-900 border border-neutral-800 px-3 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setFormPlagiarismSources(formPlagiarismSources.filter((_, i) => i !== idx))}
+                  className="text-red-500 hover:text-red-400 font-bold text-xs pb-1.5 px-1 h-9 shrink-0 flex items-center justify-center"
+                >
+                  Hapus
+                </button>
+              </div>
+            ))}
+
+            {formPlagiarismSources.length === 0 && (
+              <p className="text-center text-xs text-neutral-500 py-4">Belum ada daftar sumber kecocokan. Klik "+ Tambah Sumber" untuk menambahkan.</p>
+            )}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   // Actions
   const handleOpenCreate = () => {
     setFormTitle('')
@@ -4709,6 +4871,13 @@ function DashboardContent() {
     } else {
       setFormPublikasiItems([])
     }
+
+    if (currentModule === 'Sarana Prasarana' && item.id === 's-5') {
+      parsePlagiarismContent(item.content || '')
+    } else {
+      setFormPlagiarismDesc('')
+      setFormPlagiarismSources([])
+    }
     setIsEditModalOpen(true)
   }
 
@@ -4725,6 +4894,7 @@ function DashboardContent() {
     const isWidyaiswaraInpassing = currentModule === 'Widyaiswara' && selectedItem.id === 'w-6'
     const isKurikulum = currentModule === 'Program Pendidikan' && selectedItem.id === 'e-2'
     const isPublikasi = currentModule === 'Publikasi'
+    const isPlagiarism = currentModule === 'Sarana Prasarana' && selectedItem.id === 's-5'
     const finalContent = isProg 
       ? buildProgramContent(formTitle) 
       : (isProfilStructured 
@@ -4737,7 +4907,10 @@ function DashboardContent() {
                       ? buildKurikulumContent()
                       : (isPublikasi
                           ? buildPublikasiContent()
-                          : formContent
+                          : (isPlagiarism
+                              ? buildPlagiarismContent()
+                              : formContent
+                            )
                         )
                     )
                 )
@@ -5827,6 +6000,8 @@ function DashboardContent() {
                   renderInpassingStructuredFields()
                 ) : currentModule === 'Publikasi' ? (
                   renderPublikasiStructuredFields()
+                ) : currentModule === 'Sarana Prasarana' && selectedItem?.id === 's-5' ? (
+                  renderPlagiarismStructuredFields()
                 ) : (
                   <div>
                     {currentModule === 'Publikasi' && renderPublikasiExtraFields()}

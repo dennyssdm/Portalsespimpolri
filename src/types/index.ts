@@ -61,6 +61,11 @@ export type PageContent = {
     body: string
     items?: string[]
   }[]
+  plagiarismSources?: {
+    domain: string
+    percentage: number
+    matchCount: number
+  }[]
 }
 
 export type ImplementationStatus = {

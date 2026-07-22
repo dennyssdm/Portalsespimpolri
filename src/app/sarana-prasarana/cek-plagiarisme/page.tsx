@@ -34,7 +34,55 @@ export default async function Page() {
       dynamicContent.title = dbContent.title
     }
     if (dbContent.content) {
-      dynamicContent.description = dbContent.content
+      // Parse description and sources
+      const lines = dbContent.content.split(/\r?\n/)
+      const sourcesList: any[] = []
+      let currentSource: any = null
+      let descriptionText = ''
+      
+      for (const line of lines) {
+        const trimmed = line.trim()
+        if (!trimmed) continue
+        
+        const colonIdx = trimmed.indexOf(':')
+        if (colonIdx === -1) {
+          if (sourcesList.length === 0) {
+            descriptionText += (descriptionText ? '\n' : '') + trimmed
+          }
+          continue
+        }
+        
+        const key = trimmed.substring(0, colonIdx).trim().toUpperCase()
+        const val = trimmed.substring(colonIdx + 1).trim()
+        
+        if (key === 'DESKRIPSI') {
+          descriptionText = val
+          continue
+        }
+        
+        if (key === 'SUMBER') {
+          currentSource = {
+            domain: val,
+            percentage: 0,
+            matchCount: 0
+          }
+          sourcesList.push(currentSource)
+          continue
+        }
+        
+        if (currentSource) {
+          if (key === 'PERSENTASE') {
+            currentSource.percentage = parseInt(val, 10) || 0
+          } else if (key === 'TEMUAN') {
+            currentSource.matchCount = parseInt(val, 10) || 0
+          }
+        }
+      }
+      
+      dynamicContent.description = descriptionText || dbContent.content
+      if (sourcesList.length > 0) {
+        dynamicContent.plagiarismSources = sourcesList
+      }
     }
     if (dbContent.image_url) {
       if (!dynamicContent.externalLink) {

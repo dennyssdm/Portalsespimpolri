@@ -2117,6 +2117,11 @@ export const pages: Record<string, PageContent> = {
       href: 'https://www.turnitin.com/',
       description: 'Layanan resmi pemeriksaan kemiripan karya tulis akademik via Turnitin.'
     },
+    plagiarismSources: [
+      { domain: 'jurnal.polri.go.id', percentage: 6, matchCount: 12 },
+      { domain: 'perpusnas.go.id', percentage: 4, matchCount: 8 },
+      { domain: 'sespim.polri.go.id', percentage: 3, matchCount: 4 }
+    ],
     sections: [
       {
         title: 'Layanan Cek Plagiarisme',
