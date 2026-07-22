@@ -23,7 +23,12 @@ import {
   CheckIcon,
   ExclamationTriangleIcon,
   ArrowTopRightOnSquareIcon,
-  CheckCircleIcon
+  CheckCircleIcon,
+  ChartBarIcon,
+  BriefcaseIcon,
+  BookOpenIcon,
+  EnvelopeIcon,
+  CpuChipIcon
 } from '@heroicons/react/24/outline'
 
 // Types for CMS items
@@ -151,6 +156,23 @@ const ADMIN_SIDEBAR_ITEMS: CMSSidebarItem[] = [
   { label: 'Laporan Sertifikasi', type: 'module', moduleName: 'Laporan Sertifikasi' },
   { label: 'Agen Wira AI & Operator', type: 'module', moduleName: 'Agen Wira AI & Operator' }
 ]
+
+const SIDEBAR_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  'Beranda': HomeIcon,
+  'Profil': UserGroupIcon,
+  'Program Pendidikan': AcademicCapIcon,
+  'Widyaiswara': BookOpenIcon,
+  'Kelembagaan Internal': BriefcaseIcon,
+  'Berita & Informasi Publik': DocumentTextIcon,
+  'Publikasi': DocumentTextIcon,
+  'Galeri & Unduhan': FolderIcon,
+  'Kontak': EnvelopeIcon,
+  'Sarana Prasarana': BriefcaseIcon,
+  'Pembimbingan Naskap': BookOpenIcon,
+  'Laporan Sertifikasi': ShieldCheckIcon,
+  'Agen Wira AI & Operator': CpuChipIcon,
+  'Analitik Kasespim': ChartBarIcon,
+}
 
 function DashboardContent() {
   const router = useRouter()
@@ -6126,6 +6148,7 @@ startxref
           <nav className="p-4 space-y-1.5 overflow-y-auto max-h-[calc(100vh-280px)]">
             <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-neutral-500 mb-2 block">Daftar Modul Konten</p>
             {sidebarItems.map((item) => {
+              const IconComponent = SIDEBAR_ICONS[item.label] || FolderIcon
               if (item.type === 'link') {
                 return (
                   <a
@@ -6136,7 +6159,7 @@ startxref
                     className="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold tracking-wide text-neutral-400 hover:bg-neutral-800 hover:text-white transition"
                   >
                     <div className="flex items-center gap-2.5">
-                      <FolderIcon className="h-4 w-4 shrink-0 text-polri-goldSoft" />
+                      <IconComponent className="h-4 w-4 shrink-0 text-polri-goldSoft" />
                       {item.label}
                     </div>
                     <svg fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5 shrink-0 opacity-60">
@@ -6161,7 +6184,7 @@ startxref
                       : 'text-neutral-400 hover:bg-neutral-800 hover:text-white'
                   }`}
                 >
-                  <FolderIcon className="h-4 w-4 shrink-0" />
+                  <IconComponent className="h-4 w-4 shrink-0" />
                   {item.label}
                 </button>
               )
@@ -6264,7 +6287,7 @@ startxref
                 type="button"
                 className="inline-flex items-center gap-2 bg-polri-maroon hover:bg-polri-brownDark text-white font-bold text-xs py-3 px-4 rounded-xl shadow-md transition"
               >
-                <PlusIcon className="h-4.5 w-4.5" />
+                <PlusIcon className="h-4 w-4" />
                 Tambah Konten
               </button>
             )}
@@ -6275,7 +6298,7 @@ startxref
             {/* Search Input */}
             <div className="relative flex-1 max-w-md">
               <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-neutral-500">
-                <MagnifyingGlassIcon className="h-4.5 w-4.5" />
+                <MagnifyingGlassIcon className="h-4 w-4" />
               </span>
               <input
                 type="text"
@@ -7341,7 +7364,7 @@ startxref
                 /* STEP 3: RESET PASSWORD FORM */
                 <form onSubmit={handleSaveCpPassword} className="space-y-4">
                   <div className="rounded-xl bg-neutral-950 border border-neutral-850 p-3 text-[10px] text-neutral-400 flex items-start gap-2.5 leading-4">
-                    <ShieldCheckIcon className="h-4.5 w-4.5 shrink-0 text-polri-gold" />
+                    <ShieldCheckIcon className="h-5 w-5 shrink-0 text-polri-gold" />
                     <span>
                       Verifikasi sukses. Silakan masukkan kata sandi baru untuk akun Anda.
                     </span>
