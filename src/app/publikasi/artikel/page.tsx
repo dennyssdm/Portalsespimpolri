@@ -99,17 +99,13 @@ export default async function Page() {
     }))
 
   try {
-    const res = await serverFetch('/api/publikasi-content?limit=1000', { cache: 'no-store' })
+    const res = await serverFetch('/api/publikasi-content/pub-artikel', { cache: 'no-store' })
     if (res.ok) {
       const json = await res.json()
-      if (json.status === 'success' && json.data && json.data.records) {
-        const parsed = parseGroupedPublications(json.data.records)
-        const filteredRecords = parsed.filter(
-          (r: any) => r.category?.toLowerCase() === categoryName.toLowerCase()
-        )
-        
-        if (filteredRecords.length > 0) {
-          displayItems = filteredRecords.map((r: any) => {
+      if (json.status === 'success' && json.data && json.data.record) {
+        const parsed = parseGroupedPublications([json.data.record])
+        if (parsed.length > 0) {
+          displayItems = parsed.map((r: any) => {
             const localMatch = publicationItems.find(
               (p) => p.title.toLowerCase() === r.title.toLowerCase()
             )
@@ -134,7 +130,7 @@ export default async function Page() {
       }
     }
   } catch (err) {
-    console.warn(`Failed to fetch publications for category ${categoryName} from API, using fallback:`, err)
+    console.warn("Failed to fetch Artikel from API, using fallback:", err)
   }
 
   return (

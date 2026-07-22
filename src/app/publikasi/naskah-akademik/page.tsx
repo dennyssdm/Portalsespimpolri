@@ -88,13 +88,11 @@ export default async function Page() {
   let allRecords: any[] = []
 
   try {
-    const res = await serverFetch('/api/publikasi-content?limit=1000', { cache: 'no-store' })
+    const res = await serverFetch('/api/publikasi-content/pub-naskah-akademik', { cache: 'no-store' })
     if (res.ok) {
       const json = await res.json()
-      if (json.status === 'success' && json.data && json.data.records) {
-        allRecords = parseGroupedPublications(json.data.records).filter(
-          (r: any) => r.category === 'Naskah Akademik'
-        )
+      if (json.status === 'success' && json.data && json.data.record) {
+        allRecords = parseGroupedPublications([json.data.record])
       }
     }
   } catch (err) {
