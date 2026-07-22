@@ -89,9 +89,29 @@ export default async function Page() {
   // Predefined prompts for police tasks
   const promptTemplates = [
     {
+      title: "📚 Penyusunan Rencana Pembelajaran (RPS)",
+      role: "Widyaiswara / Perencanaan Ajar",
+      prompt: `Bertindaklah sebagai desainer kurikulum pendidikan kepolisian senior. Bantu saya menyusun Rencana Pembelajaran Semester (RPS) untuk mata kuliah 'Manajemen Operasional Kamtibmas'. RPS harus mencakup: 1. Capaian Pembelajaran Lulusan (CPL), 2. Pokok Bahasan Mingguan (16 Pertemuan), 3. Metode Pembelajaran Orang Dewasa (Andragogi), dan 4. Kriteria Penilaian berbasis studi kasus taktis.`
+    },
+    {
+      title: "📖 Penyusunan Bahan Ajar (Hanjar)",
+      role: "Widyaiswara / Penulisan Hanjar",
+      prompt: `Bertindaklah sebagai instruktur taktis Lemdiklat Polri. Kembangkan draf modul Bahan Ajar (Hanjar) untuk materi 'Kepemimpinan Presisi di Era Siber'. Rancang bab pendahuluan, definisi siber dari perspektif Polri, 3 pilar penindakan kejahatan siber, serta 5 studi kasus dilema etika pengambilan keputusan bagi Kapolres.`
+    },
+    {
+      title: "📝 Pembuatan Soal Ujian & Evaluasi",
+      role: "Evaluasi Pendidikan / Bank Soal",
+      prompt: `Bertindaklah sebagai tim penguji akademik Sespim. Buatlah 5 soal ujian esai analitis tingkat tinggi (HOTS - Higher Order Thinking Skills) untuk peserta didik Sespimmen mengenai 'Manajemen Konflik Sosial dan Resolusi Konflik Polisi-Masyarakat'. Sertakan kunci jawaban penilaian (rubrik) untuk masing-masing soal.`
+    },
+    {
+      title: "🎓 Penyusunan Kurikulum Presisi",
+      role: "Reformasi Kurikulum Sespim",
+      prompt: `Bertindaklah sebagai pakar sosiologi keamanan dan pendidikan tinggi militer/polisi. Berikan rancangan kurikulum modern terintegrasi teknologi AI untuk program pendidikan Sespimti. Kurikulum harus membagi kompetensi menjadi: Kepemimpinan Strategis, Pemodelan Data Presisi, Etika Publik, Keamanan Siber Nasional, dan Manajemen Krisis Kontemporer.`
+    },
+    {
       title: "📝 Analisis & Telaah Regulasi Kepolisian (NotebookLM / Claude)",
       role: "Pemberian Dokumen Hanjar / Perkap",
-      prompt: `Bertindaklah sebagai asisten riset kepolisian senior. Analisis dokumen regulasi yang saya unggah ini. Temukan jika terdapat tumpang tindih regulasi, inkonsistensi taktis, serta berikan rekomendasi perbaikan pasal dalam format draf naskah akademik yang formal.`
+      prompt: `Bertindaklah sebagai asisten riset kepolisian senior. Analisis dokumen regulasi yang saya unggah ini. Temukan jika terdapat tumpang tertib regulasi, inkonsistensi taktis, serta berikan rekomendasi perbaikan pasal dalam format draf naskah akademik yang formal.`
     },
     {
       title: "🛡️ Simulasi Penanganan Krisis Kamtibmas (ChatGPT / Gemini)",
