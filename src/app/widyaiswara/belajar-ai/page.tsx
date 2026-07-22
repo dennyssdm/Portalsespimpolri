@@ -126,71 +126,76 @@ export default async function Page() {
   ]
 
   return (
-    <div className="min-h-screen bg-black py-12 px-4 md:px-8 xl:px-12 mt-14">
-      {/* Premium Hero Section with Split Layout & Generated Image */}
-      <div className="max-w-7xl mx-auto mb-20 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center bg-gradient-to-br from-neutral-950 to-neutral-900/50 p-6 md:p-10 rounded-3xl border border-neutral-900 shadow-2xl relative overflow-hidden">
+    <div className="min-h-screen bg-black pt-16">
+      {/* Premium Full-bleed Hero Section with Split Layout & Generated Image, sitting directly under the menu */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950 border-b border-neutral-900 py-16 lg:py-24">
         {/* Decorative background glow */}
-        <div className="absolute top-0 right-0 w-80 h-80 bg-polri-gold/5 blur-[120px] rounded-full pointer-events-none"></div>
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-polri-maroon/10 blur-[120px] rounded-full pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-polri-gold/5 blur-[120px] rounded-full pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-[450px] h-[450px] bg-polri-maroon/10 blur-[120px] rounded-full pointer-events-none"></div>
+        
+        {/* Tech grid overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,.015)_1px,transparent_1px),linear-gradient(rgba(255,255,255,.015)_1px,transparent_1px)] bg-[size:40px_40px] opacity-70 pointer-events-none" />
 
-        {/* Text Column */}
-        <div className="lg:col-span-7 space-y-6 text-left relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-polri-maroon/20 border border-polri-gold/20">
-            <span className="w-2 h-2 rounded-full bg-polri-goldSoft animate-pulse"></span>
-            <span className="text-[10px] font-black tracking-widest text-polri-goldSoft uppercase">
-              {content.eyebrow}
-            </span>
-          </div>
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight text-white uppercase leading-none">
-            {pageTitle}
-          </h1>
-          <div className="w-24 h-1.5 bg-gradient-to-r from-polri-gold via-yellow-500 to-transparent rounded-full"></div>
-          <p className="text-xs md:text-sm text-neutral-450 leading-relaxed max-w-xl">
-            {pageDescription}
-          </p>
-
-          {/* Micro Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 pt-4 border-t border-neutral-900">
-            <div>
-              <span className="block text-lg font-black text-white">7+ Tools</span>
-              <span className="text-[10px] text-neutral-500 uppercase tracking-wider font-bold">Teknologi AI</span>
-            </div>
-            <div>
-              <span className="block text-lg font-black text-white">100%</span>
-              <span className="text-[10px] text-neutral-500 uppercase tracking-wider font-bold">Studi Kasus Polri</span>
-            </div>
-            <div className="col-span-2 md:col-span-1">
-              <span className="block text-lg font-black text-white">Presisi</span>
-              <span className="text-[10px] text-neutral-500 uppercase tracking-wider font-bold">Standar Pembelajaran</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Image Column */}
-        <div className="lg:col-span-5 relative z-10 flex justify-center">
-          <div className="relative group max-w-md w-full aspect-square rounded-2xl overflow-hidden border border-polri-gold/20 shadow-2xl transition-all duration-500 hover:border-polri-gold/40">
-            {/* Holographic light overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent opacity-60 z-10"></div>
-            <img 
-              src="/images/belajar_ai_hero.png" 
-              alt="Belajar AI Sespim Lemdiklat"
-              className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
-            />
-            {/* Tech badge */}
-            <div className="absolute bottom-4 left-4 right-4 z-20 bg-black/80 backdrop-blur-md border border-neutral-800 p-3 rounded-xl flex items-center justify-between">
-              <div>
-                <span className="block text-[8px] uppercase tracking-widest text-neutral-500 font-bold">Media Visual</span>
-                <span className="text-[10px] font-black text-white uppercase tracking-wider">AI Training Center</span>
-              </div>
-              <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-[8px] font-black rounded border border-emerald-500/20 uppercase tracking-wider">
-                Active
+        <div className="max-w-7xl mx-auto px-4 md:px-8 xl:px-12 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
+          {/* Text Column */}
+          <div className="lg:col-span-7 space-y-6 text-left relative z-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-polri-maroon/20 border border-polri-gold/20">
+              <span className="w-2 h-2 rounded-full bg-polri-goldSoft animate-pulse"></span>
+              <span className="text-[10px] font-black tracking-widest text-polri-goldSoft uppercase">
+                {content.eyebrow}
               </span>
             </div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white uppercase leading-none">
+              {pageTitle}
+            </h1>
+            <div className="w-24 h-1.5 bg-gradient-to-r from-polri-gold via-yellow-500 to-transparent rounded-full"></div>
+            <p className="text-xs md:text-sm text-neutral-450 leading-relaxed max-w-xl">
+              {pageDescription}
+            </p>
+
+            {/* Micro Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 pt-6 border-t border-neutral-800">
+              <div>
+                <span className="block text-xl font-black text-white">7+ Tools</span>
+                <span className="text-[10px] text-neutral-500 uppercase tracking-wider font-bold">Teknologi AI</span>
+              </div>
+              <div>
+                <span className="block text-xl font-black text-white">100%</span>
+                <span className="text-[10px] text-neutral-500 uppercase tracking-wider font-bold">Studi Kasus Polri</span>
+              </div>
+              <div className="col-span-2 md:col-span-1">
+                <span className="block text-xl font-black text-white">Presisi</span>
+                <span className="text-[10px] text-neutral-500 uppercase tracking-wider font-bold">Standar Pembelajaran</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Image Column */}
+          <div className="lg:col-span-5 relative z-10 flex justify-center">
+            <div className="relative group max-w-md w-full aspect-square rounded-2xl overflow-hidden border border-polri-gold/20 shadow-2xl transition-all duration-500 hover:border-polri-gold/40">
+              {/* Holographic light overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent opacity-60 z-10"></div>
+              <img 
+                src="/images/belajar_ai_hero.png" 
+                alt="Belajar AI Sespim Lemdiklat"
+                className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
+              />
+              {/* Tech badge */}
+              <div className="absolute bottom-4 left-4 right-4 z-20 bg-black/80 backdrop-blur-md border border-neutral-800 p-3 rounded-xl flex items-center justify-between">
+                <div>
+                  <span className="block text-[8px] uppercase tracking-widest text-neutral-500 font-bold">Media Visual</span>
+                  <span className="text-[10px] font-black text-white uppercase tracking-wider">AI Training Center</span>
+                </div>
+                <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-[8px] font-black rounded border border-emerald-500/20 uppercase tracking-wider">
+                  Active
+                </span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="max-w-7xl mx-auto space-y-16">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 xl:px-12 py-16 space-y-16">
         {/* Curated AI Tools Grid */}
         <div className="space-y-6">
           <div className="border-l-4 border-polri-gold pl-4">
