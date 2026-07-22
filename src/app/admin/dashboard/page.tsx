@@ -2997,8 +2997,8 @@ startxref
       const key = trimmed.substring(0, colonIdx).trim().toUpperCase()
       const val = trimmed.substring(colonIdx + 1).trim()
       
-      if (key === 'NAMA') {
-        currentItem = { title: val, description: '', fileName: '', href: '', format: 'PDF', category: 'Pelatihan Dasar' }
+      if (key === 'NAMA' || key === 'JUDUL') {
+        currentItem = { title: val, description: '', fileName: '', href: '', format: 'PDF', category: key === 'JUDUL' ? 'Asisten Riset Dokumen' : 'Pelatihan Dasar' }
         list.push(currentItem)
         continue
       }
@@ -3088,13 +3088,14 @@ startxref
   // Building Materi Terbuka content string from states
   const buildMateriTerbukaContent = (): string => {
     let contentStr = ''
+    const isBelajarAI = selectedItem?.id === 'w-9'
     for (const item of formMateriTerbukaItems) {
       if (!item.title.trim()) continue
-      contentStr += `NAMA: ${item.title}\n`
+      contentStr += `${isBelajarAI ? 'JUDUL' : 'NAMA'}: ${item.title}\n`
       if (item.description) contentStr += `DESKRIPSI: ${item.description}\n`
-      if (item.fileName) contentStr += `FILE: ${item.fileName}\n`
+      if (item.fileName && !isBelajarAI) contentStr += `FILE: ${item.fileName}\n`
       if (item.href) contentStr += `URL: ${item.href}\n`
-      if (item.format) contentStr += `FORMAT: ${item.format}\n`
+      if (item.format && !isBelajarAI) contentStr += `FORMAT: ${item.format}\n`
       if (item.category) contentStr += `KATEGORI: ${item.category}\n`
       contentStr += `\n`
     }
@@ -4467,16 +4468,19 @@ startxref
   }
 
   const renderMateriTerbukaStructuredFields = () => {
+    const isBelajarAI = selectedItem?.id === 'w-9'
     return (
       <div className="space-y-4 max-h-[350px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3 text-neutral-200">
         <div className="flex justify-between items-center">
-          <p className="text-[10px] font-bold text-polri-goldSoft uppercase tracking-wider">Daftar Materi Terbuka (PDF / File)</p>
+          <p className="text-[10px] font-bold text-polri-goldSoft uppercase tracking-wider">
+            {isBelajarAI ? 'Direktori Alat Bantu AI' : 'Daftar Materi Terbuka (PDF / File)'}
+          </p>
           <button
             type="button"
-            onClick={() => setFormMateriTerbukaItems([...formMateriTerbukaItems, { title: '', description: '', fileName: '', href: '', format: 'PDF', category: 'Pelatihan Dasar' }])}
+            onClick={() => setFormMateriTerbukaItems([...formMateriTerbukaItems, { title: '', description: '', fileName: '', href: '', format: 'PDF', category: isBelajarAI ? 'Asisten Riset Dokumen' : 'Pelatihan Dasar' }])}
             className="px-2 py-1 rounded bg-polri-gold text-neutral-950 text-[9px] font-black uppercase hover:bg-yellow-500 transition"
           >
-            + Tambah Materi
+            {isBelajarAI ? '+ Tambah Alat AI' : '+ Tambah Materi'}
           </button>
         </div>
         <div className="space-y-4">
@@ -4490,8 +4494,10 @@ startxref
                 Hapus
               </button>
               <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Judul Materi</label>
+                <div className={isBelajarAI ? 'col-span-2' : ''}>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">
+                    {isBelajarAI ? 'Nama / Judul AI Tools' : 'Judul Materi'}
+                  </label>
                   <input
                     type="text"
                     value={item.title}
@@ -4500,29 +4506,33 @@ startxref
                       updated[idx].title = e.target.value
                       setFormMateriTerbukaItems(updated)
                     }}
-                    placeholder="Contoh: RENCANA PEMBELAJARAN"
+                    placeholder={isBelajarAI ? "Contoh: Google NotebookLM" : "Contoh: RENCANA PEMBELAJARAN"}
                     className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
                   />
                 </div>
-                <div>
-                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Nama File</label>
-                  <input
-                    type="text"
-                    value={item.fileName}
-                    onChange={(e) => {
-                      const updated = [...formMateriTerbukaItems]
-                      updated[idx].fileName = e.target.value
-                      setFormMateriTerbukaItems(updated)
-                    }}
-                    placeholder="Contoh: rencana_pembelajaran.pdf"
-                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
-                  />
-                </div>
+                {!isBelajarAI && (
+                  <div>
+                    <label className="block text-[8px] uppercase text-neutral-500 font-bold">Nama File</label>
+                    <input
+                      type="text"
+                      value={item.fileName}
+                      onChange={(e) => {
+                        const updated = [...formMateriTerbukaItems]
+                        updated[idx].fileName = e.target.value
+                        setFormMateriTerbukaItems(updated)
+                      }}
+                      placeholder="Contoh: rencana_pembelajaran.pdf"
+                      className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">URL Tautan / File</label>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">
+                    {isBelajarAI ? 'URL Website Tools' : 'URL Tautan / File'}
+                  </label>
                   <input
                     type="text"
                     value={item.href}
@@ -4531,32 +4541,59 @@ startxref
                       updated[idx].href = e.target.value
                       setFormMateriTerbukaItems(updated)
                     }}
-                    placeholder="Contoh: /files/rencana.pdf"
+                    placeholder={isBelajarAI ? "Contoh: https://notebooklm.google" : "Contoh: /files/rencana.pdf"}
                     className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
                   />
                 </div>
                 <div>
-                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Kategori Materi</label>
-                  <select
-                    value={item.category}
-                    onChange={(e) => {
-                      const updated = [...formMateriTerbukaItems]
-                      updated[idx].category = e.target.value
-                      setFormMateriTerbukaItems(updated)
-                    }}
-                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-2 text-xs text-white outline-none focus:border-polri-gold"
-                  >
-                    <option value="Pelatihan Dasar">Pelatihan Dasar</option>
-                    <option value="SESPIMTI">SESPIMTI</option>
-                    <option value="SESPIMMEN">SESPIMMEN</option>
-                    <option value="SPPK">SPPK</option>
-                    <option value="SESPIMMA">SESPIMMA</option>
-                  </select>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Kategori</label>
+                  {isBelajarAI ? (
+                    <select
+                      value={item.category}
+                      onChange={(e) => {
+                        const updated = [...formMateriTerbukaItems]
+                        updated[idx].category = e.target.value
+                        setFormMateriTerbukaItems(updated)
+                      }}
+                      className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                    >
+                      <option value="Asisten Riset Dokumen">Asisten Riset Dokumen</option>
+                      <option value="Simulasi Skenario Taktis">Simulasi Skenario Taktis</option>
+                      <option value="Penalaran & Analisis Hukum">Penalaran & Analisis Hukum</option>
+                      <option value="Produktivitas & Paparan">Produktivitas & Paparan</option>
+                      <option value="Real-time Social Listening">Real-time Social Listening</option>
+                      <option value="Riset & Fact-Checking">Riset & Fact-Checking</option>
+                      <option value="Media Presentasi Taktis">Media Presentasi Taktis</option>
+                      <option value="Penelusuran Jurnal Presisi">Penelusuran Jurnal Presisi</option>
+                      <option value="Asisten Riset">Asisten Riset</option>
+                      <option value="Simulasi & Teks">Simulasi & Teks</option>
+                      <option value="Analisis Data">Analisis Data</option>
+                      <option value="Etika & RPS">Etika & RPS</option>
+                      <option value="Opini Publik">Opini Publik</option>
+                      <option value="Media Presentasi">Media Presentasi</option>
+                    </select>
+                  ) : (
+                    <select
+                      value={item.category}
+                      onChange={(e) => {
+                        const updated = [...formMateriTerbukaItems]
+                        updated[idx].category = e.target.value
+                        setFormMateriTerbukaItems(updated)
+                      }}
+                      className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                    >
+                      <option value="Pelatihan Dasar">Pelatihan Dasar</option>
+                      <option value="SESPIMTI">SESPIMTI</option>
+                      <option value="SESPIMMEN">SESPIMMEN</option>
+                      <option value="SPPK">SPPK</option>
+                      <option value="SESPIMMA">SESPIMMA</option>
+                    </select>
+                  )}
                 </div>
               </div>
 
               <div>
-                <label className="block text-[8px] uppercase text-neutral-500 font-bold">Deskripsi Materi</label>
+                <label className="block text-[8px] uppercase text-neutral-500 font-bold">Deskripsi / Kasus Penggunaan</label>
                 <textarea
                   value={item.description}
                   onChange={(e) => {
@@ -4565,25 +4602,27 @@ startxref
                     setFormMateriTerbukaItems(updated)
                   }}
                   rows={2}
-                  placeholder="Deskripsi singkat materi pembelajaran..."
+                  placeholder={isBelajarAI ? "Deskripsi singkat dan instruksi penggunaan AI tools..." : "Deskripsi singkat materi pembelajaran..."}
                   className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold resize-none"
                 />
               </div>
 
-              <div>
-                <label className="block text-[8px] uppercase text-neutral-500 font-bold">Format Dokumen</label>
-                <input
-                  type="text"
-                  value={item.format || 'PDF'}
-                  onChange={(e) => {
-                    const updated = [...formMateriTerbukaItems]
-                    updated[idx].format = e.target.value
-                    setFormMateriTerbukaItems(updated)
-                  }}
-                  placeholder="Contoh: PDF"
-                  className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
-                />
-              </div>
+              {!isBelajarAI && (
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Format Dokumen</label>
+                  <input
+                    type="text"
+                    value={item.format || 'PDF'}
+                    onChange={(e) => {
+                      const updated = [...formMateriTerbukaItems]
+                      updated[idx].format = e.target.value
+                      setFormMateriTerbukaItems(updated)
+                    }}
+                    placeholder="Contoh: PDF"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+              )}
             </div>
           ))}
         </div>
