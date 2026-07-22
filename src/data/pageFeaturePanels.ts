@@ -143,7 +143,7 @@ export const pageFeaturePanels: Record<string, PageFeaturePanel> = {
         title: 'IKAS Alumni / Tracer Study',
         description: 'Jejaring alumni dan tracer study sebagai bahan pengkajian, pemetaan alumni, serta pengembangan pendidikan.',
         meta: 'JIANBANG',
-        href: '/kelembagaan-internal/jianbang/ikas-alumni'
+        href: 'https://sespimlemdiklatpolri.id/'
       },
       {
         title: 'WIDYAISWARA',

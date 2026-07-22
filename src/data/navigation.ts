@@ -74,7 +74,7 @@ export const navigation: NavItem[] = [
         label: 'JIANBANG',
         href: '/kelembagaan-internal/jianbang',
         children: [
-          { label: 'IKAS Alumni / Tracer Study', href: '/kelembagaan-internal/jianbang/ikas-alumni' }
+          { label: 'IKAS Alumni / Tracer Study', href: 'https://sespimlemdiklatpolri.id/' }
         ]
       },
       { label: 'BIDANG', href: '/kelembagaan-internal/bidang' }

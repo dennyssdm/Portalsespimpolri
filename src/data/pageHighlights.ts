@@ -250,7 +250,7 @@ export const pageHighlights: Record<string, PageHighlight> = {
       {
         title: 'IKAS Alumni / Tracer Study',
         description: 'Kanal jejaring alumni untuk tracer study, pemetaan alumni, dan dukungan pengembangan kepemimpinan Polri.',
-        href: '/kelembagaan-internal/jianbang/ikas-alumni'
+        href: 'https://sespimlemdiklatpolri.id/'
       }
     ],
     sideNotes: [
@@ -333,7 +333,7 @@ export const pageHighlights: Record<string, PageHighlight> = {
       {
         title: 'IKAS Alumni / Tracer Study',
         description: 'Jejaring alumni mendukung pemetaan lulusan, umpan balik kurikulum, dan kajian dampak pendidikan.',
-        href: '/kelembagaan-internal/jianbang/ikas-alumni'
+        href: 'https://sespimlemdiklatpolri.id/'
       }
     ],
     sideNotes: [
@@ -346,7 +346,7 @@ export const pageHighlights: Record<string, PageHighlight> = {
         body: 'Pengembangan kajian membantu menjaga pendidikan kepemimpinan dan manajemen tetap relevan dengan kebutuhan organisasi Polri.'
       }
     ],
-    cta: { label: 'Lihat IKAS Alumni', href: '/kelembagaan-internal/jianbang/ikas-alumni' }
+    cta: { label: 'Lihat IKAS Alumni', href: 'https://sespimlemdiklatpolri.id/' }
   },
   '/kelembagaan-internal/bidang': {
     label: 'Bidang Pembelajaran',
@@ -385,7 +385,7 @@ export const pageHighlights: Record<string, PageHighlight> = {
         body: 'Riset, kajian, penilaian, dan pengembangan dilakukan agar materi tetap mengikuti kemajuan ilmu pengetahuan.'
       }
     ],
-    cta: { label: 'Lihat IKAS Alumni', href: '/kelembagaan-internal/jianbang/ikas-alumni' }
+    cta: { label: 'Lihat IKAS Alumni', href: 'https://sespimlemdiklatpolri.id/' }
   },
   '/widyaiswara': {
     label: 'Tenaga Pendidik',
