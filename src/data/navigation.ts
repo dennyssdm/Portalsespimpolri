@@ -136,7 +136,6 @@ export const navigation: NavItem[] = [
     href: '/unduhan',
     description: 'Pusat dokumen dan panduan akademik.',
     children: [
-      { label: 'Semua Unduhan', href: '/unduhan' },
       { label: 'Pedoman Akademik', href: '/unduhan/pedoman-akademik' },
       { label: 'Formulir Umum', href: '/unduhan/formulir' }
     ]
