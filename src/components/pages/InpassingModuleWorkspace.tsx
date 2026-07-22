@@ -112,19 +112,33 @@ export function InpassingModuleWorkspace({ modules, certificateTemplateUrl }: In
 
   const [certificateName, setCertificateName] = useState<string>(() => {
     if (typeof window !== 'undefined') {
-      const stored = window.localStorage.getItem(certificateNameStorageKey)
-      if (stored) return stored
-
       const userJson = window.sessionStorage.getItem('sespim_user')
       if (userJson) {
         try {
           const user = JSON.parse(userJson)
-          return user.name || ''
+          if (user.name) return user.name
         } catch {}
       }
+
+      const stored = window.localStorage.getItem(certificateNameStorageKey)
+      if (stored) return stored
     }
     return ''
   })
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const userJson = window.sessionStorage.getItem('sespim_user')
+      if (userJson) {
+        try {
+          const user = JSON.parse(userJson)
+          if (user.name) {
+            setCertificateName(user.name)
+          }
+        } catch {}
+      }
+    }
+  }, [])
 
   const [isDownloading, setIsDownloading] = useState(false)
 
