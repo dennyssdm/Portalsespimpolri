@@ -58,7 +58,14 @@ const EDUCATOR_NRP_MAP: Record<string, string> = {
 }
 
 function findMatchingClaim(educatorName: string, claims: { name: string; certificate_code: string }[]) {
-  const norm = (s: string) => s.toLowerCase().replace(/(irjen pol|akbp|kompol|ipda|drs\.|s\.i\.k\.|m\.si\.|s\.h\.|s\.t\.|s\.st\.mk\.)/g, '').replace(/[^a-z]/g, '').trim()
+  const norm = (s: string) => {
+    if (!s) return ''
+    return s.toLowerCase()
+      .replace(/(irjen pol|irjen\s+pol|brigjen pol|brigjen\s+pol|kombes pol|kombes\s+pol|akbp|kompol|ipda|drs\.|dr\.|prof\.)/g, '')
+      .replace(/(s\.h\.|s\.i\.k\.|m\.si\.|m\.h\.|m\.m\.|s\.st\.mk\.|s\.sos\.|m\.hum\.|m\.p\.a\.|ph\.d\.)/g, '')
+      .replace(/[^a-z]/g, '')
+      .trim()
+  }
   const targetNorm = norm(educatorName)
   return claims.find(c => norm(c.name) === targetNorm || norm(c.name).includes(targetNorm) || targetNorm.includes(norm(c.name)))
 }
@@ -142,7 +149,14 @@ export function EducatorDirectoryPage({ items }: EducatorDirectoryPageProps) {
                   {groupItems.map((item) => {
                     const matchingClaim = findMatchingClaim(item.name, claims)
 
-                    const normName = (s: string) => s.toLowerCase().replace(/(irjen pol|akbp|kompol|ipda|drs\.|s\.i\.k\.|m\.si\.|s\.h\.|s\.t\.|s\.st\.mk\.|dr\.|s\.sos\.|m\.hum\.)/g, '').replace(/[^a-z]/g, '').trim()
+                    const normName = (s: string) => {
+                      if (!s) return ''
+                      return s.toLowerCase()
+                        .replace(/(irjen pol|irjen\s+pol|brigjen pol|brigjen\s+pol|kombes pol|kombes\s+pol|akbp|kompol|ipda|drs\.|dr\.|prof\.)/g, '')
+                        .replace(/(s\.h\.|s\.i\.|s\.i\.k\.|m\.si\.|m\.h\.|m\.m\.|s\.st\.mk\.|s\.sos\.|m\.hum\.|m\.p\.a\.|ph\.d\.)/g, '')
+                        .replace(/[^a-z]/g, '')
+                        .trim()
+                    }
                     const targetNorm = normName(item.name)
                     const nrpNip = EDUCATOR_NRP_MAP[targetNorm] || ''
 
