@@ -1226,6 +1226,17 @@ function DashboardContent() {
       instText += `0 -18 Td\n(${idx + 1}. ${cleanInstName} - ${inst[1]} Peserta) Tj\n`
     })
 
+    let claimsText = ''
+    const topClaims = claimsList.slice(0, 5)
+    topClaims.forEach((claim, idx) => {
+      const cleanClaimName = claim.name.replace(/[\(\)]/g, '')
+      const dateStrClaim = new Date(claim.completed_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'numeric', day: 'numeric' })
+      claimsText += `0 -18 Td\n(${idx + 1}. ${cleanClaimName} - NRP/NIP: ${claim.nrp_nip} - Lulus: ${dateStrClaim}) Tj\n`
+    })
+    if (claimsText === '') {
+      claimsText = '0 -18 Td\n(Belum ada Calon Widyaiswara yang lulus inpassing) Tj\n'
+    }
+
     const pdfString = `%PDF-1.4
 1 0 obj
 <<
@@ -1269,7 +1280,7 @@ endobj
 >>
 endobj
 5 0 obj
-<< /Length 1500 >>
+<< /Length 2000 >>
 stream
 BT
 /F1 14 Tf
@@ -1297,7 +1308,12 @@ BT
 /F2 10 Tf
 ${instText}
 /F1 11 Tf
-0 -40 Td
+0 -35 Td
+(LAPORAN KELULUSAN CALON WIDYAISWARA (INPASSING):) Tj
+/F2 10 Tf
+${claimsText}
+/F1 11 Tf
+0 -35 Td
 (SEBARAN KEAHLIAN WIDYAISWARA (DISTRIBUSI KEPAKARAN):) Tj
 /F2 10 Tf
 0 -20 Td
@@ -1309,7 +1325,7 @@ ${instText}
 0 -15 Td
 (- Kamneg & Intelijen Operasional: 6 WI Dosen) Tj
 /F1 10 Tf
-0 -45 Td
+0 -40 Td
 (DITANDATANGANI SECARA DIGITAL OLEH:) Tj
 /F2 9 Tf
 0 -20 Td
