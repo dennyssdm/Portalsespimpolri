@@ -148,8 +148,7 @@ export const navigation: NavItem[] = [
       { label: 'Simulasi', href: '/sarana-prasarana/simulasi' },
       { label: 'Dashboard', href: '/sarana-prasarana/dashboard' },
       { label: 'Offcampus', href: '/sarana-prasarana/offcampus' },
-      { label: 'Klinik Pratama', href: '/sarana-prasarana/klinik-pratama' },
-      { label: 'Produk / Karya Akademis', href: '/sarana-prasarana/produk-karya' }
+      { label: 'Klinik Pratama', href: '/sarana-prasarana/klinik-pratama' }
     ]
   }
 ]
