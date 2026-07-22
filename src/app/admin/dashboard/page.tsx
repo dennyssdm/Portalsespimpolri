@@ -5620,19 +5620,19 @@ startxref
       setFormPublikasiItems([])
     }
 
-    if (currentModule === 'Galeri & Unduhan' && item.id === 'g-1') {
+    if (currentModule === 'Galeri & Unduhan' && (item.category === 'Galeri Foto' || item.id === 'g-1')) {
       parseGaleriFotoContent(item.content || '')
     } else {
       setFormGaleriFotoItems([])
     }
 
-    if (currentModule === 'Galeri & Unduhan' && item.id === 'g-2') {
+    if (currentModule === 'Galeri & Unduhan' && (item.category === 'Galeri Video' || item.id === 'g-2')) {
       parseGaleriVideoContent(item.content || '')
     } else {
       setFormGaleriVideoItems([])
     }
 
-    const isUnduhanContent = (currentModule === 'Galeri & Unduhan' && ['g-3', 'g-4', 'g-5'].includes(item.id)) || (currentModule === 'Program Pendidikan' && item.id === 'e-3')
+    const isUnduhanContent = (currentModule === 'Galeri & Unduhan' && (['g-3', 'g-4', 'g-5'].includes(item.id) || ['Template NASKAP', 'Template Policy Brief', 'Formulir Umum'].includes(item.category))) || (currentModule === 'Program Pendidikan' && (item.id === 'e-3' || item.category === 'pedoman-akademik'))
     if (isUnduhanContent) {
       parseUnduhanContent(item.content || '')
     } else {
@@ -5662,9 +5662,9 @@ startxref
     const isKurikulum = currentModule === 'Program Pendidikan' && selectedItem.id === 'e-2'
     const isPublikasi = currentModule === 'Publikasi'
     const isPlagiarism = currentModule === 'Sarana Prasarana' && selectedItem.id === 's-5'
-    const isGaleriFoto = currentModule === 'Galeri & Unduhan' && selectedItem.id === 'g-1'
-    const isGaleriVideo = currentModule === 'Galeri & Unduhan' && selectedItem.id === 'g-2'
-    const isUnduhan = (currentModule === 'Galeri & Unduhan' && ['g-3', 'g-4', 'g-5'].includes(selectedItem.id)) || (currentModule === 'Program Pendidikan' && selectedItem.id === 'e-3')
+    const isGaleriFoto = currentModule === 'Galeri & Unduhan' && (selectedItem.category === 'Galeri Foto' || selectedItem.id === 'g-1')
+    const isGaleriVideo = currentModule === 'Galeri & Unduhan' && (selectedItem.category === 'Galeri Video' || selectedItem.id === 'g-2')
+    const isUnduhan = (currentModule === 'Galeri & Unduhan' && (['g-3', 'g-4', 'g-5'].includes(selectedItem.id) || ['Template NASKAP', 'Template Policy Brief', 'Formulir Umum'].includes(selectedItem.category))) || (currentModule === 'Program Pendidikan' && (selectedItem.id === 'e-3' || selectedItem.category === 'pedoman-akademik'))
     const finalContent = isProg 
       ? buildProgramContent(formTitle) 
       : (isProfilStructured 
@@ -6467,11 +6467,13 @@ startxref
                   renderInpassingStructuredFields()
                 ) : currentModule === 'Publikasi' ? (
                   renderPublikasiStructuredFields()
-                ) : (currentModule === 'Galeri & Unduhan' && selectedItem?.id === 'g-1') ? (
+                ) : currentModule === 'Galeri & Unduhan' && (formCategory === 'Galeri Foto' || selectedItem?.id === 'g-1') ? (
                   renderGaleriFotoStructuredFields()
-                ) : (currentModule === 'Galeri & Unduhan' && selectedItem?.id === 'g-2') ? (
+                ) : currentModule === 'Galeri & Unduhan' && (formCategory === 'Galeri Video' || selectedItem?.id === 'g-2') ? (
                   renderGaleriVideoStructuredFields()
-                ) : ((currentModule === 'Galeri & Unduhan' && ['g-3', 'g-4', 'g-5'].includes(selectedItem?.id || '')) || (currentModule === 'Program Pendidikan' && selectedItem?.id === 'e-3')) ? (
+                ) : (currentModule === 'Galeri & Unduhan' && ['Template NASKAP', 'Template Policy Brief', 'Formulir Umum', 'g-3', 'g-4', 'g-5'].includes(formCategory)) || (currentModule === 'Program Pendidikan' && formCategory === 'pedoman-akademik' ? (
+                  renderUnduhanStructuredFields()
+                ) : null) ? (
                   renderUnduhanStructuredFields()
                 ) : (
                   <div>
@@ -6787,11 +6789,11 @@ startxref
                   renderPublikasiStructuredFields()
                 ) : currentModule === 'Sarana Prasarana' && selectedItem?.id === 's-5' ? (
                   renderPlagiarismStructuredFields()
-                ) : (currentModule === 'Galeri & Unduhan' && selectedItem?.id === 'g-1') ? (
+                ) : currentModule === 'Galeri & Unduhan' && (selectedItem?.category === 'Galeri Foto' || formCategory === 'Galeri Foto' || selectedItem?.id === 'g-1') ? (
                   renderGaleriFotoStructuredFields()
-                ) : (currentModule === 'Galeri & Unduhan' && selectedItem?.id === 'g-2') ? (
+                ) : currentModule === 'Galeri & Unduhan' && (selectedItem?.category === 'Galeri Video' || formCategory === 'Galeri Video' || selectedItem?.id === 'g-2') ? (
                   renderGaleriVideoStructuredFields()
-                ) : ((currentModule === 'Galeri & Unduhan' && ['g-3', 'g-4', 'g-5'].includes(selectedItem?.id || '')) || (currentModule === 'Program Pendidikan' && selectedItem?.id === 'e-3')) ? (
+                ) : (currentModule === 'Galeri & Unduhan' && ['Template NASKAP', 'Template Policy Brief', 'Formulir Umum', 'g-3', 'g-4', 'g-5'].includes(selectedItem?.category || formCategory)) || (currentModule === 'Program Pendidikan' && (selectedItem?.category === 'pedoman-akademik' || formCategory === 'pedoman-akademik' || selectedItem?.id === 'e-3')) ? (
                   renderUnduhanStructuredFields()
                 ) : (
                   <div>
