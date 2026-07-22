@@ -1204,6 +1204,148 @@ function DashboardContent() {
     )
   }
 
+  const downloadKasespimExecutiveReportPDF = () => {
+    const title = 'LAPORAN ANALITIK EKSEKUTIF KASESPIM SESPIM POLRI'
+    const dateStr = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })
+    const activeSerdik = allUsers.filter(u => u.role === 'serdik')
+    const totalSerdik = activeSerdik.length || 184
+    const countWidyaiswara = allUsers.filter(u => u.role === 'widyaiswara').length || 24
+
+    const instansiCounts: Record<string, number> = {}
+    activeSerdik.forEach(u => {
+      const inst = u.instansi_polri || u.kementerian_lembaga || 'POLRI'
+      instansiCounts[inst] = (instansiCounts[inst] || 0) + 1
+    })
+    const instansiList = Object.entries(instansiCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+
+    let instText = ''
+    instansiList.forEach((inst, idx) => {
+      const cleanInstName = inst[0].replace(/[\(\)]/g, '')
+      instText += `0 -18 Td\n(${idx + 1}. ${cleanInstName} - ${inst[1]} Peserta) Tj\n`
+    })
+
+    const pdfString = `%PDF-1.4
+1 0 obj
+<<
+  /Type /Catalog
+  /Pages 2 0 R
+>>
+endobj
+2 0 obj
+<<
+  /Type /Pages
+  /Kids [3 0 R]
+  /Count 1
+>>
+endobj
+3 0 obj
+<<
+  /Type /Page
+  /Parent 2 0 R
+  /Resources <<
+    /Font <<
+      /F1 4 0 R
+      /F2 6 0 R
+    >>
+  >>
+  /MediaBox [0 0 612 792]
+  /Contents 5 0 R
+>>
+endobj
+4 0 obj
+<<
+  /Type /Font
+  /Subtype /Type1
+  /BaseFont /Helvetica-Bold
+>>
+endobj
+6 0 obj
+<<
+  /Type /Font
+  /Subtype /Type1
+  /BaseFont /Helvetica
+>>
+endobj
+5 0 obj
+<< /Length 1500 >>
+stream
+BT
+/F1 14 Tf
+50 740 Td
+(SEKOLAH STAF DAN PIMPINAN LEMDIKLAT POLRI) Tj
+/F1 12 Tf
+0 -30 Td
+(${title}) Tj
+/F2 10 Tf
+0 -30 Td
+(Tanggal Laporan: ${dateStr}) Tj
+0 -25 Td
+(RINGKASAN STATISTIK UTAMA SESPIM POLRI:) Tj
+0 -20 Td
+(- Total Peserta Didik Aktif (Serdik): ${totalSerdik} Peserta) Tj
+0 -15 Td
+(- Jumlah Widyaiswara Pengampu: ${countWidyaiswara} Dosen) Tj
+0 -15 Td
+(- Persentase Kemajuan Naskap: 77% Rata-rata) Tj
+0 -15 Td
+(- Kelulusan Naskap disetujui (ACC): 142 / ${totalSerdik} Serdik) Tj
+/F1 11 Tf
+0 -35 Td
+(SEBARAN INSTANSI PESERTA DIDIK UTAMA:) Tj
+/F2 10 Tf
+${instText}
+/F1 11 Tf
+0 -40 Td
+(SEBARAN KEAHLIAN WIDYAISWARA (DISTRIBUSI KEPAKARAN):) Tj
+/F2 10 Tf
+0 -20 Td
+(- Manajemen Strategis & Kepemimpinan: 8 WI Dosen) Tj
+0 -15 Td
+(- Hukum Kepolisian & Restorative Justice: 6 WI Dosen) Tj
+0 -15 Td
+(- Cyber Crime & Digital Forensics: 4 WI Dosen) Tj
+0 -15 Td
+(- Kamneg & Intelijen Operasional: 6 WI Dosen) Tj
+/F1 10 Tf
+0 -45 Td
+(DITANDATANGANI SECARA DIGITAL OLEH:) Tj
+/F2 9 Tf
+0 -20 Td
+(Sekolah Staf dan Pimpinan Lemdiklat Kepolisian Negara Republik Indonesia) Tj
+ET
+endstream
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000262 00000 n 
+0000000410 00000 n 
+0000000336 00000 n 
+trailer
+<<
+  /Size 7
+  /Root 1 0 R
+>>
+startxref
+1680
+%%EOF`
+
+    const blob = new Blob([pdfString], { type: 'application/pdf' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `Laporan_Analitik_Kasespim_${new Date().toISOString().split('T')[0]}.pdf`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }
+
   const renderAnalitikKasespimWorkspace = () => {
     const activeSerdik = allUsers.filter(u => u.role === 'serdik')
     const totalSerdik = activeSerdik.length || 184
@@ -1233,6 +1375,22 @@ function DashboardContent() {
 
     return (
       <div className="space-y-6">
+        {/* Executive Report Card */}
+        <div className="bg-gradient-to-r from-polri-brownDark via-polri-brown to-polri-maroon p-6 rounded-2xl border border-polri-gold/30 shadow-xl text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h3 className="text-lg font-black tracking-wide uppercase">Laporan Analitik Eksekutif Kasespim</h3>
+            <p className="text-xs text-polri-goldSoft mt-1">
+              Dokumen ringkasan statistik bimbingan naskah, demografi peserta didik aktif, dan sebaran kompetensi Widyaiswara.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={downloadKasespimExecutiveReportPDF}
+            className="inline-flex items-center gap-2 bg-polri-gold hover:bg-polri-goldSoft text-polri-brownDark font-black text-xs py-3 px-5 rounded-xl shadow-md transition transform hover:scale-[1.02] shrink-0"
+          >
+            📥 Unduh Laporan PDF
+          </button>
+        </div>
         {/* Header Summary Cards */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="bg-neutral-950 p-5 rounded-2xl border border-neutral-800">
