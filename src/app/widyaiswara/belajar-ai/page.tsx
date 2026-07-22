@@ -11,6 +11,45 @@ interface AITool {
   category: string
 }
 
+const defaultAiTools: AITool[] = [
+  {
+    title: "Google NotebookLM",
+    description: "Alat bantu asisten riset dokumen (Perkap, Hanjar, Naskap) bebas halusinasi berbasis dokumen yang diunggah. Ideal untuk telaah regulasi.",
+    url: "https://notebooklm.google.com",
+    category: "Asisten Riset"
+  },
+  {
+    title: "OpenAI ChatGPT",
+    description: "Model bahasa besar untuk simulasi taktis interaktif, pembuatan studi kasus kepemimpinan, dan penyusunan draf awal naskah kajian.",
+    url: "https://chatgpt.com",
+    category: "Simulasi & Teks"
+  },
+  {
+    title: "Google Gemini",
+    description: "Kecerdasan buatan terintegrasi Google untuk analisis cepat dokumen kepolisian, draf policy brief, dan pencarian data aktual internet.",
+    url: "https://gemini.google.com",
+    category: "Analisis Data"
+  },
+  {
+    title: "Anthropic Claude",
+    description: "AI dengan kemampuan penalaran etika dan logika tinggi, sangat baik untuk penyusunan Rencana Semester (RPS), regulasi, dan koreksi tata bahasa.",
+    url: "https://claude.ai",
+    category: "Etika & RPS"
+  },
+  {
+    title: "xAI Grok",
+    description: "AI terintegrasi dengan data real-time platform X (Twitter) untuk analisis sentimen publik, pemantauan isu kamtibmas, dan tren media sosial.",
+    url: "https://grok.com",
+    category: "Opini Publik"
+  },
+  {
+    title: "Gamma App",
+    description: "Alat bantu kecerdasan buatan untuk merancang slide presentasi pengajaran (slide ajar) Widyaiswara secara instan dan visual premium.",
+    url: "https://gamma.app",
+    category: "Media Presentasi"
+  }
+]
+
 function parseAITools(contentStr: string): AITool[] {
   const list: AITool[] = []
   if (!contentStr) return list
@@ -78,12 +117,14 @@ export default async function Page() {
     pageTitle = dbContent.title || pageTitle
     if (dbContent.content) {
       aiTools = parseAITools(dbContent.content)
-      if (aiTools.length === 0) {
-        pageDescription = dbContent.content
-      } else {
-        pageDescription = "Panduan taktis pemanfaatan Artificial Intelligence (AI) bagi Widyaiswara dan Peserta Didik (Serdik) di Sespim Lemdiklat Polri."
-      }
     }
+  }
+
+  // Fallback if empty or fetch failed
+  if (aiTools.length === 0) {
+    aiTools = defaultAiTools
+  } else {
+    pageDescription = "Panduan taktis pemanfaatan Artificial Intelligence (AI) bagi Widyaiswara dan Peserta Didik (Serdik) di Sespim Lemdiklat Polri."
   }
 
   // Predefined prompts for police tasks
