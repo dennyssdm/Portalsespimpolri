@@ -404,6 +404,7 @@ function DashboardContent() {
   const [formMateriTerbukaItems, setFormMateriTerbukaItems] = useState<{ title: string; description: string; fileName: string; href: string; format: string; category: string }[]>([])
   const [formPublikasiItems, setFormPublikasiItems] = useState<{ title: string; description: string; fileName: string; href: string; format: string; category: string; author: string; cohort: string; year: string; cover: string }[]>([])
   const [formGaleriFotoItems, setFormGaleriFotoItems] = useState<{ title: string; description: string; category: string; imageUrl: string; date: string }[]>([])
+  const [formGaleriVideoItems, setFormGaleriVideoItems] = useState<{ title: string; description: string; category: string; url: string; cover: string; date: string }[]>([])
   
   // Cek Plagiarisme (s-5) Specific Form Fields
   const [formPlagiarismDesc, setFormPlagiarismDesc] = useState('')
@@ -3222,6 +3223,64 @@ startxref
     return contentStr.trim()
   }
 
+  // Parsing Galeri Video string content into states
+  const parseGaleriVideoContent = (contentStr: string) => {
+    if (!contentStr) {
+      setFormGaleriVideoItems([])
+      return
+    }
+    const list: any[] = []
+    const rawEntries = contentStr.split(/\n\s*\n/)
+    for (const rawEntry of rawEntries) {
+      const lines = rawEntry.split('\n')
+      let item: any = { title: '', description: '', category: 'Pendidikan', url: '', cover: '', date: '' }
+      let hasName = false
+      for (const line of lines) {
+        const trimmed = line.trim()
+        if (!trimmed) continue
+        const colonIdx = trimmed.indexOf(':')
+        if (colonIdx === -1) continue
+        const key = trimmed.substring(0, colonIdx).trim().toUpperCase()
+        const val = trimmed.substring(colonIdx + 1).trim()
+        
+        if (key === 'JUDUL' || key === 'NAMA') {
+          item.title = val
+          hasName = true
+        } else if (key === 'DESKRIPSI') {
+          item.description = val
+        } else if (key === 'KATEGORI') {
+          item.category = val
+        } else if (key === 'URL') {
+          item.url = val
+        } else if (key === 'COVER' || key === 'GAMBAR') {
+          item.cover = val
+        } else if (key === 'TANGGAL' || key === 'DATE') {
+          item.date = val
+        }
+      }
+      if (hasName) {
+        list.push(item)
+      }
+    }
+    setFormGaleriVideoItems(list)
+  }
+
+  // Building Galeri Video content string from states
+  const buildGaleriVideoContent = (): string => {
+    let contentStr = ''
+    for (const item of formGaleriVideoItems) {
+      if (!item.title.trim()) continue
+      contentStr += `JUDUL: ${item.title}\n`
+      if (item.description) contentStr += `DESKRIPSI: ${item.description}\n`
+      if (item.category) contentStr += `KATEGORI: ${item.category}\n`
+      if (item.url) contentStr += `URL: ${item.url}\n`
+      if (item.cover) contentStr += `COVER: ${item.cover}\n`
+      if (item.date) contentStr += `TANGGAL: ${item.date}\n`
+      contentStr += `\n`
+    }
+    return contentStr.trim()
+  }
+
   // Parsing Inpassing modules string content into states
   const parseInpassingModules = (contentStr: string) => {
     const lines = contentStr.split(/\r?\n/)
@@ -4739,6 +4798,150 @@ startxref
     )
   }
 
+  const renderGaleriVideoStructuredFields = () => {
+    return (
+      <div className="space-y-4 max-h-[450px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3 text-neutral-200">
+        <div className="flex justify-between items-center">
+          <div>
+            <p className="text-[10px] font-bold text-polri-goldSoft uppercase tracking-wider">Daftar Video Galeri</p>
+            <p className="text-[9px] text-neutral-400 mt-0.5">Tambah, edit, atau hapus video dalam galeri.</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setFormGaleriVideoItems([...formGaleriVideoItems, { title: '', description: '', category: 'Pendidikan', url: '', cover: '', date: '' }])}
+            className="px-2.5 py-1.5 rounded bg-polri-gold text-neutral-950 text-[9px] font-black uppercase hover:bg-yellow-500 transition"
+          >
+            + Tambah Video
+          </button>
+        </div>
+        <div className="space-y-5">
+          {formGaleriVideoItems.map((item, idx) => (
+            <div key={idx} className="p-4 bg-neutral-950 rounded-xl border border-neutral-800 space-y-3 relative">
+              <button
+                type="button"
+                onClick={() => setFormGaleriVideoItems(formGaleriVideoItems.filter((_, i) => i !== idx))}
+                className="absolute right-3 top-3 text-red-500 hover:text-red-400 font-black text-[10px] uppercase tracking-wider"
+              >
+                Hapus
+              </button>
+              
+              {/* Preview play block */}
+              <div className="bg-neutral-900/60 p-2.5 rounded-lg border border-neutral-800/80 flex gap-4 items-center">
+                <div className="relative w-16 h-12 shrink-0 rounded overflow-hidden bg-neutral-900 border border-polri-gold/20 flex items-center justify-center">
+                  <div className="bg-polri-maroon text-white rounded-full p-1.5 text-center">
+                    <svg className="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] font-black text-white truncate">{item.title || 'Masukkan Judul Video...'}</p>
+                  <p className="text-[8px] text-neutral-400 mt-1 truncate">{item.url || 'Masukkan Tautan YouTube...'}</p>
+                  <span className="inline-block bg-polri-maroon/20 text-polri-goldSoft text-[7px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider mt-1.5">{item.category}</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Judul Video</label>
+                  <input
+                    type="text"
+                    value={item.title}
+                    onChange={(e) => {
+                      const updated = [...formGaleriVideoItems]
+                      updated[idx].title = e.target.value
+                      setFormGaleriVideoItems(updated)
+                    }}
+                    placeholder="Contoh: Video Profil Sespim"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Kategori</label>
+                  <select
+                    value={item.category}
+                    onChange={(e) => {
+                      const updated = [...formGaleriVideoItems]
+                      updated[idx].category = e.target.value
+                      setFormGaleriVideoItems(updated)
+                    }}
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                  >
+                    <option value="Profil">Profil</option>
+                    <option value="Kegiatan">Kegiatan</option>
+                    <option value="Pembelajaran">Pembelajaran</option>
+                    <option value="Lainnya">Lainnya</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2">
+                <div className="col-span-2">
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">URL Video / Embed YouTube</label>
+                  <input
+                    type="text"
+                    value={item.url}
+                    onChange={(e) => {
+                      const updated = [...formGaleriVideoItems]
+                      updated[idx].url = e.target.value
+                      setFormGaleriVideoItems(updated)
+                    }}
+                    placeholder="Contoh: https://www.youtube.com/watch?v=..."
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Tanggal</label>
+                  <input
+                    type="text"
+                    value={item.date}
+                    onChange={(e) => {
+                      const updated = [...formGaleriVideoItems]
+                      updated[idx].date = e.target.value
+                      setFormGaleriVideoItems(updated)
+                    }}
+                    placeholder="Contoh: 10 Juli 2026"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[8px] uppercase text-neutral-500 font-bold">URL Thumbnail Gambar / Cover</label>
+                <input
+                  type="text"
+                  value={item.cover}
+                  onChange={(e) => {
+                    const updated = [...formGaleriVideoItems]
+                    updated[idx].cover = e.target.value
+                    setFormGaleriVideoItems(updated)
+                  }}
+                  placeholder="Contoh: /images/sespim-campus-hero.png"
+                  className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[8px] uppercase text-neutral-500 font-bold">Deskripsi Video</label>
+                <textarea
+                  value={item.description}
+                  onChange={(e) => {
+                    const updated = [...formGaleriVideoItems]
+                    updated[idx].description = e.target.value
+                    setFormGaleriVideoItems(updated)
+                  }}
+                  rows={2}
+                  placeholder="Deskripsi singkat mengenai isi video..."
+                  className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold resize-none"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
   const renderInpassingStructuredFields = () => {
     return (
       <div className="space-y-4 max-h-[350px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3 text-neutral-200">
@@ -5223,6 +5426,12 @@ startxref
       setFormGaleriFotoItems([])
     }
 
+    if (currentModule === 'Galeri & Unduhan' && item.id === 'g-2') {
+      parseGaleriVideoContent(item.content || '')
+    } else {
+      setFormGaleriVideoItems([])
+    }
+
     if (currentModule === 'Sarana Prasarana' && item.id === 's-5') {
       parsePlagiarismContent(item.content || '')
     } else {
@@ -5247,6 +5456,7 @@ startxref
     const isPublikasi = currentModule === 'Publikasi'
     const isPlagiarism = currentModule === 'Sarana Prasarana' && selectedItem.id === 's-5'
     const isGaleriFoto = currentModule === 'Galeri & Unduhan' && selectedItem.id === 'g-1'
+    const isGaleriVideo = currentModule === 'Galeri & Unduhan' && selectedItem.id === 'g-2'
     const finalContent = isProg 
       ? buildProgramContent(formTitle) 
       : (isProfilStructured 
@@ -5263,7 +5473,10 @@ startxref
                               ? buildPlagiarismContent()
                               : (isGaleriFoto
                                   ? buildGaleriFotoContent()
-                                  : formContent
+                                  : (isGaleriVideo
+                                      ? buildGaleriVideoContent()
+                                      : formContent
+                                    )
                                 )
                             )
                         )
@@ -6045,6 +6258,8 @@ startxref
                   renderPublikasiStructuredFields()
                 ) : (currentModule === 'Galeri & Unduhan' && selectedItem?.id === 'g-1') ? (
                   renderGaleriFotoStructuredFields()
+                ) : (currentModule === 'Galeri & Unduhan' && selectedItem?.id === 'g-2') ? (
+                  renderGaleriVideoStructuredFields()
                 ) : (
                   <div>
                     <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Isi Konten (News / Detail)</label>
