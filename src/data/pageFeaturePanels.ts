@@ -57,7 +57,7 @@ export const pageFeaturePanels: Record<string, PageFeaturePanel> = {
         title: 'Pedoman dan evaluasi',
         description: 'Ruang untuk aturan akademik, tata tertib, penilaian, dan mekanisme monitoring.',
         meta: 'Rujukan',
-        href: '/program-pendidikan/pedoman-akademik'
+        href: '/program-pendidikan/evaluasi-pendidikan'
       },
       {
         title: 'Peserta didik',
@@ -342,38 +342,6 @@ export const pageFeaturePanels: Record<string, PageFeaturePanel> = {
       }
     ]
   },
-  '/unduhan/pedoman-akademik': {
-    eyebrow: 'Peta Dokumen',
-    title: 'Dokumen penting disusun berdasarkan kebutuhan akademik dan administrasi',
-    description: 'Panel ini menjadi baseline UI untuk pusat unduhan sebelum file resmi dan metadata dokumen diintegrasikan.',
-    items: [
-      {
-        title: 'Pedoman akademik',
-        description: 'Dokumen rujukan utama untuk tata kelola pendidikan dan aturan akademik.',
-        meta: 'Pedoman',
-        href: '/unduhan/pedoman-akademik'
-      },
-      {
-        title: 'Template NASKAP',
-        description: 'Format naskah akademik untuk mendukung penyusunan karya peserta didik.',
-        meta: 'Template',
-        href: '/unduhan/template-naskap'
-      },
-      {
-        title: 'Template policy brief',
-        description: 'Format ringkas untuk publikasi rekomendasi kebijakan dan analisis strategis.',
-        meta: 'Template',
-        href: '/unduhan/template-policy-brief'
-      },
-      {
-        title: 'Formulir umum',
-        description: 'Kanal formulir administratif yang dapat diberi versi dan tanggal pembaruan.',
-        meta: 'Formulir',
-        href: '/unduhan/formulir'
-      }
-    ]
-  },
-
   '/sarana-prasarana': {
     eyebrow: 'Peta Layanan',
     title: 'Portal pendukung untuk literasi, pembelajaran, mutu akademik, akses digital, dan kesehatan',

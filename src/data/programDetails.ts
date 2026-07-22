@@ -57,7 +57,7 @@ export const programDetails: Record<string, ProgramDetail> = {
     ],
     documents: [
       { title: 'Kalender Pendidikan', href: '/program-pendidikan/kalender-pendidikan' },
-      { title: 'Pedoman Akademik', href: '/program-pendidikan/pedoman-akademik' }
+      { title: 'Kurikulum Umum', href: '/program-pendidikan/kurikulum' }
     ]
   },
   sespimmen: {

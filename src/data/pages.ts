@@ -505,23 +505,6 @@ export const pages: Record<string, PageContent> = {
       }
     ]
   },
-  '/program-pendidikan/pedoman-akademik': {
-    title: "Pedoman Akademik",
-    eyebrow: "Akademik",
-    description: "Pedoman penyelenggaraan pendidikan dan tata tertib akademik peserta didik.",
-    sections: [
-      {
-        title: 'Ringkasan Halaman',
-        body: "Pedoman penyelenggaraan pendidikan dan tata tertib akademik peserta didik.",
-        items: ['Konten awal mengikuti sitemap Sespim Polri.', 'Layout disiapkan sebagai baseline front-end.', 'Detail konten dapat diperbarui setelah approval.']
-      },
-      {
-        title: 'Kebutuhan UI',
-        body: 'Halaman ini membutuhkan struktur hero, breadcrumb, konten utama, kartu informasi, dan CTA menuju halaman terkait.',
-        items: ['Hero halaman', 'Section konten utama', 'Kartu informasi', 'CTA dan tautan terkait']
-      }
-    ]
-  },
   '/program-pendidikan/evaluasi-pendidikan': {
     title: "Evaluasi Pendidikan",
     eyebrow: "Akademik",
@@ -1877,40 +1860,6 @@ export const pages: Record<string, PageContent> = {
       {
         title: 'Ringkasan Halaman',
         body: "Kumpulan video dokumentasi kegiatan, pembelajaran, seminar, dan informasi publik.",
-        items: ['Konten awal mengikuti sitemap Sespim Polri.', 'Layout disiapkan sebagai baseline front-end.', 'Detail konten dapat diperbarui setelah approval.']
-      },
-      {
-        title: 'Kebutuhan UI',
-        body: 'Halaman ini membutuhkan struktur hero, breadcrumb, konten utama, kartu informasi, dan CTA menuju halaman terkait.',
-        items: ['Hero halaman', 'Section konten utama', 'Kartu informasi', 'CTA dan tautan terkait']
-      }
-    ]
-  },
-  '/unduhan/pedoman-akademik': {
-    title: "Unduhan Pedoman Akademik",
-    eyebrow: "Dokumen",
-    description: "Dokumen pedoman akademik yang dapat diunduh oleh peserta didik dan publik terkait.",
-    sections: [
-      {
-        title: 'Ringkasan Halaman',
-        body: "Dokumen pedoman akademik yang dapat diunduh oleh peserta didik dan publik terkait.",
-        items: ['Konten awal mengikuti sitemap Sespim Polri.', 'Layout disiapkan sebagai baseline front-end.', 'Detail konten dapat diperbarui setelah approval.']
-      },
-      {
-        title: 'Kebutuhan UI',
-        body: 'Halaman ini membutuhkan struktur hero, breadcrumb, konten utama, kartu informasi, dan CTA menuju halaman terkait.',
-        items: ['Hero halaman', 'Section konten utama', 'Kartu informasi', 'CTA dan tautan terkait']
-      }
-    ]
-  },
-  '/unduhan/formulir': {
-    title: "Formulir Umum",
-    eyebrow: "Dokumen",
-    description: "Formulir umum dan dokumen pendukung layanan akademik.",
-    sections: [
-      {
-        title: 'Ringkasan Halaman',
-        body: "Formulir umum dan dokumen pendukung layanan akademik.",
         items: ['Konten awal mengikuti sitemap Sespim Polri.', 'Layout disiapkan sebagai baseline front-end.', 'Detail konten dapat diperbarui setelah approval.']
       },
       {

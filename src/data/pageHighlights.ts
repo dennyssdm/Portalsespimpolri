@@ -149,9 +149,9 @@ export const pageHighlights: Record<string, PageHighlight> = {
         href: '/program-pendidikan/kalender-pendidikan'
       },
       {
-        title: 'Pedoman akademik',
-        description: 'Ruang untuk pedoman penyelenggaraan pendidikan, tata tertib, dan rujukan peserta didik.',
-        href: '/program-pendidikan/pedoman-akademik'
+        title: 'Evaluasi pendidikan',
+        description: 'Ruang untuk evaluasi pendidikan, penilaian, tata tertib, dan rujukan peserta didik.',
+        href: '/program-pendidikan/evaluasi-pendidikan'
       },
       {
         title: 'Program kepemimpinan',
@@ -756,48 +756,6 @@ export const pageHighlights: Record<string, PageHighlight> = {
       }
     ],
     cta: { label: 'Buka Galeri Foto', href: '/galeri/foto' }
-  },
-  '/unduhan/pedoman-akademik': {
-    label: 'Dokumen',
-    summary: 'Pusat akses pedoman akademik, template naskap, template policy brief, dan formulir umum.',
-    stats: [
-      { value: '4', label: 'Kategori dokumen' },
-      { value: '2', label: 'Template utama' },
-      { value: '1', label: 'Ruang formulir' }
-    ],
-    priorities: [
-      'Membuat dokumen penting mudah ditemukan dari satu halaman.',
-      'Menyiapkan kartu unduhan untuk fase integrasi file resmi.',
-      'Membedakan pedoman, template, dan formulir agar pengguna cepat memilih.'
-    ],
-    spotlight: [
-      {
-        title: 'Pedoman akademik',
-        description: 'Rujukan penyelenggaraan pendidikan dan tata tertib akademik.',
-        href: '/unduhan/pedoman-akademik'
-      },
-      {
-        title: 'Template NASKAP',
-        description: 'Template dokumen naskah akademik untuk kebutuhan peserta didik.',
-        href: '/unduhan/template-naskap'
-      },
-      {
-        title: 'Formulir umum',
-        description: 'Kanal formulir administratif yang dapat diperluas setelah file resmi tersedia.',
-        href: '/unduhan/formulir'
-      }
-    ],
-    sideNotes: [
-      {
-        title: 'Validasi dokumen',
-        body: 'File unduhan final perlu divalidasi oleh pemilik dokumen sebelum dipublikasikan.'
-      },
-      {
-        title: 'Metadata file',
-        body: 'Setiap dokumen sebaiknya memiliki versi, tanggal pembaruan, ukuran file, dan format.'
-      }
-    ],
-    cta: { label: 'Buka Pedoman Akademik', href: '/unduhan/pedoman-akademik' }
   },
   '/kontak': {
     label: 'Layanan Publik',

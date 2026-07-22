@@ -44,7 +44,6 @@ export const navigation: NavItem[] = [
     children: [
       { label: 'Kalender Pendidikan', href: '/program-pendidikan/kalender-pendidikan' },
       { label: 'Kurikulum Umum', href: '/program-pendidikan/kurikulum' },
-      { label: 'Pedoman Akademik', href: '/program-pendidikan/pedoman-akademik' },
       { label: 'Evaluasi Pendidikan', href: '/program-pendidikan/evaluasi-pendidikan' },
       {
         label: 'Informasi Peserta Didik',
@@ -129,15 +128,6 @@ export const navigation: NavItem[] = [
       },
       { label: 'Agenda Pendidikan', href: '/berita/agenda' },
       { label: 'Informasi Publik', href: '/berita/informasi-publik' }
-    ]
-  },
-  {
-    label: 'Unduhan',
-    href: '/unduhan/pedoman-akademik',
-    description: 'Pusat dokumen dan panduan akademik.',
-    children: [
-      { label: 'Pedoman Akademik', href: '/unduhan/pedoman-akademik' },
-      { label: 'Formulir Umum', href: '/unduhan/formulir' }
     ]
   },
   {

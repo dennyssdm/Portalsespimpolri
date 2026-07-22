@@ -69,7 +69,6 @@ export const quickLinks = [
   { label: 'Widyaiswara', href: '/widyaiswara' },
   { label: 'Publikasi', href: '/publikasi' },
   { label: 'Galeri', href: '/galeri' },
-  { label: 'Unduhan', href: '/unduhan/pedoman-akademik' },
   { label: 'Kontak', href: '/kontak' }
 ]
 
