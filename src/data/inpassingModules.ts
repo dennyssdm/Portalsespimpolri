@@ -50,5 +50,11 @@ export const inpassingModules: InpassingModule[] = [
     order: 7,
     title: 'Modul 7 Inpassing Widyaiswara',
     description: 'Materi pembelajaran mandiri untuk calon Widyaiswara.'
+  },
+  {
+    id: 'modul-8',
+    order: 8,
+    title: 'Modul 8 Inpassing Widyaiswara',
+    description: 'Materi pembelajaran mandiri untuk calon Widyaiswara.'
   }
 ]
