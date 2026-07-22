@@ -17,46 +17,58 @@ interface StoryStep {
 
 const storyData: Record<string, StoryStep> = {
   start: {
-    text: "LAPORAN UTAMA: Massa buruh sebanyak 5.000 orang berkumpul di depan Gedung DPRD. Situasi mulai memanas karena perwakilan mereka ditolak masuk. Beberapa provokator mulai melempar botol plastik ke arah barikade awal Polwan. Sebagai Kapolres, apa tindakan taktis pertama Anda?",
+    text: "SKENARIO 1 (Crowd Control): Massa buruh sebanyak 5.000 orang berkumpul di depan Gedung DPRD. Situasi mulai memanas karena perwakilan mereka ditolak masuk. Beberapa provokator mulai melempar botol plastik ke arah barikade awal Polwan. Sebagai Kapolres, apa tindakan taktis pertama Anda?",
     options: [
-      { text: "Turunkan Tim Negosiasi (Polwan) ke depan, gunakan pengeras suara untuk menenangkan massa secara humanis.", kpi: { trust: 15, riot: "Mulai Tenang" }, next: "step_humanis" },
-      { text: "Perintahkan pasukan Sabhara bersiap dengan tameng, dorong massa mundur 50 meter ke belakang.", kpi: { trust: -10, riot: "Tegang" }, next: "step_tegas" },
-      { text: "Tembakkan Gas Air Mata segera untuk membubarkan kerumunan sebelum semakin anarkis.", kpi: { trust: -30, riot: "Kacau / Rusuh" }, next: "step_represif" }
+      { text: "Turunkan Tim Negosiasi (Polwan) ke depan, gunakan pengeras suara untuk menenangkan massa secara humanis.", kpi: { trust: 15, riot: "Mulai Tenang" }, next: "stage2_disaster" },
+      { text: "Perintahkan pasukan Sabhara bersiap dengan tameng, dorong massa mundur 50 meter ke belakang.", kpi: { trust: -10, riot: "Tegang" }, next: "stage2_disaster" },
+      { text: "Tembakkan Gas Air Mata segera untuk membubarkan kerumunan sebelum semakin anarkis.", kpi: { trust: -30, riot: "Kacau / Rusuh" }, next: "stage2_disaster" }
     ]
   },
-  step_humanis: {
-    text: "KONDISI: Imbauan humanis berhasil meredam emosi mayoritas massa. Namun, media sosial menyebarkan hoaks bahwa Polisi bersikap lemah dan membiarkan penutupan jalan fasilitas publik. Wartawan mencegat Anda untuk wawancara dadakan secara live (Media Handling). Apa respons Anda?",
+  stage2_disaster: {
+    text: "SKENARIO 2 (Disaster Response): Terjadi banjir bandang di wilayah lereng gunung. Warga desa adat menolak dievakuasi dari zona merah rawan longsor susulan karena alasan spiritual dan adat leluhur. Bagaimana langkah kepemimpinan Anda?",
     options: [
-      { text: "Tegaskan di kamera: 'Kami mengutamakan dialog demi keselamatan warga. Jalan dibuka bertahap lewat kesepakatan.'", kpi: { trust: 25, riot: "Kondusif" }, next: "ending_good" },
-      { text: "Menolak berkomentar, langsung berjalan cepat menghindari kerumunan wartawan menuju mobil dinas.", kpi: { trust: -15, riot: "Mulai Tenang" }, next: "ending_neutral" }
+      { text: "Lakukan dialog kultural melalui tokoh adat setempat, janjikan evakuasi barang pusaka desa secara terhormat.", kpi: { trust: 15, riot: "Kondusif" }, next: "stage3_integrity" },
+      { text: "Kerahkan truk Dalmas untuk mengevakuasi paksa seluruh warga demi menyelamatkan jiwa mereka secara instan.", kpi: { trust: -5, riot: "Tegang" }, next: "stage3_integrity" },
+      { text: "Tunda evakuasi, fokus menyalurkan logistik medis dan makanan di posko batas luar sambil menunggu arahan BPBD.", kpi: { trust: -15, riot: "Mulai Tenang" }, next: "stage3_integrity" }
     ]
   },
-  step_tegas: {
-    text: "KONDISI: Aksi saling dorong terjadi. Gas air mata belum ditembakkan, tetapi 2 personel Sabhara terluka terkena lemparan batu. Massa menuntut rekan mereka yang ditangkap segera dibebaskan dalam waktu 10 menit atau mereka akan membakar pos polisi terdekat. Bagaimana keputusan Anda?",
+  stage3_integrity: {
+    text: "SKENARIO 3 (Integrity & Conflict): Ditemukan aktivitas tambang emas ilegal skala besar yang menghidupi ratusan kepala keluarga lokal. Penyelidikan intelijen menunjukkan tambang tersebut dibekingi oleh oknum Perwira polisi di jajaran Polres Anda. Apa tindakan Anda?",
     options: [
-      { text: "Lakukan mediasi cepat, janjikan pembebasan bersyarat setelah korlap menjamin massa bubar dengan tertib.", kpi: { trust: 10, riot: "Kondusif" }, next: "ending_good" },
-      { text: "Abaikan tuntutan, perintahkan Water Cannon maju dan bersiap lakukan penangkapan massal pada provokator.", kpi: { trust: -15, riot: "Kacau / Rusuh" }, next: "ending_bad" }
+      { text: "Lakukan tindakan hukum tegas menutup tambang secara transparan, serta proses etik oknum perwira beking tanpa pandang bulu.", kpi: { trust: 25, riot: "Tegang" }, next: "stage4_cyber" },
+      { text: "Ganden Pemda untuk merancang program peralihan mata pencaharian warga terlebih dahulu sebelum melakukan penertiban hukum bertahap.", kpi: { trust: 15, riot: "Mulai Tenang" }, next: "stage4_cyber" },
+      { text: "Tutup mata sementara waktu demi menjaga mata pencaharian warga lokal serta menghindari potensi bentrokan massal.", kpi: { trust: -25, riot: "Kondusif" }, next: "stage4_cyber" }
     ]
   },
-  step_represif: {
-    text: "KONDISI: Keputusan represif Anda memicu kepanikan massal. Kerusuhan pecah di 3 titik sekitar gedung DPRD. Netizen di X (Twitter) menaikkan tagar kecaman terhadap tindakan kepolisian. Kapolda menelepon Anda dan meminta pertanggungjawaban instan. Apa langkah darurat Anda?",
+  stage4_cyber: {
+    text: "SKENARIO 4 (Cyber Security): Database Polres diretas oleh ransomware. Hacker meminta tebusan tebusan $50.000 dalam bitcoin dan mengancam akan membocorkan data pribadi pelapor kasus sensitif (pelecehan seksual) ke publik jika tidak dibayar dalam 6 jam. Apa respons Anda?",
     options: [
-      { text: "Akui kesalahan prosedur di media, tarik pasukan represif, dan ganti dengan pendekatan dialog wilayah.", kpi: { trust: 5, riot: "Tegang" }, next: "ending_neutral" },
-      { text: "Bertahan pada keputusan, lakukan sweeping total untuk membersihkan area terlepas dari kecaman publik.", kpi: { trust: -25, riot: "Darurat" }, next: "ending_bad" }
+      { text: "Tolak membayar tebusan, umumkan insiden secara transparan kepada publik, dan undang Bareskrim Siber untuk pelacakan.", kpi: { trust: 20, riot: "Kondusif" }, next: "stage5_hoax" },
+      { text: "Bayar uang tebusan secara diam-diam menggunakan dana darurat demi melindungi keamanan data pelapor dan reputasi institusi.", kpi: { trust: -20, riot: "Kondusif" }, next: "stage5_hoax" },
+      { text: "Sembunyikan insiden dari pers dan publik, klaim bahwa sistem sedang mengalami pemeliharaan (maintenance) rutin.", kpi: { trust: -35, riot: "Tegang" }, next: "stage5_hoax" }
     ]
   },
+  stage5_hoax: {
+    text: "SKENARIO 5 (Panic Control): Video hoaks kasus penculikan anak viral di wilayah Anda. Ratusan warga yang panik mengepung dan memukuli seorang pedagang keliling asing yang dituduh sebagai penculik. Bagaimana perintah taktis Anda?",
+    options: [
+      { text: "Kerahkan tim patroli segera untuk menyelamatkan korban, amankan pelaku provokasi, dan rilis video klarifikasi fakta di media sosial.", kpi: { trust: 25, riot: "Kondusif" }, next: "evaluation" },
+      { text: "Bubarkan kerumunan massa secara represif menggunakan tembakan gas air mata tanpa melakukan imbauan/klarifikasi terlebih dahulu.", kpi: { trust: -10, riot: "Kacau / Rusuh" }, next: "evaluation" },
+      { text: "Keluarkan imbauan tertulis di media sosial agar warga tidak terprovokasi, tanpa mengirimkan tim evakuasi fisik secara cepat.", kpi: { trust: -20, riot: "Tegang" }, next: "evaluation" }
+    ]
+  },
+  // Ending Screens
   ending_good: {
-    text: "SIMULASI SELESAI: KEPEMIMPINAN SUKSES DIIPLOMATIS.\n\nAnda berhasil meredakan krisis makro tanpa ada korban luka serius. Penilaian AI menunjukkan Anda mengedepankan prinsip 'Salus Populi Suprema Lex Esto' (Keselamatan Rakyat adalah Hukum Tertinggi).",
+    text: "SIMULASI SELESAI: KEPEMIMPINAN STRATEGIS & HUMANIS.\n\nSelamat! Anda berhasil meredakan seluruh krisis makro dengan mengedepankan hak asasi manusia, dialog kultural, dan transparansi informasi publik. Keputusan Anda mencerminkan doktrin kepemimpinan Presisi Polri yang modern dan dicintai masyarakat.",
     badge: "The Strategic Diplomat",
     isEnd: true
   },
   ending_neutral: {
-    text: "SIMULASI SELESAI: KEPEMIMPINAN PROSEDURAL.\n\nSituasi berhasil dikendalikan, namun komunikasi publik Anda dinilai kurang transparan sehingga menyisakan sentimen negatif di masyarakat. Perlu latihan lebih lanjut pada sektor Media Handling.",
+    text: "SIMULASI SELESAI: KEPEMIMPINAN PROSEDURAL & TAKTIS.\n\nAnda berhasil mengamankan wilayah dari kerusuhan fisik, namun beberapa kebijakan Anda dinilai kurang transparan dan kurang memperhatikan dampak sosial. Perlu peningkatan pada aspek media handling dan kepekaan sosial krisis.",
     badge: "Tactical Officer",
     isEnd: true
   },
   ending_bad: {
-    text: "SIMULASI SELESAI: KEPEMIMPINAN GAGAL.\n\nKeputusan Anda memicu eskalasi kekerasan yang meluas (Riot). Tingkat kepercayaan publik jatuh ke titik nadir dan berisiko memicu sidang etik internal akibat kegagalan manajemen krisis.",
+    text: "SIMULASI SELESAI: KEPEMIMPINAN GAGAL & REPRESIF.\n\nKeputusan Anda memicu gelombang kerusuhan (Riot) di lapangan, pelanggaran hak warga, dan jatuhnya kepercayaan publik ke titik terendah. Perlu evaluasi total dan pelatihan intensif manajemen krisis di Sespim.",
     badge: "Repressive Commander (Evaluasi Total)",
     isEnd: true
   }
@@ -68,9 +80,23 @@ export function SimulasiClient() {
   const [currentStep, setCurrentStep] = useState("start")
 
   const handleOptionClick = (option: StoryOption) => {
-    setPublicTrust((prev) => Math.max(0, Math.min(100, prev + option.kpi.trust)))
-    setRiotLevel(option.kpi.riot)
-    setCurrentStep(option.next)
+    const nextTrust = Math.max(0, Math.min(100, publicTrust + option.kpi.trust))
+    const nextRiot = option.kpi.riot
+
+    setPublicTrust(nextTrust)
+    setRiotLevel(nextRiot)
+
+    if (option.next === 'evaluation') {
+      if (nextTrust >= 75) {
+        setCurrentStep('ending_good')
+      } else if (nextTrust >= 45) {
+        setCurrentStep('ending_neutral')
+      } else {
+        setCurrentStep('ending_bad')
+      }
+    } else {
+      setCurrentStep(option.next)
+    }
   }
 
   const handleRestart = () => {
@@ -82,6 +108,16 @@ export function SimulasiClient() {
   const currentStory = storyData[currentStep] || storyData.start
   const isKondusif = riotLevel === "Kondusif" || riotLevel === "Mulai Tenang"
   const rank = isKondusif ? "AKBP (Promosi)" : "AKP"
+
+  // Helper to determine stage number
+  const getStageNumber = () => {
+    if (currentStep === 'start') return 1
+    if (currentStep === 'stage2_disaster') return 2
+    if (currentStep === 'stage3_integrity') return 3
+    if (currentStep === 'stage4_cyber') return 4
+    if (currentStep === 'stage5_hoax') return 5
+    return 5
+  }
 
   return (
     <div className="max-w-3xl mx-auto bg-neutral-950 border border-polri-gold/30 rounded-2xl shadow-2xl overflow-hidden p-6 md:p-8 space-y-6">
@@ -95,9 +131,16 @@ export function SimulasiClient() {
             AI Decision-Making Engine v1.0 • Lemdiklat Polri
           </p>
         </div>
-        <span className="px-3 py-1 bg-polri-maroon/20 border border-polri-gold/20 text-polri-goldSoft text-[9px] font-black rounded-full uppercase tracking-wider shrink-0">
-          Ujian Kompetensi Simulasi
-        </span>
+        <div className="flex items-center gap-2">
+          {!currentStory.isEnd && (
+            <span className="px-2.5 py-1 bg-neutral-900 border border-neutral-800 text-neutral-400 text-[9px] font-black rounded-lg">
+              SKENARIO {getStageNumber()} / 5
+            </span>
+          )}
+          <span className="px-3 py-1 bg-polri-maroon/20 border border-polri-gold/20 text-polri-goldSoft text-[9px] font-black rounded-full uppercase tracking-wider shrink-0">
+            Ujian Kompetensi Simulasi
+          </span>
+        </div>
       </div>
 
       {/* KPI Status Bar */}
@@ -114,7 +157,7 @@ export function SimulasiClient() {
           <div className="w-full bg-neutral-900 h-2.5 rounded-full overflow-hidden border border-neutral-800 relative">
             <div 
               className={`h-full transition-all duration-500 ${
-                publicTrust >= 60 ? 'bg-emerald-500' : publicTrust >= 35 ? 'bg-yellow-500' : 'bg-red-500'
+                publicTrust >= 75 ? 'bg-emerald-500' : publicTrust >= 45 ? 'bg-yellow-500' : 'bg-red-500'
               }`}
               style={{ width: `${publicTrust}%` }}
             ></div>
