@@ -1854,7 +1854,7 @@ export const pages: Record<string, PageContent> = {
   },
   '/galeri/foto': {
     title: "Galeri Foto",
-    eyebrow: "Dokumentasi",
+    eyebrow: "Publikasi",
     description: "Kumpulan foto kegiatan pendidikan, seminar, upacara, dan dokumentasi institusi.",
     sections: [
       {
@@ -1871,7 +1871,7 @@ export const pages: Record<string, PageContent> = {
   },
   '/galeri/video': {
     title: "Galeri Video",
-    eyebrow: "Dokumentasi",
+    eyebrow: "Publikasi",
     description: "Kumpulan video dokumentasi kegiatan, pembelajaran, seminar, dan informasi publik.",
     sections: [
       {

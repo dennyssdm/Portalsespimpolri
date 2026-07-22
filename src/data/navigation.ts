@@ -107,7 +107,9 @@ export const navigation: NavItem[] = [
       { label: 'Naskah Akademik', href: '/publikasi/naskah-akademik' },
       { label: 'Jurnal Ilmiah', href: '/publikasi/jurnal-ilmiah' },
       { label: 'Resensi Buku', href: '/publikasi/resensi-buku' },
-      { label: 'Karya Peserta Didik', href: '/publikasi/karya-peserta-didik' }
+      { label: 'Karya Peserta Didik', href: '/publikasi/karya-peserta-didik' },
+      { label: 'Galeri Foto', href: '/galeri/foto' },
+      { label: 'Galeri Video', href: '/galeri/video' }
     ]
   },
   {
@@ -130,13 +132,11 @@ export const navigation: NavItem[] = [
     ]
   },
   {
-    label: 'Galeri & Unduhan',
-    href: '/galeri',
-    description: 'Dokumentasi kegiatan dan pusat dokumen.',
+    label: 'Unduhan',
+    href: '/unduhan',
+    description: 'Pusat dokumen dan panduan akademik.',
     children: [
-      { label: 'Galeri Foto', href: '/galeri/foto' },
-      { label: 'Galeri Video', href: '/galeri/video' },
-      { label: 'Unduhan', href: '/unduhan' },
+      { label: 'Semua Unduhan', href: '/unduhan' },
       { label: 'Pedoman Akademik', href: '/unduhan/pedoman-akademik' },
       { label: 'Template NASKAP', href: '/unduhan/template-naskap' },
       { label: 'Template Policy Brief', href: '/unduhan/template-policy-brief' },
