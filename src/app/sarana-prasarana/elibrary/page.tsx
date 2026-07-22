@@ -13,7 +13,6 @@ export default async function Page() {
     notFound()
   }
 
-  // Fetch dynamic content from database
   let dbContent = null
   try {
     const res = await serverFetch('/api/sarana-prasarana-content/s-1', { cache: 'no-store' })
@@ -24,10 +23,9 @@ export default async function Page() {
       }
     }
   } catch (err) {
-    console.warn('Failed to fetch dynamic elibrary from DB, using fallback:', err)
+    console.warn('Failed to fetch dynamic content:', err)
   }
 
-  // Map to structured content
   const dynamicContent: any = { ...content }
   if (dbContent) {
     if (dbContent.title) {
@@ -37,7 +35,10 @@ export default async function Page() {
       dynamicContent.description = dbContent.content
     }
     if (dbContent.image_url) {
-      dynamicContent.heroImage = dbContent.image_url
+      if (!dynamicContent.externalLink) {
+        dynamicContent.externalLink = {}
+      }
+      dynamicContent.externalLink.href = dbContent.image_url
     }
   }
 
