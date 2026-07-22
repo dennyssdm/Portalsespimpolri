@@ -1423,6 +1423,23 @@ export const pages: Record<string, PageContent> = {
       }
     ]
   },
+  '/widyaiswara/belajar-ai': {
+    title: "Belajar AI & Pemanfaatan LLM",
+    eyebrow: "Tenaga Pendidik",
+    description: "Ruang pembelajaran pemanfaatan teknologi Artificial Intelligence (AI) seperti ChatGPT, Gemini, Claude, Grok, dan NotebookLM untuk mendukung inovasi pendidikan dan kepemimpinan taktis.",
+    sections: [
+      {
+        title: "Pemanfaatan Teknologi AI",
+        body: "Integrasi sistem Kecerdasan Buatan (AI) di era modern membantu civitas akademika Sespim Polri memetakan bahan pengajaran, simulasi interaktif penanganan kamtibmas, serta asisten riset dokumen kepolisian.",
+        items: [
+          "NotebookLM untuk asisten riset regulasi bebas halusinasi.",
+          "ChatGPT untuk simulasi interaktif skenario kamtibmas.",
+          "Gemini & Claude untuk penyusunan laporan taktis komparatif.",
+          "Grok untuk monitoring sentimen media sosial secara real-time."
+        ]
+      }
+    ]
+  },
   '/widyaiswara/lsp-bnsp': {
     title: "LSP / BNSP",
     eyebrow: "Tenaga Pendidik",

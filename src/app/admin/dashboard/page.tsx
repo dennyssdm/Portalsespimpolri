@@ -84,7 +84,8 @@ const initialMockData: Record<string, CMSItem[]> = {
     { id: 'w-5', title: 'Progress Pembimbingan Naskap', category: 'Pembimbingan Naskap', date: '2026-07-03', status: 'Published' },
     { id: 'w-6', title: 'Sistem Inpassing Jabatan Fungsional', category: 'Inpassing', date: '2026-07-04', status: 'Published' },
     { id: 'w-7', title: 'Sertifikasi BNSP / LSP Lemdiklat', category: 'LSP / BNSP', date: '2026-07-04', status: 'Published' },
-    { id: 'w-8', title: 'Bahan Ajar (HANJAR) Serdik', category: 'HANJAR', date: '2026-07-05', status: 'Published' }
+    { id: 'w-8', title: 'Bahan Ajar (HANJAR) Serdik', category: 'HANJAR', date: '2026-07-05', status: 'Published' },
+    { id: 'w-9', title: 'Belajar AI & Pemanfaatan LLM', category: 'Belajar AI', date: '2026-07-06', status: 'Published' }
   ],
   'Publikasi': [
     { id: 'pub-1', title: 'Artikel Opini Kepemimpinan Modern', category: 'Artikel', date: '2026-07-01', status: 'Published' },
@@ -5601,7 +5602,7 @@ startxref
       setFormRedaksiReviewer('')
     }
 
-    if (currentModule === 'Widyaiswara' && (item.id === 'w-4' || item.id === 'w-8')) {
+    if (currentModule === 'Widyaiswara' && (item.id === 'w-4' || item.id === 'w-8' || item.id === 'w-9')) {
       parseMateriTerbukaContent(item.content || '')
     } else {
       setFormMateriTerbukaItems([])
@@ -5656,7 +5657,7 @@ startxref
 
     const isProg = currentModule === 'Program Pendidikan' && isProgramSchool(formCategory, selectedItem.id)
     const isProfilStructured = currentModule === 'Profil' && ['p-5', 'p-6', 'p-7', 'p-8'].includes(selectedItem.id)
-    const isWidyaiswaraMateri = currentModule === 'Widyaiswara' && (selectedItem.id === 'w-4' || selectedItem.id === 'w-8')
+    const isWidyaiswaraMateri = currentModule === 'Widyaiswara' && (selectedItem.id === 'w-4' || selectedItem.id === 'w-8' || selectedItem.id === 'w-9')
     const isWidyaiswaraInpassing = currentModule === 'Widyaiswara' && selectedItem.id === 'w-6'
     const isKurikulum = currentModule === 'Program Pendidikan' && selectedItem.id === 'e-2'
     const isPublikasi = currentModule === 'Publikasi'
@@ -6460,7 +6461,7 @@ startxref
                   </div>
                 ) : currentModule === 'Profil' && ['p-5', 'p-6', 'p-7', 'p-8'].includes(formCategory) ? (
                   renderProfilStructuredFields(formCategory)
-                ) : currentModule === 'Widyaiswara' && formCategory === 'Materi Terbuka' ? (
+                ) : currentModule === 'Widyaiswara' && (formCategory === 'Materi Terbuka' || formCategory === 'Belajar AI' || selectedItem?.id === 'w-8' || selectedItem?.id === 'w-9') ? (
                   renderMateriTerbukaStructuredFields()
                 ) : currentModule === 'Widyaiswara' && formCategory === 'Inpassing' ? (
                   renderInpassingStructuredFields()
@@ -6776,7 +6777,7 @@ startxref
                   </div>
                 ) : currentModule === 'Profil' && ['p-5', 'p-6', 'p-7', 'p-8'].includes(selectedItem?.id || '') ? (
                   renderProfilStructuredFields(selectedItem?.id || '')
-                ) : currentModule === 'Widyaiswara' && (selectedItem?.id === 'w-4' || selectedItem?.id === 'w-8') ? (
+                ) : currentModule === 'Widyaiswara' && (selectedItem?.id === 'w-4' || selectedItem?.id === 'w-8' || selectedItem?.id === 'w-9') ? (
                   renderMateriTerbukaStructuredFields()
                 ) : currentModule === 'Program Pendidikan' && selectedItem?.id === 'e-2' ? (
                   renderKurikulumStructuredFields()

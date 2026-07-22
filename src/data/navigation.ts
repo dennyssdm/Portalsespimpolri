@@ -92,6 +92,7 @@ export const navigation: NavItem[] = [
       { label: 'HANJAR', href: '/widyaiswara/hanjar' },
       { label: 'Pembimbingan Naskap', href: '/widyaiswara/pembimbingan-naskap' },
       { label: 'Inpassing', href: '/widyaiswara/inpassing' },
+      { label: 'Belajar AI', href: '/widyaiswara/belajar-ai' },
       { label: 'LSP / BNSP', href: 'https://lsppolri.id/' }
     ]
   },
