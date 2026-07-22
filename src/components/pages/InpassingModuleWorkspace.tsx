@@ -401,7 +401,7 @@ export function InpassingModuleWorkspace({ modules, certificateTemplateUrl }: In
           <div className="space-y-4">
             <div>
               <p className="text-sm font-bold uppercase tracking-[0.24em] text-polri-goldSoft">Klaim Sertifikat</p>
-              <h2 className="mt-3 text-2xl font-black">Sertifikat Penyelesaian 7 Modul</h2>
+              <h2 className="mt-3 text-2xl font-black">Sertifikat Penyelesaian 8 Modul Inpassing Sespim</h2>
               <p className="mt-3 text-sm leading-7 text-white/72">
                 Sertifikat dapat diunduh setelah seluruh modul selesai dipelajari.
               </p>
