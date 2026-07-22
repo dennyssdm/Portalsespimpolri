@@ -1,8 +1,11 @@
 import { notFound } from 'next/navigation'
 import { ContentPage } from '@/components/pages/ContentPage'
 import { pages } from '@/data/pages'
+import { serverFetch } from '@/lib/api'
 
-export default function Page() {
+export const dynamic = 'force-dynamic'
+
+export default async function Page() {
   const path = "/sarana-prasarana/cek-plagiarisme"
   const content = pages[path]
 
@@ -10,5 +13,36 @@ export default function Page() {
     notFound()
   }
 
-  return <ContentPage content={content} path={path} />
+  // Fetch dynamic content from database
+  let dbContent = null
+  try {
+    const res = await serverFetch('/api/sarana-prasarana-content/s-5', { cache: 'no-store' })
+    if (res.ok) {
+      const json = await res.json()
+      if (json.status === 'success' && json.data?.record) {
+        dbContent = json.data.record
+      }
+    }
+  } catch (err) {
+    console.warn('Failed to fetch dynamic cek-plagiarisme from DB, using fallback:', err)
+  }
+
+  // Map to structured content
+  const dynamicContent: any = { ...content }
+  if (dbContent) {
+    if (dbContent.title) {
+      dynamicContent.title = dbContent.title
+    }
+    if (dbContent.content) {
+      dynamicContent.description = dbContent.content
+    }
+    if (dbContent.image_url) {
+      if (!dynamicContent.externalLink) {
+        dynamicContent.externalLink = {}
+      }
+      dynamicContent.externalLink.href = dbContent.image_url
+    }
+  }
+
+  return <ContentPage content={dynamicContent} path={path} />
 }

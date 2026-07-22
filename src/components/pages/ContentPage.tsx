@@ -429,7 +429,7 @@ export function ContentPage({ content, path }: ContentPageProps) {
     '/berita/kegiatan/media-sosial-hashtag'
   ].includes(path)
   const moveResourcesAbove = path === '/widyaiswara/materi-terbuka'
-  const turnitinHref = 'https://www.turnitin.com/'
+  const turnitinHref = content.externalLink?.href || 'https://www.turnitin.com/'
   const googleMeetHref = 'https://meet.google.com/'
   const clinicWebsiteHref = 'https://klinik-sespimpolri.com/'
   const clinicQueueHref = 'https://app.klinik-sespimpolri.com/'

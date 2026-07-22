@@ -5610,12 +5610,14 @@ function DashboardContent() {
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Atau Perbarui URL Media / Foto</label>
+                    <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">
+                      {selectedItem?.id === 's-5' ? 'Tautan Portal Turnitin (URL)' : 'Atau Perbarui URL Media / Foto'}
+                    </label>
                     <input
                       type="text"
                       value={formImageUrl}
                       onChange={(e) => setFormImageUrl(e.target.value)}
-                      placeholder="Contoh: /images/kasespim.png atau link eksternal..."
+                      placeholder={selectedItem?.id === 's-5' ? 'Contoh: https://www.turnitin.com/class/...' : 'Contoh: /images/kasespim.png atau link eksternal...'}
                       className="mt-2 w-full rounded-xl bg-neutral-950 border border-neutral-800 px-4 py-3 text-xs text-white outline-none focus:border-polri-gold placeholder:text-neutral-600"
                     />
                   </div>
