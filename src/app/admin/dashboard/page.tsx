@@ -407,6 +407,7 @@ function DashboardContent() {
   const [formGaleriFotoItems, setFormGaleriFotoItems] = useState<{ title: string; description: string; category: string; imageUrl: string; date: string }[]>([])
   const [formGaleriVideoItems, setFormGaleriVideoItems] = useState<{ title: string; description: string; category: string; url: string; cover: string; date: string }[]>([])
   const [formUnduhanItems, setFormUnduhanItems] = useState<{ title: string; description: string; fileName: string; href: string; format: string; category: string }[]>([])
+  const [formKaryaAkademisItems, setFormKaryaAkademisItems] = useState<{ title: string; description: string; fileName: string; href: string; format: string; category: string; author: string; year: string }[]>([])
   
   // Cek Plagiarisme (s-5) Specific Form Fields
   const [formPlagiarismDesc, setFormPlagiarismDesc] = useState('')
@@ -3341,6 +3342,70 @@ startxref
     return contentStr.trim()
   }
 
+  // Parsing Produk / Karya Akademis string content into states
+  const parseKaryaAkademisContent = (contentStr: string) => {
+    if (!contentStr) {
+      setFormKaryaAkademisItems([])
+      return
+    }
+    const list: any[] = []
+    const rawEntries = contentStr.split(/\n\s*\n/)
+    for (const rawEntry of rawEntries) {
+      const lines = rawEntry.split('\n')
+      let item: any = { title: '', description: '', fileName: '', href: '', format: 'PDF', category: 'Kajian', author: '', year: '2026' }
+      let hasName = false
+      for (const line of lines) {
+        const trimmed = line.trim()
+        if (!trimmed) continue
+        const colonIdx = trimmed.indexOf(':')
+        if (colonIdx === -1) continue
+        const key = trimmed.substring(0, colonIdx).trim().toUpperCase()
+        const val = trimmed.substring(colonIdx + 1).trim()
+        
+        if (key === 'NAMA' || key === 'JUDUL') {
+          item.title = val
+          hasName = true
+        } else if (key === 'DESKRIPSI') {
+          item.description = val
+        } else if (key === 'FILE') {
+          item.fileName = val
+        } else if (key === 'URL') {
+          item.href = val
+        } else if (key === 'FORMAT') {
+          item.format = val
+        } else if (key === 'KATEGORI') {
+          item.category = val
+        } else if (key === 'PENULIS' || key === 'AUTHOR') {
+          item.author = val
+        } else if (key === 'TAHUN' || key === 'YEAR') {
+          item.year = val
+        }
+      }
+      if (hasName) {
+        list.push(item)
+      }
+    }
+    setFormKaryaAkademisItems(list)
+  }
+
+  // Building Produk / Karya Akademis content string from states
+  const buildKaryaAkademisContent = (): string => {
+    let contentStr = ''
+    for (const item of formKaryaAkademisItems) {
+      if (!item.title.trim()) continue
+      contentStr += `NAMA: ${item.title}\n`
+      if (item.description) contentStr += `DESKRIPSI: ${item.description}\n`
+      if (item.fileName) contentStr += `FILE: ${item.fileName}\n`
+      if (item.href) contentStr += `URL: ${item.href}\n`
+      if (item.format) contentStr += `FORMAT: ${item.format}\n`
+      if (item.category) contentStr += `KATEGORI: ${item.category}\n`
+      if (item.author) contentStr += `PENULIS: ${item.author}\n`
+      if (item.year) contentStr += `TAHUN: ${item.year}\n`
+      contentStr += `\n`
+    }
+    return contentStr.trim()
+  }
+
   // Parsing Inpassing modules string content into states
   const parseInpassingModules = (contentStr: string) => {
     const lines = contentStr.split(/\r?\n/)
@@ -5142,6 +5207,177 @@ startxref
     )
   }
 
+  const renderKaryaAkademisStructuredFields = () => {
+    return (
+      <div className="space-y-4 max-h-[450px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3 text-neutral-200">
+        <div className="flex justify-between items-center">
+          <div>
+            <p className="text-[10px] font-bold text-polri-goldSoft uppercase tracking-wider">Daftar Produk / Karya Akademis</p>
+            <p className="text-[9px] text-neutral-400 mt-0.5">Tambah, edit, atau hapus produk/karya ilmiah dalam repositori.</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setFormKaryaAkademisItems([...formKaryaAkademisItems, { title: '', description: '', fileName: '', href: '', format: 'PDF', category: 'Kajian', author: '', year: '2026' }])}
+            className="px-2.5 py-1.5 rounded bg-polri-gold text-neutral-950 text-[9px] font-black uppercase hover:bg-yellow-500 transition"
+          >
+            + Tambah Karya
+          </button>
+        </div>
+        <div className="space-y-5">
+          {formKaryaAkademisItems.map((item, idx) => (
+            <div key={idx} className="p-4 bg-neutral-950 rounded-xl border border-neutral-800 space-y-3 relative">
+              <button
+                type="button"
+                onClick={() => setFormKaryaAkademisItems(formKaryaAkademisItems.filter((_, i) => i !== idx))}
+                className="absolute right-3 top-3 text-red-500 hover:text-red-400 font-black text-[10px] uppercase tracking-wider"
+              >
+                Hapus
+              </button>
+              
+              <div className="bg-neutral-900/60 p-2.5 rounded-lg border border-neutral-800/80 flex gap-4 items-center">
+                <div className="w-8 h-8 rounded bg-polri-maroon/20 flex items-center justify-center text-polri-goldSoft font-black text-[10px] uppercase tracking-wider shrink-0">
+                  {item.format || 'PDF'}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] font-black text-white truncate">{item.title || 'Masukkan Nama Produk/Karya...'}</p>
+                  <p className="text-[8px] text-neutral-400 mt-1 truncate">{item.author ? `Penulis: ${item.author}` : 'Masukkan Nama Penulis...'}</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Nama Produk / Karya</label>
+                  <input
+                    type="text"
+                    value={item.title}
+                    onChange={(e) => {
+                      const updated = [...formKaryaAkademisItems]
+                      updated[idx].title = e.target.value
+                      setFormKaryaAkademisItems(updated)
+                    }}
+                    placeholder="Contoh: Buku Saku Taktis Negosiasi"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Kategori Karya</label>
+                  <select
+                    value={item.category}
+                    onChange={(e) => {
+                      const updated = [...formKaryaAkademisItems]
+                      updated[idx].category = e.target.value
+                      setFormKaryaAkademisItems(updated)
+                    }}
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                  >
+                    <option value="Buku Saku">Buku Saku</option>
+                    <option value="Kajian">Kajian</option>
+                    <option value="Naskap">Naskap</option>
+                    <option value="Jurnal">Jurnal</option>
+                    <option value="Lainnya">Lainnya</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Nama Penulis / Author</label>
+                  <input
+                    type="text"
+                    value={item.author}
+                    onChange={(e) => {
+                      const updated = [...formKaryaAkademisItems]
+                      updated[idx].author = e.target.value
+                      setFormKaryaAkademisItems(updated)
+                    }}
+                    placeholder="Contoh: Kombes Pol Dr. Awan Samodra"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Tahun Terbit</label>
+                  <input
+                    type="text"
+                    value={item.year}
+                    onChange={(e) => {
+                      const updated = [...formKaryaAkademisItems]
+                      updated[idx].year = e.target.value
+                      setFormKaryaAkademisItems(updated)
+                    }}
+                    placeholder="Contoh: 2026"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2">
+                <div className="col-span-2">
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">URL Tautan Unduh</label>
+                  <input
+                    type="text"
+                    value={item.href}
+                    onChange={(e) => {
+                      const updated = [...formKaryaAkademisItems]
+                      updated[idx].href = e.target.value
+                      setFormKaryaAkademisItems(updated)
+                    }}
+                    placeholder="Contoh: https://drive.google.com/..."
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Format</label>
+                  <input
+                    type="text"
+                    value={item.format}
+                    onChange={(e) => {
+                      const updated = [...formKaryaAkademisItems]
+                      updated[idx].format = e.target.value
+                      setFormKaryaAkademisItems(updated)
+                    }}
+                    placeholder="PDF, DOCX"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Nama Berkas</label>
+                  <input
+                    type="text"
+                    value={item.fileName}
+                    onChange={(e) => {
+                      const updated = [...formKaryaAkademisItems]
+                      updated[idx].fileName = e.target.value
+                      setFormKaryaAkademisItems(updated)
+                    }}
+                    placeholder="Contoh: Buku_Saku_Negosiasi.pdf"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Deskripsi Singkat</label>
+                  <textarea
+                    value={item.description}
+                    onChange={(e) => {
+                      const updated = [...formKaryaAkademisItems]
+                      updated[idx].description = e.target.value
+                      setFormKaryaAkademisItems(updated)
+                    }}
+                    rows={1}
+                    placeholder="Deskripsi singkat..."
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold resize-none"
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
   const renderInpassingStructuredFields = () => {
     return (
       <div className="space-y-4 max-h-[350px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3 text-neutral-200">
@@ -5639,6 +5875,13 @@ startxref
       setFormUnduhanItems([])
     }
 
+    const isKaryaAkademisContent = currentModule === 'Sarana Prasarana' && (item.category === 'Produk / Karya Akademis' || item.id === 's-7')
+    if (isKaryaAkademisContent) {
+      parseKaryaAkademisContent(item.content || '')
+    } else {
+      setFormKaryaAkademisItems([])
+    }
+
     if (currentModule === 'Sarana Prasarana' && item.id === 's-5') {
       parsePlagiarismContent(item.content || '')
     } else {
@@ -5665,6 +5908,7 @@ startxref
     const isGaleriFoto = currentModule === 'Galeri & Unduhan' && (selectedItem.category === 'Galeri Foto' || selectedItem.id === 'g-1')
     const isGaleriVideo = currentModule === 'Galeri & Unduhan' && (selectedItem.category === 'Galeri Video' || selectedItem.id === 'g-2')
     const isUnduhan = (currentModule === 'Galeri & Unduhan' && (['g-3', 'g-4', 'g-5'].includes(selectedItem.id) || ['Template NASKAP', 'Template Policy Brief', 'Formulir Umum'].includes(selectedItem.category))) || (currentModule === 'Program Pendidikan' && (selectedItem.id === 'e-3' || selectedItem.category === 'pedoman-akademik'))
+    const isKaryaAkademis = currentModule === 'Sarana Prasarana' && (selectedItem.category === 'Produk / Karya Akademis' || selectedItem.id === 's-7')
     const finalContent = isProg 
       ? buildProgramContent(formTitle) 
       : (isProfilStructured 
@@ -5685,7 +5929,10 @@ startxref
                                       ? buildGaleriVideoContent()
                                       : (isUnduhan
                                           ? buildUnduhanContent()
-                                          : formContent
+                                          : (isKaryaAkademis
+                                              ? buildKaryaAkademisContent()
+                                              : formContent
+                                            )
                                         )
                                     )
                                 )
@@ -6475,6 +6722,8 @@ startxref
                   renderUnduhanStructuredFields()
                 ) : null) ? (
                   renderUnduhanStructuredFields()
+                ) : currentModule === 'Sarana Prasarana' && (formCategory === 'Produk / Karya Akademis' || selectedItem?.id === 's-7') ? (
+                  renderKaryaAkademisStructuredFields()
                 ) : (
                   <div>
                     <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Isi Konten (News / Detail)</label>
@@ -6795,6 +7044,8 @@ startxref
                   renderGaleriVideoStructuredFields()
                 ) : (currentModule === 'Galeri & Unduhan' && ['Template NASKAP', 'Template Policy Brief', 'Formulir Umum', 'g-3', 'g-4', 'g-5'].includes(selectedItem?.category || formCategory)) || (currentModule === 'Program Pendidikan' && (selectedItem?.category === 'pedoman-akademik' || formCategory === 'pedoman-akademik' || selectedItem?.id === 'e-3')) ? (
                   renderUnduhanStructuredFields()
+                ) : currentModule === 'Sarana Prasarana' && (selectedItem?.category === 'Produk / Karya Akademis' || formCategory === 'Produk / Karya Akademis' || selectedItem?.id === 's-7') ? (
+                  renderKaryaAkademisStructuredFields()
                 ) : (
                   <div>
                     {currentModule === 'Publikasi' && renderPublikasiExtraFields()}
