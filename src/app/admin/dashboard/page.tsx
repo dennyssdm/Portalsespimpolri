@@ -403,6 +403,7 @@ function DashboardContent() {
   const [formFasilitasItems, setFormFasilitasItems] = useState<{ group: string; name: string; keterangan: string; foto: string }[]>([])
   const [formMateriTerbukaItems, setFormMateriTerbukaItems] = useState<{ title: string; description: string; fileName: string; href: string; format: string; category: string }[]>([])
   const [formPublikasiItems, setFormPublikasiItems] = useState<{ title: string; description: string; fileName: string; href: string; format: string; category: string; author: string; cohort: string; year: string; cover: string }[]>([])
+  const [formGaleriFotoItems, setFormGaleriFotoItems] = useState<{ title: string; description: string; category: string; imageUrl: string; date: string }[]>([])
   
   // Cek Plagiarisme (s-5) Specific Form Fields
   const [formPlagiarismDesc, setFormPlagiarismDesc] = useState('')
@@ -3166,6 +3167,61 @@ startxref
     return contentStr.trim()
   }
 
+  // Parsing Galeri Foto string content into states
+  const parseGaleriFotoContent = (contentStr: string) => {
+    if (!contentStr) {
+      setFormGaleriFotoItems([])
+      return
+    }
+    const list: any[] = []
+    const rawEntries = contentStr.split(/\n\s*\n/)
+    for (const rawEntry of rawEntries) {
+      const lines = rawEntry.split('\n')
+      let item: any = { title: '', description: '', category: 'Pendidikan', imageUrl: '', date: '' }
+      let hasName = false
+      for (const line of lines) {
+        const trimmed = line.trim()
+        if (!trimmed) continue
+        const colonIdx = trimmed.indexOf(':')
+        if (colonIdx === -1) continue
+        const key = trimmed.substring(0, colonIdx).trim().toUpperCase()
+        const val = trimmed.substring(colonIdx + 1).trim()
+        
+        if (key === 'JUDUL' || key === 'NAMA') {
+          item.title = val
+          hasName = true
+        } else if (key === 'DESKRIPSI') {
+          item.description = val
+        } else if (key === 'KATEGORI') {
+          item.category = val
+        } else if (key === 'GAMBAR' || key === 'COVER') {
+          item.imageUrl = val
+        } else if (key === 'TANGGAL' || key === 'DATE') {
+          item.date = val
+        }
+      }
+      if (hasName) {
+        list.push(item)
+      }
+    }
+    setFormGaleriFotoItems(list)
+  }
+
+  // Building Galeri Foto content string from states
+  const buildGaleriFotoContent = (): string => {
+    let contentStr = ''
+    for (const item of formGaleriFotoItems) {
+      if (!item.title.trim()) continue
+      contentStr += `JUDUL: ${item.title}\n`
+      if (item.description) contentStr += `DESKRIPSI: ${item.description}\n`
+      if (item.category) contentStr += `KATEGORI: ${item.category}\n`
+      if (item.imageUrl) contentStr += `GAMBAR: ${item.imageUrl}\n`
+      if (item.date) contentStr += `TANGGAL: ${item.date}\n`
+      contentStr += `\n`
+    }
+    return contentStr.trim()
+  }
+
   // Parsing Inpassing modules string content into states
   const parseInpassingModules = (contentStr: string) => {
     const lines = contentStr.split(/\r?\n/)
@@ -4568,6 +4624,121 @@ startxref
     )
   }
 
+  const renderGaleriFotoStructuredFields = () => {
+    return (
+      <div className="space-y-4 max-h-[450px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3 text-neutral-200">
+        <div className="flex justify-between items-center">
+          <div>
+            <p className="text-[10px] font-bold text-polri-goldSoft uppercase tracking-wider">Daftar Foto Galeri</p>
+            <p className="text-[9px] text-neutral-400 mt-0.5">Tambah, edit, atau hapus foto dalam galeri.</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setFormGaleriFotoItems([...formGaleriFotoItems, { title: '', description: '', category: 'Pendidikan', imageUrl: '', date: '' }])}
+            className="px-2.5 py-1.5 rounded bg-polri-gold text-neutral-950 text-[9px] font-black uppercase hover:bg-yellow-500 transition"
+          >
+            + Tambah Foto
+          </button>
+        </div>
+        <div className="space-y-5">
+          {formGaleriFotoItems.map((item, idx) => (
+            <div key={idx} className="p-4 bg-neutral-950 rounded-xl border border-neutral-800 space-y-3 relative">
+              <button
+                type="button"
+                onClick={() => setFormGaleriFotoItems(formGaleriFotoItems.filter((_, i) => i !== idx))}
+                className="absolute right-3 top-3 text-red-500 hover:text-red-400 font-black text-[10px] uppercase tracking-wider"
+              >
+                Hapus
+              </button>
+              
+              {/* Preview image block */}
+              <div className="bg-neutral-900/60 p-2.5 rounded-lg border border-neutral-800/80 flex gap-4 items-center">
+                <div className="relative w-16 h-12 shrink-0 rounded overflow-hidden bg-neutral-900 border border-polri-gold/20 flex items-center justify-center">
+                  {item.imageUrl ? (
+                    <img src={item.imageUrl.startsWith('http') || item.imageUrl.startsWith('/') ? item.imageUrl : getMediaUrl(item.imageUrl)} alt="" className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-[7px] text-neutral-500 uppercase font-bold">No Image</span>
+                  )}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] font-black text-white truncate">{item.title || 'Masukkan Judul Foto...'}</p>
+                  <p className="text-[8px] text-neutral-400 mt-1 truncate">{item.description || 'Masukkan Keterangan...'}</p>
+                  <span className="inline-block bg-polri-maroon/20 text-polri-goldSoft text-[7px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider mt-1.5">{item.category}</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Judul Foto / Kegiatan</label>
+                  <input
+                    type="text"
+                    value={item.title}
+                    onChange={(e) => {
+                      const updated = [...formGaleriFotoItems]
+                      updated[idx].title = e.target.value
+                      setFormGaleriFotoItems(updated)
+                    }}
+                    placeholder="Contoh: Upacara Pembukaan"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Kategori</label>
+                  <select
+                    value={item.category}
+                    onChange={(e) => {
+                      const updated = [...formGaleriFotoItems]
+                      updated[idx].category = e.target.value
+                      setFormGaleriFotoItems(updated)
+                    }}
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-2 text-xs text-white outline-none focus:border-polri-gold"
+                  >
+                    <option value="Upacara">Upacara</option>
+                    <option value="Seminar">Seminar</option>
+                    <option value="Pendidikan">Pendidikan</option>
+                    <option value="Fasilitas">Fasilitas</option>
+                    <option value="Lainnya">Lainnya</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">URL Gambar</label>
+                  <input
+                    type="text"
+                    value={item.imageUrl}
+                    onChange={(e) => {
+                      const updated = [...formGaleriFotoItems]
+                      updated[idx].imageUrl = e.target.value
+                      setFormGaleriFotoItems(updated)
+                    }}
+                    placeholder="Contoh: /images/sespim_smart_class.png"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Tanggal Kegiatan</label>
+                  <input
+                    type="text"
+                    value={item.date}
+                    onChange={(e) => {
+                      const updated = [...formGaleriFotoItems]
+                      updated[idx].date = e.target.value
+                      setFormGaleriFotoItems(updated)
+                    }}
+                    placeholder="Contoh: 15 Juli 2026"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
   const renderInpassingStructuredFields = () => {
     return (
       <div className="space-y-4 max-h-[350px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3 text-neutral-200">
@@ -5046,6 +5217,12 @@ startxref
       setFormPublikasiItems([])
     }
 
+    if (currentModule === 'Galeri & Unduhan' && item.id === 'g-1') {
+      parseGaleriFotoContent(item.content || '')
+    } else {
+      setFormGaleriFotoItems([])
+    }
+
     if (currentModule === 'Sarana Prasarana' && item.id === 's-5') {
       parsePlagiarismContent(item.content || '')
     } else {
@@ -5069,6 +5246,7 @@ startxref
     const isKurikulum = currentModule === 'Program Pendidikan' && selectedItem.id === 'e-2'
     const isPublikasi = currentModule === 'Publikasi'
     const isPlagiarism = currentModule === 'Sarana Prasarana' && selectedItem.id === 's-5'
+    const isGaleriFoto = currentModule === 'Galeri & Unduhan' && selectedItem.id === 'g-1'
     const finalContent = isProg 
       ? buildProgramContent(formTitle) 
       : (isProfilStructured 
@@ -5083,7 +5261,10 @@ startxref
                           ? buildPublikasiContent()
                           : (isPlagiarism
                               ? buildPlagiarismContent()
-                              : formContent
+                              : (isGaleriFoto
+                                  ? buildGaleriFotoContent()
+                                  : formContent
+                                )
                             )
                         )
                     )
@@ -5862,6 +6043,8 @@ startxref
                   renderInpassingStructuredFields()
                 ) : currentModule === 'Publikasi' ? (
                   renderPublikasiStructuredFields()
+                ) : (currentModule === 'Galeri & Unduhan' && selectedItem?.id === 'g-1') ? (
+                  renderGaleriFotoStructuredFields()
                 ) : (
                   <div>
                     <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Isi Konten (News / Detail)</label>
