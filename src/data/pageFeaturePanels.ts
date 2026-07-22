@@ -333,7 +333,7 @@ export const pageFeaturePanels: Record<string, PageFeaturePanel> = {
         title: 'Dokumen pendukung',
         description: 'Jembatan menuju unduhan yang relevan dengan kegiatan atau kebutuhan akademik.',
         meta: 'Dokumen',
-        href: '/unduhan'
+        href: '/unduhan/pedoman-akademik'
       },
       {
         title: 'Kurasi aset',
@@ -342,7 +342,7 @@ export const pageFeaturePanels: Record<string, PageFeaturePanel> = {
       }
     ]
   },
-  '/unduhan': {
+  '/unduhan/pedoman-akademik': {
     eyebrow: 'Peta Dokumen',
     title: 'Dokumen penting disusun berdasarkan kebutuhan akademik dan administrasi',
     description: 'Panel ini menjadi baseline UI untuk pusat unduhan sebelum file resmi dan metadata dokumen diintegrasikan.',

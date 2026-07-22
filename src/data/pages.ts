@@ -1886,23 +1886,6 @@ export const pages: Record<string, PageContent> = {
       }
     ]
   },
-  '/unduhan': {
-    title: "Unduhan",
-    eyebrow: "Dokumen",
-    description: "Pusat dokumen resmi, pedoman akademik, template, formulir, dan panduan peserta didik.",
-    sections: [
-      {
-        title: 'Ringkasan Halaman',
-        body: "Pusat dokumen resmi, pedoman akademik, template, formulir, dan panduan peserta didik.",
-        items: ['Konten awal mengikuti sitemap Sespim Polri.', 'Layout disiapkan sebagai baseline front-end.', 'Detail konten dapat diperbarui setelah approval.']
-      },
-      {
-        title: 'Kebutuhan UI',
-        body: 'Halaman ini membutuhkan struktur hero, breadcrumb, konten utama, kartu informasi, dan CTA menuju halaman terkait.',
-        items: ['Hero halaman', 'Section konten utama', 'Kartu informasi', 'CTA dan tautan terkait']
-      }
-    ]
-  },
   '/unduhan/pedoman-akademik': {
     title: "Unduhan Pedoman Akademik",
     eyebrow: "Dokumen",

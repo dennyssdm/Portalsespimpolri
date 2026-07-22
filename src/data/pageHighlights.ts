@@ -742,7 +742,7 @@ export const pageHighlights: Record<string, PageHighlight> = {
       {
         title: 'Pusat unduhan',
         description: 'Akses cepat menuju pedoman, template, dan formulir resmi.',
-        href: '/unduhan'
+        href: '/unduhan/pedoman-akademik'
       }
     ],
     sideNotes: [
@@ -757,7 +757,7 @@ export const pageHighlights: Record<string, PageHighlight> = {
     ],
     cta: { label: 'Buka Galeri Foto', href: '/galeri/foto' }
   },
-  '/unduhan': {
+  '/unduhan/pedoman-akademik': {
     label: 'Dokumen',
     summary: 'Pusat akses pedoman akademik, template naskap, template policy brief, dan formulir umum.',
     stats: [

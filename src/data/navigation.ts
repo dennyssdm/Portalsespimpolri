@@ -133,7 +133,7 @@ export const navigation: NavItem[] = [
   },
   {
     label: 'Unduhan',
-    href: '/unduhan',
+    href: '/unduhan/pedoman-akademik',
     description: 'Pusat dokumen dan panduan akademik.',
     children: [
       { label: 'Pedoman Akademik', href: '/unduhan/pedoman-akademik' },
