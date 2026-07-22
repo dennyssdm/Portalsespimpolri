@@ -1920,23 +1920,6 @@ export const pages: Record<string, PageContent> = {
       }
     ]
   },
-  '/unduhan/template-naskap': {
-    title: "Template NASKAP",
-    eyebrow: "Dokumen",
-    description: "Template dokumen NASKAP untuk kebutuhan peserta didik.",
-    sections: [
-      {
-        title: 'Ringkasan Halaman',
-        body: "Template dokumen NASKAP untuk kebutuhan peserta didik.",
-        items: ['Konten awal mengikuti sitemap Sespim Polri.', 'Layout disiapkan sebagai baseline front-end.', 'Detail konten dapat diperbarui setelah approval.']
-      },
-      {
-        title: 'Kebutuhan UI',
-        body: 'Halaman ini membutuhkan struktur hero, breadcrumb, konten utama, kartu informasi, dan CTA menuju halaman terkait.',
-        items: ['Hero halaman', 'Section konten utama', 'Kartu informasi', 'CTA dan tautan terkait']
-      }
-    ]
-  },
   '/unduhan/template-policy-brief': {
     title: "Template Policy Brief",
     eyebrow: "Dokumen",
