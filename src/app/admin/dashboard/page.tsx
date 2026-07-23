@@ -28,7 +28,8 @@ import {
   BriefcaseIcon,
   BookOpenIcon,
   EnvelopeIcon,
-  CpuChipIcon
+  CpuChipIcon,
+  ArrowPathIcon
 } from '@heroicons/react/24/outline'
 
 // Types for CMS items
@@ -6229,6 +6230,10 @@ startxref
       setFormKalenderItems([])
     }
 
+    if (currentModule === 'Program Pendidikan' && item.id === 'e-2') {
+      parseKurikulumContent(item.content || '')
+    }
+
     if (currentModule === 'Widyaiswara' && item.id === 'w-6') {
       parseInpassingModules(item.content || '')
     } else {
@@ -6621,16 +6626,27 @@ startxref
                   <h3 className="text-xl font-black text-white">{currentSidebarLabel}</h3>
                   <p className="text-xs text-neutral-400 mt-1">Kelola dan atur konfigurasi data konten dinamis untuk modul ini.</p>
             </div>
-            {hasWriteAccess && currentModule !== 'Profil' && (
+            <div className="flex items-center gap-2">
               <button
-                onClick={handleOpenCreate}
+                onClick={() => loadItems(currentModule)}
+                disabled={loading}
                 type="button"
-                className="inline-flex items-center gap-2 bg-polri-maroon hover:bg-polri-brownDark text-white font-bold text-xs py-3 px-4 rounded-xl shadow-md transition"
+                className="inline-flex items-center gap-2 bg-neutral-900 border border-neutral-800 hover:bg-neutral-800 text-neutral-300 hover:text-white font-bold text-xs py-3 px-4 rounded-xl shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <PlusIcon className="h-4 w-4" />
-                Tambah Konten
+                <ArrowPathIcon className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+                Perbarui
               </button>
-            )}
+              {hasWriteAccess && currentModule !== 'Profil' && (
+                <button
+                  onClick={handleOpenCreate}
+                  type="button"
+                  className="inline-flex items-center gap-2 bg-polri-maroon hover:bg-polri-brownDark text-white font-bold text-xs py-3 px-4 rounded-xl shadow-md transition"
+                >
+                  <PlusIcon className="h-4 w-4" />
+                  Tambah Konten
+                </button>
+              )}
+            </div>
           </div>
 
           {/* SEARCH & FILTERS BAR */}

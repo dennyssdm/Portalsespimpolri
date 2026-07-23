@@ -92,7 +92,7 @@ export function KurikulumTabs({ data }: KurikulumTabsProps) {
                 <ul className="grid sm:grid-cols-2 gap-4">
                   {current.subjects.map((sub, idx) => (
                     <li key={idx} className="flex items-start gap-2.5">
-                      <CheckCircleIcon className="h-4.5 w-4.5 text-polri-gold shrink-0 mt-0.5" />
+                      <CheckCircleIcon className="h-4 w-4 text-polri-gold shrink-0 mt-0.5" />
                       <span className="text-xs font-bold text-neutral-800 leading-5">{sub}</span>
                     </li>
                   ))}
@@ -166,7 +166,7 @@ export function KurikulumTabs({ data }: KurikulumTabsProps) {
                   rel="noopener noreferrer"
                   className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-polri-gold via-polri-goldSoft to-polri-gold px-4 py-3.5 text-xs font-black uppercase text-polri-brownDark hover:from-polri-goldSoft hover:to-polri-gold transition duration-300 shadow-[0_4px_14px_rgba(212,175,55,0.2)]"
                 >
-                  <ArrowDownTrayIcon className="h-4.5 w-4.5" />
+                  <ArrowDownTrayIcon className="h-5 w-5" />
                   Unduh Kurikulum PDF
                 </a>
               ) : (

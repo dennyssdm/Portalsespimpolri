@@ -266,7 +266,7 @@ export function FloatingChatWidget() {
                 title="Bersihkan percakapan & buat sesi baru"
                 className="rounded-lg p-1.5 hover:bg-white/10 transition text-white/80 hover:text-white"
               >
-                <TrashIcon className="h-4.5 w-4.5" />
+                <TrashIcon className="h-5 w-5" />
               </button>
               <button 
                 type="button"
