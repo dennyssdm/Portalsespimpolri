@@ -76,7 +76,22 @@ export default async function Page() {
     console.warn('Failed to fetch dynamic Kurikulum Umum from DB, using fallback:', err)
   }
 
-  const data = dbData || staticFallback
+  const data = { ...staticFallback }
+  if (dbData) {
+    for (const key of ['sespimti', 'sespimmen', 'sppk', 'sespimma'] as const) {
+      if (dbData[key]) {
+        data[key] = {
+          title: dbData[key].title || staticFallback[key].title,
+          overview: dbData[key].overview || staticFallback[key].overview,
+          subjects: (dbData[key].subjects && dbData[key].subjects.length > 0)
+            ? dbData[key].subjects
+            : staticFallback[key].subjects,
+          previewUrl: dbData[key].previewUrl || staticFallback[key].previewUrl,
+          downloadUrl: dbData[key].downloadUrl || staticFallback[key].downloadUrl
+        }
+      }
+    }
+  }
 
   return (
     <main className="bg-polri-cream/20 pb-20">
