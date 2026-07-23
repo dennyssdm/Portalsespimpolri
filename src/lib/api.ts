@@ -1,6 +1,15 @@
 // Helper layer to communicate with Node.js/Express API running on port 5001
 
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'
+export const API_BASE_URL = (() => {
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname;
+    // If accessing via local network IP (e.g. 192.168.x.x), dynamically use that IP for port 5001
+    if (hostname !== 'localhost' && hostname !== '127.0.0.1' && /^[0-9.]+$/.test(hostname)) {
+      return `http://${hostname}:5001`;
+    }
+  }
+  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
+})();
 
 // Map of Admin Sidebar Module Names to API Endpoint paths (contentType)
 export const MODULE_TO_CONTENT_TYPE: Record<string, string> = {
