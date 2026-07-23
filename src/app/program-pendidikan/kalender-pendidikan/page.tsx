@@ -28,7 +28,7 @@ export default async function Page() {
 
   let parsedItems: any[] = []
   if (dbContent && dbContent.content) {
-    const lines = dbContent.content.split(/\r?\n/)
+    const lines = dbContent.content.replace(/\\n/g, '\n').split(/\r?\n/)
     let currentItem: any = null
     for (const line of lines) {
       const trimmed = line.trim()

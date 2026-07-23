@@ -3008,7 +3008,7 @@ startxref
 
   // Parsing Kalender Pendidikan string content into states
   const parseKalenderContent = (contentStr: string) => {
-    const lines = contentStr.split(/\r?\n/)
+    const lines = contentStr.replace(/\\n/g, '\n').split(/\r?\n/)
     const list: any[] = []
     let currentItem: any = null
     for (const line of lines) {
