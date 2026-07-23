@@ -72,7 +72,7 @@ export default async function Page() {
   }
 
   const title = dbContent?.title || content.title
-  const description = dbContent?.content || content.description
+  const description = content.description
 
   return (
     <KalenderClient
