@@ -458,6 +458,20 @@ function DashboardContent() {
   const [formKurikulumSespimmaTitle, setFormKurikulumSespimmaTitle] = useState('')
   const [formKurikulumSespimmaOverview, setFormKurikulumSespimmaOverview] = useState('')
   const [formKurikulumSespimmaSubjects, setFormKurikulumSespimmaSubjects] = useState('')
+
+  // States for Kurikulum Previews & Download URLs (Format Portrait)
+  const [formKurikulumSespimtiPreviewUrl, setFormKurikulumSespimtiPreviewUrl] = useState('')
+  const [formKurikulumSespimtiDownloadUrl, setFormKurikulumSespimtiDownloadUrl] = useState('')
+
+  const [formKurikulumSespimmenPreviewUrl, setFormKurikulumSespimmenPreviewUrl] = useState('')
+  const [formKurikulumSespimmenDownloadUrl, setFormKurikulumSespimmenDownloadUrl] = useState('')
+
+  const [formKurikulumSppkPreviewUrl, setFormKurikulumSppkPreviewUrl] = useState('')
+  const [formKurikulumSppkDownloadUrl, setFormKurikulumSppkDownloadUrl] = useState('')
+
+  const [formKurikulumSespimmaPreviewUrl, setFormKurikulumSespimmaPreviewUrl] = useState('')
+  const [formKurikulumSespimmaDownloadUrl, setFormKurikulumSespimmaDownloadUrl] = useState('')
+
   const [formInpassingModules, setFormInpassingModules] = useState<{ id: string; order: number; title: string; description: string; videoHref?: string; pdfHref?: string; pdfFileName?: string }[]>([])
   
   const [formContactChatbotName, setFormContactChatbotName] = useState('')
@@ -3241,34 +3255,50 @@ startxref
       setFormKurikulumSespimtiTitle(parsed.sespimti?.title || 'Kurikulum SESPIMTI POLRI')
       setFormKurikulumSespimtiOverview(parsed.sespimti?.overview || '')
       setFormKurikulumSespimtiSubjects((parsed.sespimti?.subjects || []).join('\n'))
+      setFormKurikulumSespimtiPreviewUrl(parsed.sespimti?.previewUrl || '')
+      setFormKurikulumSespimtiDownloadUrl(parsed.sespimti?.downloadUrl || '')
 
       setFormKurikulumSespimmenTitle(parsed.sespimmen?.title || 'Kurikulum SESPIMMEN POLRI')
       setFormKurikulumSespimmenOverview(parsed.sespimmen?.overview || '')
       setFormKurikulumSespimmenSubjects((parsed.sespimmen?.subjects || []).join('\n'))
+      setFormKurikulumSespimmenPreviewUrl(parsed.sespimmen?.previewUrl || '')
+      setFormKurikulumSespimmenDownloadUrl(parsed.sespimmen?.downloadUrl || '')
 
       setFormKurikulumSppkTitle(parsed.sppk?.title || 'Kurikulum SPPK POLRI')
       setFormKurikulumSppkOverview(parsed.sppk?.overview || '')
       setFormKurikulumSppkSubjects((parsed.sppk?.subjects || []).join('\n'))
+      setFormKurikulumSppkPreviewUrl(parsed.sppk?.previewUrl || '')
+      setFormKurikulumSppkDownloadUrl(parsed.sppk?.downloadUrl || '')
 
       setFormKurikulumSespimmaTitle(parsed.sespimma?.title || 'Kurikulum SESPIMMA POLRI')
       setFormKurikulumSespimmaOverview(parsed.sespimma?.overview || '')
       setFormKurikulumSespimmaSubjects((parsed.sespimma?.subjects || []).join('\n'))
+      setFormKurikulumSespimmaPreviewUrl(parsed.sespimma?.previewUrl || '')
+      setFormKurikulumSespimmaDownloadUrl(parsed.sespimma?.downloadUrl || '')
     } catch (e) {
       setFormKurikulumSespimtiTitle('Kurikulum SESPIMTI POLRI')
       setFormKurikulumSespimtiOverview('Kurikulum Sekolah Staf dan Pimpinan Tinggi (Sespimti) Polri dirancang untuk mencetak pemimpin tingkat tinggi yang profesional, cerdas, bermoral, modern, dan kolaboratif.')
       setFormKurikulumSespimtiSubjects('Manajemen Strategis Keamanan\nGeopolitik dan Keamanan Nasional\nTeknologi Informasi Strategis\nKepemimpinan Transformatif')
+      setFormKurikulumSespimtiPreviewUrl('')
+      setFormKurikulumSespimtiDownloadUrl('')
 
       setFormKurikulumSespimmenTitle('Kurikulum SESPIMMEN POLRI')
       setFormKurikulumSespimmenOverview('Kurikulum Sekolah Staf dan Pimpinan Menengah (Sespimmen) Polri berfokus pada pemantapan kepemimpinan menengah, manajemen operasional kepolisian, serta pemecahan masalah kamtibmas.')
       setFormKurikulumSespimmenSubjects('Manajemen Operasional Kepolisian\nHukum dan Hak Asasi Manusia\nSosiologi Keamanan\nEtika Profesi Kepemimpinan')
+      setFormKurikulumSespimmenPreviewUrl('')
+      setFormKurikulumSespimmenDownloadUrl('')
 
       setFormKurikulumSppkTitle('Kurikulum SPPK POLRI')
       setFormKurikulumSppkOverview('Kurikulum Sekolah Pengembangan Profesi Kepolisian (SPPK) ditujukan untuk meningkatkan kompetensi spesialis, profesi dan etika penegakan hukum perwira Polri.')
       setFormKurikulumSppkSubjects('Spesialisasi Fungsi Teknis Kepolisian\nManajemen Penyidikan Modern\nTeknik Audit Investigatif\nSertifikasi dan Standardisasi Profesi')
+      setFormKurikulumSppkPreviewUrl('')
+      setFormKurikulumSppkDownloadUrl('')
 
       setFormKurikulumSespimmaTitle('Kurikulum SESPIMMA POLRI')
       setFormKurikulumSespimmaOverview('Kurikulum Sekolah Staf dan Pimpinan Pertama (Sespimma) membekali perwira pertama dengan kemampuan dasar manajerial, kepemimpinan dasar kewilayahan, serta pengelolaan staf.')
       setFormKurikulumSespimmaSubjects('Administrasi dan Manajemen Organisasi\nTaktik dan Teknik Operasional Pertama\nKepemimpinan Dasar Kewilayahan\nKomunikasi Massa dan Publik')
+      setFormKurikulumSespimmaPreviewUrl('')
+      setFormKurikulumSespimmaDownloadUrl('')
     }
   }
 
@@ -3278,22 +3308,30 @@ startxref
       sespimti: {
         title: formKurikulumSespimtiTitle,
         overview: formKurikulumSespimtiOverview,
-        subjects: formKurikulumSespimtiSubjects.split('\n').map(s => s.trim()).filter(Boolean)
+        subjects: formKurikulumSespimtiSubjects.split('\n').map(s => s.trim()).filter(Boolean),
+        previewUrl: formKurikulumSespimtiPreviewUrl,
+        downloadUrl: formKurikulumSespimtiDownloadUrl
       },
       sespimmen: {
         title: formKurikulumSespimmenTitle,
         overview: formKurikulumSespimmenOverview,
-        subjects: formKurikulumSespimmenSubjects.split('\n').map(s => s.trim()).filter(Boolean)
+        subjects: formKurikulumSespimmenSubjects.split('\n').map(s => s.trim()).filter(Boolean),
+        previewUrl: formKurikulumSespimmenPreviewUrl,
+        downloadUrl: formKurikulumSespimmenDownloadUrl
       },
       sppk: {
         title: formKurikulumSppkTitle,
         overview: formKurikulumSppkOverview,
-        subjects: formKurikulumSppkSubjects.split('\n').map(s => s.trim()).filter(Boolean)
+        subjects: formKurikulumSppkSubjects.split('\n').map(s => s.trim()).filter(Boolean),
+        previewUrl: formKurikulumSppkPreviewUrl,
+        downloadUrl: formKurikulumSppkDownloadUrl
       },
       sespimma: {
         title: formKurikulumSespimmaTitle,
         overview: formKurikulumSespimmaOverview,
-        subjects: formKurikulumSespimmaSubjects.split('\n').map(s => s.trim()).filter(Boolean)
+        subjects: formKurikulumSespimmaSubjects.split('\n').map(s => s.trim()).filter(Boolean),
+        previewUrl: formKurikulumSespimmaPreviewUrl,
+        downloadUrl: formKurikulumSespimmaDownloadUrl
       }
     }
     return JSON.stringify(data)
@@ -4524,6 +4562,28 @@ startxref
               className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
             />
           </div>
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="block text-[8px] uppercase text-neutral-500 font-bold">Pratinjau Dokumen (Format Portrait)</label>
+              <input
+                type="text"
+                value={formKurikulumSespimtiPreviewUrl}
+                onChange={(e) => setFormKurikulumSespimtiPreviewUrl(e.target.value)}
+                placeholder="Contoh: /images/... atau Google Drive URL"
+                className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+              />
+            </div>
+            <div>
+              <label className="block text-[8px] uppercase text-neutral-500 font-bold">Tautan Unduhan PDF</label>
+              <input
+                type="text"
+                value={formKurikulumSespimtiDownloadUrl}
+                onChange={(e) => setFormKurikulumSespimtiDownloadUrl(e.target.value)}
+                placeholder="Contoh: https://drive.google.com/..."
+                className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+              />
+            </div>
+          </div>
         </div>
 
         {/* SESPIMMEN */}
@@ -4555,6 +4615,28 @@ startxref
               rows={3}
               className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
             />
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="block text-[8px] uppercase text-neutral-500 font-bold">Pratinjau Dokumen (Format Portrait)</label>
+              <input
+                type="text"
+                value={formKurikulumSespimmenPreviewUrl}
+                onChange={(e) => setFormKurikulumSespimmenPreviewUrl(e.target.value)}
+                placeholder="Contoh: /images/... atau Google Drive URL"
+                className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+              />
+            </div>
+            <div>
+              <label className="block text-[8px] uppercase text-neutral-500 font-bold">Tautan Unduhan PDF</label>
+              <input
+                type="text"
+                value={formKurikulumSespimmenDownloadUrl}
+                onChange={(e) => setFormKurikulumSespimmenDownloadUrl(e.target.value)}
+                placeholder="Contoh: https://drive.google.com/..."
+                className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+              />
+            </div>
           </div>
         </div>
 
@@ -4588,6 +4670,28 @@ startxref
               className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
             />
           </div>
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="block text-[8px] uppercase text-neutral-500 font-bold">Pratinjau Dokumen (Format Portrait)</label>
+              <input
+                type="text"
+                value={formKurikulumSppkPreviewUrl}
+                onChange={(e) => setFormKurikulumSppkPreviewUrl(e.target.value)}
+                placeholder="Contoh: /images/... atau Google Drive URL"
+                className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+              />
+            </div>
+            <div>
+              <label className="block text-[8px] uppercase text-neutral-500 font-bold">Tautan Unduhan PDF</label>
+              <input
+                type="text"
+                value={formKurikulumSppkDownloadUrl}
+                onChange={(e) => setFormKurikulumSppkDownloadUrl(e.target.value)}
+                placeholder="Contoh: https://drive.google.com/..."
+                className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+              />
+            </div>
+          </div>
         </div>
 
         {/* SESPIMMA */}
@@ -4619,6 +4723,28 @@ startxref
               rows={3}
               className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
             />
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="block text-[8px] uppercase text-neutral-500 font-bold">Pratinjau Dokumen (Format Portrait)</label>
+              <input
+                type="text"
+                value={formKurikulumSespimmaPreviewUrl}
+                onChange={(e) => setFormKurikulumSespimmaPreviewUrl(e.target.value)}
+                placeholder="Contoh: /images/... atau Google Drive URL"
+                className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+              />
+            </div>
+            <div>
+              <label className="block text-[8px] uppercase text-neutral-500 font-bold">Tautan Unduhan PDF</label>
+              <input
+                type="text"
+                value={formKurikulumSespimmaDownloadUrl}
+                onChange={(e) => setFormKurikulumSespimmaDownloadUrl(e.target.value)}
+                placeholder="Contoh: https://drive.google.com/..."
+                className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+              />
+            </div>
           </div>
         </div>
       </div>

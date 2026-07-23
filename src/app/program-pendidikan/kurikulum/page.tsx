@@ -16,7 +16,9 @@ const staticFallback = {
       "Analisis Lingkungan Strategis (Geopolitik & Kamtibmas)",
       "Teknologi & Kepemimpinan Digital Berbasis Data",
       "Aplikasi Metodologi & Riset Kebijakan Strategis (NASTRAP)"
-    ]
+    ],
+    previewUrl: "https://drive.google.com/file/d/1-gP5QjUue8Kr2O1mXP0NuEpBX4cWoLUQ/view",
+    downloadUrl: "https://drive.google.com/file/d/1-gP5QjUue8Kr2O1mXP0NuEpBX4cWoLUQ/view"
   },
   sespimmen: {
     title: "Kurikulum SESPIMMEN POLRI",
@@ -27,7 +29,9 @@ const staticFallback = {
       "Hukum, HAM, & Administrasi Organisasi Polri",
       "Sosiologi Keamanan & Hubungan Lintas Sektoral",
       "Metodologi Kajian Strategis Perorangan (Naskap)"
-    ]
+    ],
+    previewUrl: "https://drive.google.com/file/d/1-gP5QjUue8Kr2O1mXP0NuEpBX4cWoLUQ/view",
+    downloadUrl: "https://drive.google.com/file/d/1-gP5QjUue8Kr2O1mXP0NuEpBX4cWoLUQ/view"
   },
   sppk: {
     title: "Kurikulum SPPK POLRI",
@@ -37,7 +41,9 @@ const staticFallback = {
       "Manajemen Penyidikan & Audit Investigatif Modern",
       "Kepatuhan Etika Profesi & Pengawasan Mutu Operasional",
       "Sertifikasi Kompetensi & Standardisasi Penyelenggaraan Tugas"
-    ]
+    ],
+    previewUrl: "https://drive.google.com/file/d/1-gP5QjUue8Kr2O1mXP0NuEpBX4cWoLUQ/view",
+    downloadUrl: "https://drive.google.com/file/d/1-gP5QjUue8Kr2O1mXP0NuEpBX4cWoLUQ/view"
   },
   sespimma: {
     title: "Kurikulum SESPIMMA POLRI",
@@ -47,7 +53,9 @@ const staticFallback = {
       "Taktik & Teknik Operasional Dasar Kepolisian",
       "Kepemimpinan Lapangan & Pembinaan Masyarakat",
       "Komunikasi Publik & Manajemen Pelayanan Prima"
-    ]
+    ],
+    previewUrl: "https://drive.google.com/file/d/1-gP5QjUue8Kr2O1mXP0NuEpBX4cWoLUQ/view",
+    downloadUrl: "https://drive.google.com/file/d/1-gP5QjUue8Kr2O1mXP0NuEpBX4cWoLUQ/view"
   }
 }
 
