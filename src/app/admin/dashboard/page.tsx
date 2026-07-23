@@ -425,6 +425,7 @@ function DashboardContent() {
   const [formPejabatItems, setFormPejabatItems] = useState<{ group: string; name: string; pangkat: string; jabatan: string; foto: string }[]>([])
   const [formFasilitasItems, setFormFasilitasItems] = useState<{ group: string; name: string; keterangan: string; foto: string }[]>([])
   const [formMateriTerbukaItems, setFormMateriTerbukaItems] = useState<{ title: string; description: string; fileName: string; href: string; format: string; category: string }[]>([])
+  const [formKalenderItems, setFormKalenderItems] = useState<{ category: string; title: string; description: string; imageUrl: string; file: string; url: string }[]>([])
   const [formPublikasiItems, setFormPublikasiItems] = useState<{ title: string; description: string; fileName: string; href: string; format: string; category: string; author: string; cohort: string; year: string; cover: string }[]>([])
   const [formGaleriFotoItems, setFormGaleriFotoItems] = useState<{ title: string; description: string; category: string; imageUrl: string; date: string }[]>([])
   const [formGaleriVideoItems, setFormGaleriVideoItems] = useState<{ title: string; description: string; category: string; url: string; cover: string; date: string }[]>([])
@@ -3003,6 +3004,197 @@ startxref
     
     setFormPlagiarismDesc(descriptionText || contentStr)
     setFormPlagiarismSources(sourcesList)
+  }
+
+  // Parsing Kalender Pendidikan string content into states
+  const parseKalenderContent = (contentStr: string) => {
+    const lines = contentStr.split(/\r?\n/)
+    const list: any[] = []
+    let currentItem: any = null
+    for (const line of lines) {
+      const trimmed = line.trim()
+      if (!trimmed) continue
+      
+      const colonIdx = trimmed.indexOf(':')
+      if (colonIdx === -1) continue
+      const key = trimmed.substring(0, colonIdx).trim().toUpperCase()
+      const val = trimmed.substring(colonIdx + 1).trim()
+      
+      if (key === 'KATEGORI') {
+        currentItem = { category: val, title: '', description: '', imageUrl: '', file: '', url: '' }
+        list.push(currentItem)
+        continue
+      }
+      
+      if (currentItem) {
+        if (key === 'JUDUL') {
+          currentItem.title = val
+        } else if (key === 'DESKRIPSI') {
+          currentItem.description = val
+        } else if (key === 'GAMBAR') {
+          currentItem.imageUrl = val
+        } else if (key === 'FILE') {
+          currentItem.file = val
+        } else if (key === 'URL') {
+          currentItem.url = val
+        }
+      }
+    }
+    setFormKalenderItems(list.length > 0 ? list : [
+      { category: 'SESPIMTI', title: 'Kalender Pendidikan SESPIMTI TA 2026', description: 'Kalender akademik lengkap Sespimti.', imageUrl: '/images/kalender-sespimti.png', file: 'Kalender_SESPIMTI_TA2026.pdf', url: '#' },
+      { category: 'SESPIMMEN', title: 'Kalender Pendidikan SESPIMMEN TA 2026', description: 'Kalender akademik lengkap Sespimmen.', imageUrl: '/images/kalender-sespimmen.png', file: 'Kalender_SESPIMMEN_TA2026.pdf', url: '#' },
+      { category: 'SPPK', title: 'Kalender Pendidikan SPPK TA 2026', description: 'Kalender akademik lengkap SPPK.', imageUrl: '/images/kalender-sppk.png', file: 'Kalender_SPPK_TA2026.pdf', url: '#' },
+      { category: 'SESPIMMA', title: 'Kalender Pendidikan SESPIMMA TA 2026', description: 'Kalender akademik lengkap Sespimma.', imageUrl: '/images/kalender-sespimma.png', file: 'Kalender_SESPIMMA_TA2026.pdf', url: '#' }
+    ])
+  }
+
+  const buildKalenderContent = (): string => {
+    return formKalenderItems.map(item => {
+      return `KATEGORI: ${item.category}\nJUDUL: ${item.title}\nDESKRIPSI: ${item.description}\nGAMBAR: ${item.imageUrl}\nFILE: ${item.file}\nURL: ${item.url}`
+    }).join('\n\n')
+  }
+
+  const renderKalenderStructuredFields = () => {
+    return (
+      <div className="space-y-4 max-h-[450px] overflow-y-auto pr-2 border-t border-b border-neutral-800 py-3 text-neutral-200">
+        <div className="flex justify-between items-center">
+          <div>
+            <p className="text-[10px] font-bold text-polri-goldSoft uppercase tracking-wider">Daftar Kalender Pendidikan (Format Landscape)</p>
+            <p className="text-[9px] text-neutral-400 mt-0.5">Urutan Kalender per Kategori (Sespimti, Sespimmen, SPPK, Sespimma).</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setFormKalenderItems([...formKalenderItems, { category: 'SESPIMTI', title: '', description: '', imageUrl: '', file: '', url: '' }])}
+            className="px-2.5 py-1.5 rounded bg-polri-gold text-neutral-950 text-[9px] font-black uppercase hover:bg-yellow-500 transition"
+          >
+            + Tambah Kalender
+          </button>
+        </div>
+        <div className="space-y-5">
+          {formKalenderItems.map((item, idx) => (
+            <div key={idx} className="p-4 bg-neutral-950 rounded-xl border border-neutral-800 space-y-3 relative">
+              <button
+                type="button"
+                onClick={() => setFormKalenderItems(formKalenderItems.filter((_, i) => i !== idx))}
+                className="absolute right-3 top-3 text-red-500 hover:text-red-400 font-black text-[10px] uppercase tracking-wider"
+              >
+                Hapus
+              </button>
+              
+              {/* Preview image block */}
+              <div className="bg-neutral-900/60 p-2.5 rounded-lg border border-neutral-800/80 flex gap-4 items-center">
+                <div className="relative w-20 h-12 shrink-0 rounded overflow-hidden bg-neutral-900 border border-polri-gold/20 flex items-center justify-center">
+                  {item.imageUrl ? (
+                    <img src={getMediaUrl(item.imageUrl)} alt="" className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-[7px] text-neutral-500 uppercase font-bold">No Image</span>
+                  )}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] font-black text-white truncate">{item.title || 'Masukkan Judul Kalender...'}</p>
+                  <p className="text-[8px] text-neutral-400 mt-1 truncate">{item.description || 'Masukkan Deskripsi...'}</p>
+                  <span className="inline-block bg-polri-maroon/20 text-polri-goldSoft text-[7px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider mt-1.5">{item.category}</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Kategori Program</label>
+                  <select
+                    value={item.category}
+                    onChange={(e) => {
+                      const updated = [...formKalenderItems]
+                      updated[idx].category = e.target.value
+                      setFormKalenderItems(updated)
+                    }}
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  >
+                    <option value="SESPIMTI">SESPIMTI</option>
+                    <option value="SESPIMMEN">SESPIMMEN</option>
+                    <option value="SPPK">SPPK</option>
+                    <option value="SESPIMMA">SESPIMMA</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Judul Kalender</label>
+                  <input
+                    type="text"
+                    value={item.title}
+                    onChange={(e) => {
+                      const updated = [...formKalenderItems]
+                      updated[idx].title = e.target.value
+                      setFormKalenderItems(updated)
+                    }}
+                    placeholder="Contoh: Kalender Pendidikan SESPIMTI TA 2026"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[8px] uppercase text-neutral-500 font-bold">Deskripsi Kalender</label>
+                <textarea
+                  value={item.description}
+                  onChange={(e) => {
+                    const updated = [...formKalenderItems]
+                    updated[idx].description = e.target.value
+                    setFormKalenderItems(updated)
+                  }}
+                  rows={2}
+                  placeholder="Keterangan singkat kegiatan..."
+                  className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                />
+              </div>
+
+              <div className="grid grid-cols-3 gap-2">
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Gambar Kalender (Landscape URL)</label>
+                  <input
+                    type="text"
+                    value={item.imageUrl}
+                    onChange={(e) => {
+                      const updated = [...formKalenderItems]
+                      updated[idx].imageUrl = e.target.value
+                      setFormKalenderItems(updated)
+                    }}
+                    placeholder="Contoh: /images/... atau upload"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Nama File PDF (Jika Unduh)</label>
+                  <input
+                    type="text"
+                    value={item.file}
+                    onChange={(e) => {
+                      const updated = [...formKalenderItems]
+                      updated[idx].file = e.target.value
+                      setFormKalenderItems(updated)
+                    }}
+                    placeholder="Contoh: Kalender_Sespimti.pdf"
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[8px] uppercase text-neutral-500 font-bold">Tautan Unduhan (URL / Google Drive)</label>
+                  <input
+                    type="text"
+                    value={item.url}
+                    onChange={(e) => {
+                      const updated = [...formKalenderItems]
+                      updated[idx].url = e.target.value
+                      setFormKalenderItems(updated)
+                    }}
+                    placeholder="Contoh: https://drive.google.com/..."
+                    className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-2 py-1.5 text-xs text-white outline-none focus:border-polri-gold"
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
   }
 
   // Parsing Materi Terbuka string content into states
@@ -5905,6 +6097,12 @@ startxref
       setFormMateriTerbukaItems([])
     }
 
+    if (currentModule === 'Program Pendidikan' && item.id === 'e-1') {
+      parseKalenderContent(item.content || '')
+    } else {
+      setFormKalenderItems([])
+    }
+
     if (currentModule === 'Widyaiswara' && item.id === 'w-6') {
       parseInpassingModules(item.content || '')
     } else {
@@ -5964,6 +6162,7 @@ startxref
     const isWidyaiswaraMateri = currentModule === 'Widyaiswara' && (selectedItem.id === 'w-4' || selectedItem.id === 'w-8' || selectedItem.id === 'w-9')
     const isWidyaiswaraInpassing = currentModule === 'Widyaiswara' && selectedItem.id === 'w-6'
     const isKurikulum = currentModule === 'Program Pendidikan' && selectedItem.id === 'e-2'
+    const isKalender = currentModule === 'Program Pendidikan' && selectedItem.id === 'e-1'
     const isPublikasi = currentModule === 'Publikasi'
     const isPlagiarism = currentModule === 'Sarana Prasarana' && selectedItem.id === 's-5'
     const isGaleriFoto = currentModule === 'Galeri & Unduhan' && (selectedItem.category === 'Galeri Foto' || selectedItem.id === 'g-1')
@@ -5980,19 +6179,22 @@ startxref
                   ? buildInpassingModulesContent() 
                   : (isKurikulum
                       ? buildKurikulumContent()
-                      : (isPublikasi
-                          ? buildPublikasiContent()
-                          : (isPlagiarism
-                              ? buildPlagiarismContent()
-                              : (isGaleriFoto
-                                  ? buildGaleriFotoContent()
-                                  : (isGaleriVideo
-                                      ? buildGaleriVideoContent()
-                                      : (isUnduhan
-                                          ? buildUnduhanContent()
-                                          : (isKaryaAkademis
-                                              ? buildKaryaAkademisContent()
-                                              : formContent
+                      : (isKalender
+                          ? buildKalenderContent()
+                          : (isPublikasi
+                              ? buildPublikasiContent()
+                              : (isPlagiarism
+                                  ? buildPlagiarismContent()
+                                  : (isGaleriFoto
+                                      ? buildGaleriFotoContent()
+                                      : (isGaleriVideo
+                                          ? buildGaleriVideoContent()
+                                          : (isUnduhan
+                                              ? buildUnduhanContent()
+                                              : (isKaryaAkademis
+                                                  ? buildKaryaAkademisContent()
+                                                  : formContent
+                                                )
                                             )
                                         )
                                     )
@@ -7104,6 +7306,8 @@ startxref
                   renderProfilStructuredFields(selectedItem?.id || '')
                 ) : currentModule === 'Widyaiswara' && (selectedItem?.id === 'w-4' || selectedItem?.id === 'w-8' || selectedItem?.id === 'w-9') ? (
                   renderMateriTerbukaStructuredFields()
+                ) : currentModule === 'Program Pendidikan' && selectedItem?.id === 'e-1' ? (
+                  renderKalenderStructuredFields()
                 ) : currentModule === 'Program Pendidikan' && selectedItem?.id === 'e-2' ? (
                   renderKurikulumStructuredFields()
                 ) : currentModule === 'Widyaiswara' && selectedItem?.id === 'w-6' ? (
