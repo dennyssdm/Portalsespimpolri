@@ -12,7 +12,7 @@ export default function Page() {
   }
 
   return (
-    <div className="min-h-screen bg-black mt-14 pb-20">
+    <div className="min-h-screen bg-black pb-20">
       {/* Full Width Hero */}
       <div className="relative w-full overflow-hidden bg-neutral-950 border-b border-neutral-900">
         {/* Ambient background glow */}
