@@ -75,34 +75,42 @@ export default function KalenderClient({ initialItems, title, description }: Pro
             <div className="lg:col-span-8 space-y-4">
               <div className="relative group rounded-2xl border border-polri-gold/20 overflow-hidden bg-neutral-950 shadow-lg aspect-[16/10] flex items-center justify-center">
                 {activeItem.imageUrl ? (
-                  <>
-                    <img
-                      src={getMediaUrl(activeItem.imageUrl)}
-                      alt={activeItem.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-102"
+                  activeItem.imageUrl.includes('drive.google.com') ? (
+                    <iframe
+                      src={activeItem.imageUrl.replace(/\/view.*/, '/preview')}
+                      className="w-full h-full border-0 rounded-2xl bg-neutral-900"
+                      allow="autoplay"
                     />
-                    {/* Hover Action Overlay */}
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
-                      <button
-                        onClick={() => setZoomImage(getMediaUrl(activeItem.imageUrl))}
-                        className="p-3 rounded-full bg-white text-polri-brownDark hover:bg-polri-gold hover:text-neutral-950 transition duration-300 shadow-lg"
-                        title="Perbesar Kalender"
-                      >
-                        <EyeIcon className="h-6 w-6" />
-                      </button>
-                      {activeItem.url && activeItem.url !== '#' && (
-                        <a
-                          href={activeItem.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                  ) : (
+                    <>
+                      <img
+                        src={getMediaUrl(activeItem.imageUrl)}
+                        alt={activeItem.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-102"
+                      />
+                      {/* Hover Action Overlay */}
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
+                        <button
+                          onClick={() => setZoomImage(getMediaUrl(activeItem.imageUrl))}
                           className="p-3 rounded-full bg-white text-polri-brownDark hover:bg-polri-gold hover:text-neutral-950 transition duration-300 shadow-lg"
-                          title="Unduh PDF"
+                          title="Perbesar Kalender"
                         >
-                          <ArrowDownTrayIcon className="h-6 w-6" />
-                        </a>
-                      )}
-                    </div>
-                  </>
+                          <EyeIcon className="h-6 w-6" />
+                        </button>
+                        {activeItem.url && activeItem.url !== '#' && (
+                          <a
+                            href={activeItem.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-3 rounded-full bg-white text-polri-brownDark hover:bg-polri-gold hover:text-neutral-950 transition duration-300 shadow-lg"
+                            title="Unduh PDF"
+                          >
+                            <ArrowDownTrayIcon className="h-6 w-6" />
+                          </a>
+                        )}
+                      </div>
+                    </>
+                  )
                 ) : (
                   <div className="text-center p-8">
                     <p className="text-sm font-bold text-neutral-400">Berkas gambar kalender belum diunggah.</p>
