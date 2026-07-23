@@ -17,6 +17,7 @@ import {
   CheckCircleIcon,
   CircleStackIcon,
   EyeIcon,
+  EyeSlashIcon,
   InboxArrowDownIcon,
   ArrowRightOnRectangleIcon
 } from '@heroicons/react/24/outline'
@@ -30,6 +31,8 @@ function LoginContent() {
   const [role, setRole] = useState<RoleType>('serdik')
   const [identifier, setIdentifier] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [showSsoPassword, setShowSsoPassword] = useState(false)
   const [isReadOnly, setIsReadOnly] = useState(false)
   const [loading, setLoading] = useState(false)
   const [authenticatedUser, setAuthenticatedUser] = useState<{
@@ -668,13 +671,24 @@ function LoginContent() {
                 </div>
                 <div className="relative mt-2">
                   <input
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full rounded-xl border border-polri-gold/30 bg-white px-4 py-3 text-sm text-polri-brownDark outline-none focus:border-polri-maroon placeholder:text-neutral-400"
+                    className="w-full rounded-xl border border-polri-gold/30 bg-white pl-4 pr-11 py-3 text-sm text-polri-brownDark outline-none focus:border-polri-maroon placeholder:text-neutral-400"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-neutral-400 hover:text-polri-maroon transition"
+                  >
+                    {showPassword ? (
+                      <EyeSlashIcon className="h-5 w-5" />
+                    ) : (
+                      <EyeIcon className="h-5 w-5" />
+                    )}
+                  </button>
                 </div>
               </div>
 
@@ -777,14 +791,27 @@ function LoginContent() {
 
               <div>
                 <label className="block text-[10px] font-black uppercase tracking-wider text-polri-maroon">Kata Sandi SIAP</label>
-                <input 
-                  type="password"
-                  required
-                  value={ssoPassword}
-                  onChange={(e) => setSsoPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="mt-1.5 w-full rounded-xl border border-neutral-200 px-4 py-2.5 text-sm text-polri-brownDark outline-none focus:border-polri-maroon placeholder:text-neutral-400"
-                />
+                <div className="relative mt-1.5">
+                  <input 
+                    type={showSsoPassword ? 'text' : 'password'}
+                    required
+                    value={ssoPassword}
+                    onChange={(e) => setSsoPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full rounded-xl border border-neutral-200 pl-4 pr-11 py-2.5 text-sm text-polri-brownDark outline-none focus:border-polri-maroon placeholder:text-neutral-400"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowSsoPassword(!showSsoPassword)}
+                    className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-neutral-400 hover:text-polri-maroon transition"
+                  >
+                    {showSsoPassword ? (
+                      <EyeSlashIcon className="h-5 w-5" />
+                    ) : (
+                      <EyeIcon className="h-5 w-5" />
+                    )}
+                  </button>
+                </div>
               </div>
 
               <button
