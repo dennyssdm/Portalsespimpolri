@@ -44,6 +44,8 @@ export async function apiFetch(path: string, options: RequestInit = {}) {
     headers.set('Content-Type', 'application/json')
   }
 
+  headers.set('Bypass-Tunnel-Reminder', 'true');
+
   const token = getAuthToken()
   if (token) {
     headers.set('Authorization', `Bearer ${token}`)
@@ -63,10 +65,13 @@ export async function serverFetch(path: string, options: RequestInit = {}) {
   const url = path.startsWith('http') ? path : `${API_BASE_URL}${path}`
   const controller = new AbortController()
   const timeoutId = setTimeout(() => controller.abort(), 3000)
+  const headers = new Headers(options.headers || {})
+  headers.set('Bypass-Tunnel-Reminder', 'true');
 
   try {
     const res = await fetch(url, {
       ...options,
+      headers,
       signal: controller.signal,
       next: { revalidate: 60, ...(options.next || {}) }
     })
