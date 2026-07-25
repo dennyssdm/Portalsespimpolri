@@ -26,6 +26,7 @@ export function Header() {
   const pathname = usePathname()
   
   const [mounted, setMounted] = useState(false)
+  const [isLocal, setIsLocal] = useState(false)
   const [user, setUser] = useState<{
     name: string
     role: string
@@ -35,6 +36,12 @@ export function Header() {
 
   useEffect(() => {
     setMounted(true)
+    if (typeof window !== 'undefined') {
+      const hostname = window.location.hostname
+      if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        setIsLocal(true)
+      }
+    }
     const handleStorageChange = () => {
       const userJson = sessionStorage.getItem('sespim_user')
       if (userJson) {
@@ -106,7 +113,14 @@ export function Header() {
             />
           </div>
           <div className="min-w-[118px]">
-            <p className="text-[25px] font-black uppercase leading-none tracking-[0.02em] text-white">SESPIM</p>
+            <div className="flex items-center gap-2">
+              <p className="text-[25px] font-black uppercase leading-none tracking-[0.02em] text-white">SESPIM</p>
+              {isLocal && (
+                <span className="rounded bg-amber-500/20 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-amber-400 border border-amber-500/30">
+                  Development
+                </span>
+              )}
+            </div>
             <p className="mt-1 text-[11px] font-bold uppercase leading-none tracking-[0.08em] text-polri-goldSoft">LEMDIKLAT POLRI</p>
           </div>
         </Link>
