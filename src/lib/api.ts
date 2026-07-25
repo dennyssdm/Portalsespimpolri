@@ -1,7 +1,7 @@
 // Helper layer to communicate with Node.js/Express API
 
 export const API_BASE_URL = (() => {
-  const envUrl = process.env.NEXT_PUBLIC_API_URL || 'http://10.221.76.170:5000';
+  const envUrl = process.env.NEXT_PUBLIC_API_URL || 'https://10.221.76.170';
   
   if (typeof window !== 'undefined') {
     const hostname = window.location.hostname;
