@@ -1,14 +1,23 @@
-// Helper layer to communicate with Node.js/Express API running on port 5001
+// Helper layer to communicate with Node.js/Express API
 
 export const API_BASE_URL = (() => {
+  const envUrl = process.env.NEXT_PUBLIC_API_URL;
   if (typeof window !== 'undefined') {
     const hostname = window.location.hostname;
-    // If accessing via local network IP (e.g. 192.168.x.x), dynamically use that IP for port 5001
+    // If accessing via local network IP (e.g. 10.x.x.x or 192.168.x.x), dynamically use that IP but keep the port and protocol from the env URL
     if (hostname !== 'localhost' && hostname !== '127.0.0.1' && /^[0-9.]+$/.test(hostname)) {
-      return `http://${hostname}:5001`;
+      if (envUrl) {
+        try {
+          const parsedUrl = new URL(envUrl);
+          const port = parsedUrl.port || (parsedUrl.protocol === 'https:' ? '443' : '80');
+          return `${parsedUrl.protocol}//${hostname}:${port}`;
+        } catch (e) {
+          // ignore
+        }
+      }
     }
   }
-  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
+  return envUrl || '';
 })();
 
 // Map of Admin Sidebar Module Names to API Endpoint paths (contentType)
@@ -89,15 +98,15 @@ export async function serverFetch(path: string, options: RequestInit = {}) {
 export function getMediaUrl(url: string | null | undefined): string {
   if (!url) return ''
   if (url.startsWith('http')) return url
-  if (url.startsWith('/uploads/')) {
-    const isVercel = process.env.VERCEL === '1' || 
-      (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')
-    const isApiLocalhost = API_BASE_URL.includes('localhost') || API_BASE_URL.includes('127.0.0.1')
+  
+  const path = url.startsWith('/') ? url : `/${url}`
+  
+  const isVercel = process.env.VERCEL === '1' || 
+    (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')
+  const isApiLocalhost = API_BASE_URL.includes('localhost') || API_BASE_URL.includes('127.0.0.1')
 
-    if (isVercel && isApiLocalhost) {
-      return url
-    }
-    return `${API_BASE_URL}${url}`
+  if (isVercel && isApiLocalhost) {
+    return path
   }
-  return url
+  return `${API_BASE_URL}${path}`
 }

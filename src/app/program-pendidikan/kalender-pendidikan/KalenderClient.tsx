@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Container } from '@/components/ui/Container'
 import { PageHero } from '@/components/ui/PageHero'
+import { getMediaUrl } from '@/lib/api'
 import { Breadcrumb } from '@/components/ui/Breadcrumb'
 import { ArrowDownTrayIcon, EyeIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
@@ -31,11 +32,7 @@ export default function KalenderClient({ initialItems, title, description }: Pro
     (item) => item.category.toUpperCase() === activeTab
   ) || initialItems[0]
 
-  const getMediaUrl = (url: string) => {
-    if (!url) return ''
-    if (url.startsWith('http') || url.startsWith('/')) return url
-    return "http://localhost:5001" + url
-  }
+
 
   return (
     <main className="bg-neutral-50 min-h-screen pb-20">

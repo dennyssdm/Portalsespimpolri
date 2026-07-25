@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { Breadcrumb } from '@/components/ui/Breadcrumb'
+import { getMediaUrl } from '@/lib/api'
 import { Container } from '@/components/ui/Container'
 import { PageHero } from '@/components/ui/PageHero'
 import { SectionTitle } from '@/components/ui/SectionTitle'
@@ -84,11 +85,7 @@ export function ContentCollectionPage({ path, eyebrow, title, description, items
 
   const featured = filteredItems[0]
 
-  const getMediaUrl = (url: string) => {
-    if (!url) return ''
-    if (url.startsWith('http') || url.startsWith('/')) return url
-    return `http://localhost:5001${url}`
-  }
+
 
   return (
     <main className="bg-neutral-50 min-h-screen">

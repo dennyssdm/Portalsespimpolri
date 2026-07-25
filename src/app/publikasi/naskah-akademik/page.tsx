@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { Container } from '@/components/ui/Container'
 import { PageHero } from '@/components/ui/PageHero'
 import { Breadcrumb } from '@/components/ui/Breadcrumb'
-import { serverFetch } from '@/lib/api'
+import { serverFetch, getMediaUrl } from '@/lib/api'
 
 function parseGroupedPublications(records: any[]) {
   const items: any[] = []
@@ -133,11 +133,7 @@ export default async function Page() {
     }
   ]
 
-  const getMediaUrl = (url: string) => {
-    if (!url) return ''
-    if (url.startsWith('http') || url.startsWith('/')) return url
-    return "http://localhost:5001" + url
-  }
+
 
   return (
     <main className="bg-neutral-50 min-h-screen pb-20">

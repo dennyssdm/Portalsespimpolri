@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { AcademicCapIcon, CheckCircleIcon, ArrowDownTrayIcon, EyeIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { getMediaUrl } from '@/lib/api'
 
 type SchoolCurriculum = {
   title: string
@@ -33,11 +34,7 @@ export function KurikulumTabs({ data }: KurikulumTabsProps) {
 
   const current = data[activeTab] || { title: '', overview: '', subjects: [], previewUrl: '', downloadUrl: '' }
 
-  const getMediaUrl = (url: string) => {
-    if (!url) return ''
-    if (url.startsWith('http') || url.startsWith('/')) return url
-    return "http://localhost:5001" + url
-  }
+
 
   return (
     <div className="space-y-10">
