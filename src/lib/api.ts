@@ -9,8 +9,8 @@ export const API_BASE_URL = (() => {
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
       return 'http://localhost:5001';
     }
-    // If accessing via local network IP (e.g. 10.x.x.x or 192.168.x.x), dynamically use that IP but keep the port and protocol from the env URL
-    if (/^[0-9.]+$/.test(hostname)) {
+    // In local development, if accessing via local network IP (e.g. 192.168.x.x), dynamically use that IP but keep the port and protocol from the env URL
+    if (process.env.NODE_ENV === 'development' && /^[0-9.]+$/.test(hostname)) {
       try {
         const parsedUrl = new URL(envUrl);
         const port = parsedUrl.port || (parsedUrl.protocol === 'https:' ? '443' : '80');
