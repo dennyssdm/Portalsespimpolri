@@ -7,7 +7,7 @@ import { FloatingChatWidget } from '@/components/layout/FloatingChatWidget'
 
 export const metadata: Metadata = {
   title: 'Portal Resmi Sespim Lemdiklat Polri',
-  description: 'SOT-driven front-end portal Sespim Lemdiklat Polri dengan Next.js dan Tailwind CSS.',
+  description: 'Portal Resmi Sespim Lemdiklat Polri - Lembaga pendidikan kepemimpinan kepolisian untuk mewujudkan pimpinan Polri yang profesional, berintegritas, dan strategis.',
   icons: {
     icon: '/images/logo-sespim.png',
     apple: '/images/logo-sespim.png'
