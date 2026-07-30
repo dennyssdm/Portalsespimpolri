@@ -1,33 +1,6 @@
 // Helper layer to communicate with Node.js/Express API
 
-export const API_BASE_URL = (() => {
-  const envUrl = process.env.NEXT_PUBLIC_API_URL || 'https://10.221.76.170';
-  
-  if (typeof window !== 'undefined') {
-    const hostname = window.location.hostname;
-    // If accessing via localhost / 127.0.0.1, use local dev API
-    if (hostname === 'localhost' || hostname === '127.0.0.1') {
-      return 'http://localhost:5001';
-    }
-    // In local development, if accessing via local network IP (e.g. 192.168.x.x), dynamically use that IP but keep the port and protocol from the env URL
-    if (process.env.NODE_ENV === 'development' && /^[0-9.]+$/.test(hostname)) {
-      try {
-        const parsedUrl = new URL(envUrl);
-        const port = parsedUrl.port || (parsedUrl.protocol === 'https:' ? '443' : '80');
-        return `${parsedUrl.protocol}//${hostname}:${port}`;
-      } catch (e) {
-        // ignore
-      }
-    }
-  } else {
-    // Server-side environment
-    // In local development mode, default to the local dev API
-    if (process.env.NODE_ENV === 'development') {
-      return 'http://localhost:5001';
-    }
-  }
-  return envUrl;
-})();
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 // Map of Admin Sidebar Module Names to API Endpoint paths (contentType)
 export const MODULE_TO_CONTENT_TYPE: Record<string, string> = {
